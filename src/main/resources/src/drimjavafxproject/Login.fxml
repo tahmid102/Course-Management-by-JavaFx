@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.drimjavafxproject.LoginController">
     <children>
-        <TextField fx:id="usernameField" layoutX="204.0" layoutY="147.0" prefHeight="22.0" prefWidth="159.0" promptText="Username" />
+        <TextField fx:id="usernameField" layoutX="204.0" layoutY="147.0" prefHeight="22.0" prefWidth="159.0" promptText="userID" />
         <Text layoutY="-13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="22.13671875" />
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="werwer" />
@@ -47,5 +47,6 @@
          </font>
       </Label>
       <ComboBox fx:id="roleBox" layoutX="204.0" layoutY="99.0" prefWidth="150.0" promptText="Select Role" />
+      <Label fx:id="errorLabel" layoutX="130.0" layoutY="125.0" prefHeight="59.0" prefWidth="109.0" text="Label" />
     </children>
 </AnchorPane>

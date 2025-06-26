@@ -13,7 +13,15 @@ public class StudentList {
     }
     public boolean isStudentAvailable(Student b){
         for(Student a:students){
-            if(a.studentId==b.studentId){
+            if(a.getStudentId()==b.getStudentId()){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isStudentAvailable(int b){
+        for(Student a:students){
+            if(a.getStudentId()==b){
                 return true;
             }
         }
@@ -24,7 +32,7 @@ public class StudentList {
     }
     public Student searchStudent(int userId){
         for(Student a:students){
-            if(a.studentId==userId){
+            if(a.getStudentId()==userId){
                 return a;
             }
         }

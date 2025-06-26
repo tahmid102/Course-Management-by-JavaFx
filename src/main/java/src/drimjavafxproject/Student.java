@@ -36,4 +36,5 @@ public class Student {
     public void removeCourse(Course b){
         courses.remove(b);
     }
+
 }

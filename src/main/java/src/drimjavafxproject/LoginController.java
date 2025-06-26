@@ -18,10 +18,18 @@ public class LoginController {
         public Label welcomeLabel;
         @FXML
         public ComboBox<String> roleBox;
+        Student a=new Student("tahmid",2305180);
+        Student b=new Student("mufeed",2305151);
+        StudentList A=new StudentList();
 
         @FXML
         public void initialize() {
                 roleBox.getItems().addAll("Student", "Teacher");
+                a.setStudentPassword("tahmid");
+                b.setStudentPassword("mufeed");
+                A.addStudent(a);
+                A.addStudent(b);
+
         }
 
 
@@ -36,10 +44,22 @@ public class LoginController {
                 passwordField.setVisible(false);
                 roleBox.setVisible(false);
                 roleBox.setVisible(false);
-                if (username.equals("Mufeed") && password.equals("1234")) {
-
-                        errorLabel.setText("Login successful!");
-                } else {
+//                if (username.equals(A.) && password.equals("1234")) {
+//
+//                        errorLabel.setText("Login successful!");
+//                } else {
+//                        errorLabel.setText("Invalid credentials");
+//                }
+                int enteredId=Integer.parseInt(username);
+                if(A.isStudentAvailable(enteredId)){
+                        if(A.searchStudent(enteredId).getStudentPassword().equals(password)){
+                                errorLabel.setText("Login successful!");
+                        }
+                        else{
+                                errorLabel.setText("Wrong Password");
+                        }
+                }
+                else{
                         errorLabel.setText("Invalid credentials");
                 }
 

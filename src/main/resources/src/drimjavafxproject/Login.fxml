@@ -47,6 +47,7 @@
          </font>
       </Label>
       <ComboBox fx:id="roleBox" layoutX="204.0" layoutY="99.0" prefWidth="150.0" promptText="Select Role" />
-      <Label fx:id="errorLabel" layoutX="130.0" layoutY="125.0" prefHeight="59.0" prefWidth="109.0" text="Label" />
+      <Label fx:id="errorLabel" layoutX="130.0" layoutY="125.0" prefHeight="59.0" prefWidth="109.0" />
+      <Button fx:id="cancelButton" layoutX="354.0" layoutY="274.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
     </children>
 </AnchorPane>

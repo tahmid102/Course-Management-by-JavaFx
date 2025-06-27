@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.drimjavafxproject.DashboardController">
    <children>
-
-      <TextField layoutX="204.0" layoutY="69.0" promptText="sdkjpfsdj" />
+      <HBox fx:id="hboxAll" prefHeight="400.0" prefWidth="600.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <VBox fx:id="vBox" prefHeight="400.0" prefWidth="76.0" spacing="20.0">
+               <children>
+                  <Text fx:id="topText" fill="#bf17bf" strokeType="OUTSIDE" strokeWidth="0.0" text="DRIM JAVA" wrappingWidth="134.13677978515625">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButton" prefHeight="24.0" prefWidth="134.0" text="Home" />
+                  <Button fx:id="myCoursesButton" mnemonicParsing="false" onAction="#onMyCourses" prefHeight="27.0" prefWidth="134.0" text="My Courses" />
+                  <Button fx:id="addCourseButton" mnemonicParsing="false" onAction="#onAdd" prefHeight="26.0" prefWidth="134.0" text="Add/Drop Course" />
+                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="134.0" text="Due List" />
+                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="181.0" text="Student Information" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: #245A77;
 }
 
 .text-field, .password-field {
@@ -9,7 +9,8 @@
 }
 
 .button {
-    -fx-background-color: #4285f4;
+    -fx-background-color: #F8D966;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+

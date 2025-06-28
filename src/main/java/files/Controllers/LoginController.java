@@ -1,5 +1,6 @@
 package files.Controllers;
 
+
 import files.Classes.Student;
 import files.Classes.StudentList;
 import javafx.event.ActionEvent;
@@ -33,8 +34,8 @@ public class LoginController {
         @FXML
         public void initialize() {
                 roleBox.getItems().addAll("Student", "Teacher");
-                a.setStudentPassword("tahmid");
-                b.setStudentPassword("mufeed");
+                a.setPassword("tahmid");
+                b.setPassword("mufeed");
                 A.addStudent(a);
                 A.addStudent(b);
 
@@ -53,10 +54,10 @@ public class LoginController {
 
                 int enteredId=Integer.parseInt(username);
                 if(A.isStudentAvailable(enteredId)){
-                        if(A.searchStudent(enteredId).getStudentPassword().equals(password)){
+                        if(A.searchStudent(enteredId).getPassword().equals(password)){
                                 errorLabel.setText("Login successful!");
                                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
-                                Scene scene=new Scene(fxmlLoader.load(),1000,1000);
+                                Scene scene=new Scene(fxmlLoader.load());
                                 Stage stage = (Stage) submitButton.getScene().getWindow();
                                 stage.setScene(scene);
                                 stage.setTitle("Dash");

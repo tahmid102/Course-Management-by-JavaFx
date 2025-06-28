@@ -1,6 +1,6 @@
 package files.Classes;
 
-public class Course {
+class Course {
     String courseName;
     String courseID;
     public Course(String courseID,String courseName){

@@ -3,38 +3,21 @@ package files.Classes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Student {
-    String studentName;
-    int studentId;
-    String studentPassword;
-    List<Course> courses=new ArrayList<>();
+public class Student extends Person{
+    //personal Student class fields
+    List<Course>courses;
 
+    //Student class constructor
     public Student(String studentName,int studentId){
-        this.studentId=studentId;
-        this.studentName=studentName;
-
+        super(studentName,studentId);
+        courses=new ArrayList<>();
     }
 
-    public void setStudentPassword(String studentPassword) {
-        this.studentPassword = studentPassword;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public String getStudentPassword() {
-        return studentPassword;
-    }
+    //Student methods
     public void addCourses(Course a){
         courses.add(a);
     }
     public void removeCourse(Course b){
         courses.remove(b);
     }
-
 }

@@ -2,7 +2,7 @@ package files.Controllers;
 
 
 import files.Classes.Student;
-import files.Classes.StudentList;
+import files.Classes.StudentHashMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +29,7 @@ public class LoginController {
 
         Student a=new Student("tahmid",2305180);
         Student b=new Student("mufeed",2305151);
-        StudentList A=new StudentList();
+        StudentHashMap A=new StudentHashMap();
 
         @FXML
         public void initialize() {
@@ -49,9 +49,16 @@ public class LoginController {
 
 
         public void onSubmit(ActionEvent actionEvent) throws IOException {
+                String selectedRole=roleBox.getValue();
+                if(selectedRole == null || selectedRole.isBlank()){
+                        errorLabel.setText("Please select a role");
+                        return;
+                }
                 String username=usernameField.getText().trim().toLowerCase();
                 String password=passwordField.getText();
 
+
+            try {
                 int enteredId=Integer.parseInt(username);
                 if(A.isStudentAvailable(enteredId)){
                         if(A.searchStudent(enteredId).getPassword().equals(password)){
@@ -63,20 +70,28 @@ public class LoginController {
                                 stage.setTitle("Dash");
                                 stage.show();
 
+                                usernameField.setDisable(true);
+                                passwordField.setDisable(true);
+                                usernameField.setVisible(false);
+                                passwordField.setVisible(false);
+                                roleBox.setVisible(false);
+                                roleBox.setDisable(false);
+
                         }
                         else{
                                 errorLabel.setText("Wrong Password");
+                                return;
                         }
                 }
                 else{
                         errorLabel.setText("Invalid credentials");
+                        return;
                 }
-                usernameField.setDisable(true);
-                passwordField.setDisable(true);
-                usernameField.setVisible(false);
-                passwordField.setVisible(false);
-                roleBox.setVisible(false);
-                roleBox.setDisable(false);
+            } catch (NumberFormatException e) {
+                errorLabel.setText("Please enter numeric ID");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
 
         }

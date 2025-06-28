@@ -1,4 +1,4 @@
-package src.drimjavafxproject;
+package files.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

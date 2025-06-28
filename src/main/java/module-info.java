@@ -3,6 +3,10 @@ module src.drimjavafxproject {
     requires javafx.fxml;
 
 
-    opens src.drimjavafxproject to javafx.fxml;
-    exports src.drimjavafxproject;
+    opens files to javafx.fxml;
+    exports files;
+    exports files.Classes;
+    opens files.Classes to javafx.fxml;
+    exports files.Controllers;
+    opens files.Controllers to javafx.fxml;
 }

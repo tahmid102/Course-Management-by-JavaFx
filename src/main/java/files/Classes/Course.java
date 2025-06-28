@@ -1,4 +1,4 @@
-package src.drimjavafxproject;
+package files.Classes;
 
 public class Course {
     String courseName;

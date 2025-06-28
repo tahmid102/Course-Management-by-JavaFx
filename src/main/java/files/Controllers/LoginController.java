@@ -1,15 +1,15 @@
-package src.drimjavafxproject;
+package files.Controllers;
 
+import files.Classes.Student;
+import files.Classes.StudentList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Locale;
 
 public class LoginController {
 
@@ -55,7 +55,7 @@ public class LoginController {
                 if(A.isStudentAvailable(enteredId)){
                         if(A.searchStudent(enteredId).getStudentPassword().equals(password)){
                                 errorLabel.setText("Login successful!");
-                                FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Dashboard.fxml"));
+                                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
                                 Scene scene=new Scene(fxmlLoader.load(),1000,1000);
                                 Stage stage = (Stage) submitButton.getScene().getWindow();
                                 stage.setScene(scene);

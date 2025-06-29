@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 
 public class LoginController {
 
@@ -31,7 +32,7 @@ public class LoginController {
         StudentHashMap A=new StudentHashMap();
 
         @FXML
-        public void initialize() throws FileNotFoundException {
+        public void initialize(){
                 roleBox.getItems().addAll("Student", "Teacher");
                 A.initializeStudents();
                 System.out.println(A.searchStudent(2305151));
@@ -44,7 +45,7 @@ public class LoginController {
 
 
 
-        public void onSubmit(ActionEvent actionEvent) throws IOException {
+        public void onSubmit(ActionEvent actionEvent){
                 String selectedRole=roleBox.getValue();
                 if(selectedRole == null || selectedRole.isBlank()){
                         errorLabel.setText("Please select a role");
@@ -86,14 +87,22 @@ public class LoginController {
             } catch (NumberFormatException e) {
                 errorLabel.setText("Please enter numeric ID");
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                errorLabel.setText("An error occurred !");
             }
 
 
         }
         public void onCancel(){
-                Stage stage = (Stage) cancelButton.getScene().getWindow();
-                stage.close();
+                Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                cancelAlert.setTitle("Quit");
+                cancelAlert.setHeaderText("Quitting Application");
+                cancelAlert.setContentText("Are you sure you want to continue?");
+                Optional<ButtonType> result = cancelAlert.showAndWait();
+                if( result.isPresent() && result.get()==ButtonType.OK){
+                        Stage stage = (Stage) cancelButton.getScene().getWindow();
+                        stage.close();
+                }
+
         }
 
 }

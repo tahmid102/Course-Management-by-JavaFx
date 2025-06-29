@@ -29,6 +29,7 @@ public class StudentHashMap {
     public void initializeStudents() {
         try {
             InputStream is=getClass().getResourceAsStream("/database/StudentCredentials.txt");
+            assert is != null;
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             String data;

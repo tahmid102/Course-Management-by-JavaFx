@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class LoginController {
@@ -27,19 +28,14 @@ public class LoginController {
 
         public Button cancelButton;
 
-        Student a=new Student("tahmid",2305180);
-        Student b=new Student("mufeed",2305151);
         StudentHashMap A=new StudentHashMap();
 
         @FXML
-        public void initialize() {
+        public void initialize() throws FileNotFoundException {
                 roleBox.getItems().addAll("Student", "Teacher");
-                a.setPassword("tahmid");
-                b.setPassword("mufeed");
-                A.addStudent(a);
-                A.addStudent(b);
-
-
+                A.initializeStudents();
+                System.out.println(A.searchStudent(2305151));
+                System.out.println(A.searchStudent(2305180));
                 usernameField.setOnAction(e-> passwordField.requestFocus());
                 passwordField.setOnAction(e-> submitButton.requestFocus());
 

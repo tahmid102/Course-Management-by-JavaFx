@@ -9,8 +9,8 @@ public class Student extends Person{
     List<Course>courses;
 
     //Student class constructor
-    public Student(String studentName,int studentId){
-        super(studentName,studentId);
+    public Student(String studentName,int studentId,String stdPass){
+        super(studentName,studentId,stdPass);
         courses=new ArrayList<>();
     }
 

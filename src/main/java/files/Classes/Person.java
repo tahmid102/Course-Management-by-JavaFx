@@ -5,10 +5,10 @@ abstract class Person {
     private int ID;
     private String password;
 
-    public Person(String name, int ID) {
+    public Person(String name, int ID,String password) {
         this.name = name;
         this.ID = ID;
-        this.password = "";
+        this.password = password;
     }
 
     public String getName() {

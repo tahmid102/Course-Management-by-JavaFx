@@ -35,8 +35,7 @@ public class LoginController {
         public void initialize(){
                 roleBox.getItems().addAll("Student", "Teacher");
                 A.initializeStudents();
-                System.out.println(A.searchStudent(2305151));
-                System.out.println(A.searchStudent(2305180));
+
                 usernameField.setOnAction(e-> passwordField.requestFocus());
                 passwordField.setOnAction(e-> submitButton.requestFocus());
 
@@ -49,7 +48,6 @@ public class LoginController {
                 String selectedRole=roleBox.getValue();
                 if(selectedRole == null || selectedRole.isBlank()){
                         errorLabel.setText("Please select a role");
-                        return;
                 }
                 String username=usernameField.getText().trim().toLowerCase();
                 String password=passwordField.getText();
@@ -77,12 +75,10 @@ public class LoginController {
                         }
                         else{
                                 errorLabel.setText("Wrong Password");
-                                return;
                         }
                 }
                 else{
                         errorLabel.setText("Invalid credentials");
-                        return;
                 }
             } catch (NumberFormatException e) {
                 errorLabel.setText("Please enter numeric ID");

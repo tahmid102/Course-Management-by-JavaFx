@@ -6,48 +6,20 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.LoginController">
     <children>
         <TextField fx:id="usernameField" layoutX="204.0" layoutY="147.0" prefHeight="22.0" prefWidth="159.0" promptText="userID" />
-        <Text layoutY="-13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="22.13671875" />
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="werwer" />
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
-            <fill>
-                <LinearGradient endX="1.0" endY="1.0">
-                    <stops>
-                        <Stop>
-                            <color>
-                                <Color />
-                            </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                            <color>
-                                <Color red="1.0" green="1.0" blue="1.0" />
-                            </color>
-                        </Stop>
-                    </stops>
-                </LinearGradient>
-            </fill>
-        </Text>
         <PasswordField fx:id="passwordField" layoutX="204.0" layoutY="200.0" prefHeight="26.0" prefWidth="159.0" promptText="Password" />
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-        <Button fx:id="submitButton" layoutX="122.0" layoutY="274.0" mnemonicParsing="false" onAction="#onSubmit" prefHeight="26.0" prefWidth="60.0" text="Submit" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOMEE" />
+        <Button fx:id="submitButton" layoutX="148.0" layoutY="273.0" mnemonicParsing="false" onAction="#onSubmit" prefHeight="26.0" prefWidth="60.0" text="Submit" />
       <Label fx:id="welcomeLabel" layoutX="130.0" layoutY="35.0" prefHeight="48.0" prefWidth="339.0" text="WELCOME TO DRIM JAVA" textAlignment="CENTER" textFill="#00000059">
          <font>
             <Font name="Arial Black" size="23.0" />
          </font>
       </Label>
-      <ComboBox fx:id="roleBox" layoutX="204.0" layoutY="99.0" prefWidth="150.0" promptText="Select Role" />
-      <Label fx:id="errorLabel" layoutX="130.0" layoutY="125.0" prefHeight="59.0" prefWidth="109.0" />
-      <Button fx:id="cancelButton" layoutX="354.0" layoutY="274.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+      <ComboBox fx:id="roleBox" layoutX="208.0" layoutY="98.0" prefWidth="150.0" promptText="Select Role" />
+      <Label fx:id="errorLabel" layoutX="229.0" layoutY="300.0" prefHeight="59.0" prefWidth="109.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
+      <Button fx:id="cancelButton" layoutX="358.0" layoutY="274.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
     </children>
 </AnchorPane>

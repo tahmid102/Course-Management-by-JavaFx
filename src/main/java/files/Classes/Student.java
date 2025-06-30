@@ -2,39 +2,35 @@ package files.Classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class Student {
-    String studentName;
-    int studentId;
-    String studentPassword;
-    List<Course> courses=new ArrayList<>();
+public class Student extends Person{
+    //personal Student class fields
+    List<Course>courses;
 
-    public Student(String studentName,int studentId){
-        this.studentId=studentId;
-        this.studentName=studentName;
-
+    //Student class constructor
+    public Student(String studentName,int studentId,String stdPass){
+        super(studentName,studentId,stdPass);
+        courses=new ArrayList<>();
     }
 
-    public void setStudentPassword(String studentPassword) {
-        this.studentPassword = studentPassword;
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Student)) return false;
+        Student p=(Student) o;
+        return p.getID()==this.getID();
     }
 
-    public String getStudentName() {
-        return studentName;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getID());
     }
 
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public String getStudentPassword() {
-        return studentPassword;
-    }
+    //Student methods
     public void addCourses(Course a){
         courses.add(a);
     }
     public void removeCourse(Course b){
         courses.remove(b);
     }
-
 }

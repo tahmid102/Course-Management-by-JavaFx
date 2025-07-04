@@ -2,6 +2,7 @@ module src.drimjavafxproject {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires jdk.dynalink;
 
 
     opens files to javafx.fxml;

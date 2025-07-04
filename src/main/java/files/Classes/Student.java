@@ -28,9 +28,13 @@ public class Student extends Person{
 
     //Student methods
     public void addCourses(Course a){
+
         courses.add(a);
+        a.addStudent(this);
     }
     public void removeCourse(Course b){
+
         courses.remove(b);
+        b.dropStudent(this);
     }
 }

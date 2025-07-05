@@ -14,7 +14,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("Tahmid bhai er fanklub");
         stage.setScene(scene);
-
+//mafed baae gae
         stage.show();
     }
 

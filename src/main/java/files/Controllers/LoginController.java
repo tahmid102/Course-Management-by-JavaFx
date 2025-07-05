@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -58,7 +59,8 @@ public class LoginController {
                     controller.setCurrentStudent(A.searchStudent(enteredId));
                     Stage stage = (Stage) submitButton.getScene().getWindow();
                     stage.setScene(scene);
-                    stage.setTitle("Dash");
+                    stage.setTitle("Student Dashboard");
+                    stage.getIcons().add(new Image(getClass().getResourceAsStream("/buet_logo.png")));
                     stage.show();
 
                     usernameField.setDisable(true);

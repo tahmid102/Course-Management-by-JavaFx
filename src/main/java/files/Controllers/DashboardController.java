@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -31,7 +32,7 @@ public class DashboardController {
 
 
 
-    private Student currentStudent;
+    protected Student currentStudent;
 
     public void setCurrentStudent(Student student){
         this.currentStudent=student;
@@ -44,7 +45,20 @@ public class DashboardController {
     }
 
     public void onHomeButton(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+            Parent root = loader.load();
 
+            DashboardController controller = loader.getController();
+            controller.setCurrentStudent(currentStudent);  // Pass student info back
+
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onMyCourses(ActionEvent actionEvent) {
@@ -60,13 +74,15 @@ public class DashboardController {
 
     public void changeToProfile(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Profile.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Student/Profile.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Student Profile");
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/buet_logo.png")));
+            stage.setResizable(true);
             stage.show();
         } catch (Exception ex) {
             Label errorLabel = new Label();
@@ -78,13 +94,16 @@ public class DashboardController {
 
     public void changeToCourses(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Profile.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Student/StudentCourses.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Student Courses");
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/buet_logo.png")));
+            stage.setResizable(true);
+
             stage.show();
         } catch (Exception ex) {
             Label errorLabel = new Label();

@@ -23,14 +23,20 @@
                         <Font size="25.0" />
                      </font>
                   </Text>
-                  <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButton" prefHeight="24.0" prefWidth="134.0" text="Home" />
-                  <Button fx:id="myCoursesButton" mnemonicParsing="false" onAction="#onMyCourses" prefHeight="27.0" prefWidth="134.0" text="My Courses" />
+                  <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButton" prefHeight="24.0" prefWidth="134.0" text="Home" VBox.vgrow="ALWAYS" />
+                  <AnchorPane>
+                     <children>
+                        <Button fx:id="myCoursesButton" mnemonicParsing="false" onAction="#onMyCourses" prefHeight="27.0" prefWidth="134.0" text="My Courses" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                   <Button fx:id="addCourseButton" mnemonicParsing="false" onAction="#onAdd" prefHeight="26.0" prefWidth="134.0" text="Add/Drop Course" />
                   <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="134.0" text="Due List" />
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="181.0" text="Student Information" />
+                  <Button fx:id="ProfileButton" mnemonicParsing="false" onAction="#onProfile" prefHeight="26.0" prefWidth="181.0" text="My Profile" />
                </children>
             </VBox>
-            <Label text="Label" />
+            <Label />
+            <Label fx:id="welcomeText" text="Welcom" />
+
          </children>
       </HBox>
    </children>

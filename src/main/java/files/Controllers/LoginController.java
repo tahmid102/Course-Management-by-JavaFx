@@ -60,6 +60,8 @@ public class LoginController {
                                 errorLabel.setText("Login successful!");
                                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
                                 Scene scene=new Scene(fxmlLoader.load());
+                                DashboardController controller=fxmlLoader.getController();
+                                controller.setCurrentStudent(A.searchStudent(enteredId));
                                 Stage stage = (Stage) submitButton.getScene().getWindow();
                                 stage.setScene(scene);
                                 stage.setTitle("Dash");

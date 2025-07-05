@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Student extends Person{
     //personal Student class fields
-    List<Course>courses;
+    private final List<Course>courses;
 
     //Student class constructor
     public Student(String studentName,int studentId,String stdPass){
@@ -27,14 +27,21 @@ public class Student extends Person{
     }
 
     //Student methods
-    public void addCourses(Course a){
-
-        courses.add(a);
-        a.addStudent(this);
+    public void addCourses(Course c){
+        if(!courses.contains(c))  courses.add(c);
     }
-    public void removeCourse(Course b){
-
-        courses.remove(b);
-        b.dropStudent(this);
+    public void removeCourse(Course c){
+        courses.remove(c);
+    }
+    @Override
+    public String toString(){
+        StringBuilder sb=new StringBuilder(super.toString());
+        sb.append(", AssignedCourses=[");
+        for(Course c: courses){
+            sb.append(c.getCourseName()).append(",");
+        }
+        if(!courses.isEmpty()) sb.setLength(sb.length()-1);
+        sb.append("]");
+        return sb.toString();
     }
 }

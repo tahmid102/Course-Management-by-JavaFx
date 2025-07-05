@@ -23,6 +23,15 @@ abstract class Person {
         return ID;
     }
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", ID=" + ID +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     public void setID(int ID) {
         this.ID = ID;
     }

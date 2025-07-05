@@ -7,12 +7,8 @@ import java.util.List;
 class Teacher extends Person{
     List<Course> courseAssigned;
     public Teacher(String name, int ID, String password) {
-
         super(name, ID, password);
         courseAssigned=new ArrayList<>();
-    }
-    public void assignCourse(Course a){
-        courseAssigned.add(a);
     }
 
     @Override
@@ -29,11 +25,6 @@ class Teacher extends Person{
     public String getPassword() {
         return super.getPassword();
     }
-
-    public List<Course> getCourseAssigned() {
-        return courseAssigned;
-    }
-
     @Override
     public void setID(int ID) {
         super.setID(ID);
@@ -44,6 +35,14 @@ class Teacher extends Person{
         super.setPassword(password);
     }
 
+    public void assignCourse(Course c){
+        if(!courseAssigned.contains(c)){
+            courseAssigned.add(c);
+        }
+    }
+    public List<Course> getCourseAssigned() {
+        return courseAssigned;
+    }
     public void addStudentToCourse(Student a,Course b){
         a.addCourses(b);
         b.addStudent(a);
@@ -55,8 +54,19 @@ class Teacher extends Person{
         if(!(obj instanceof Teacher))return false;
         return ((Teacher) obj).getID()==this.getID();
 
-    }
+    }@Override
     public int hashCode(){
         return this.getID();
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(super.toString());
+        sb.append(", AssignedCourses=[");
+        for (Course c : courseAssigned) {
+            sb.append(c.getCourseID()).append(",");
+        }
+        if (!courseAssigned.isEmpty()) sb.setLength(sb.length() - 1);
+        sb.append("]");
+        return sb.toString();
     }
 }

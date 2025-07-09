@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class DashboardController {
     public Button ProfileButton;
@@ -66,6 +67,7 @@ public class DashboardController {
     }
 
     public void onAdd(ActionEvent actionEvent) {
+        changeTOAdd(actionEvent);
 
     }
     public void onProfile(ActionEvent actionEvent){
@@ -81,7 +83,7 @@ public class DashboardController {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Student Profile");
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/buet_logo.png")));
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/buet_logo.png"))));
             stage.setResizable(true);
             stage.show();
         } catch (Exception ex) {
@@ -101,7 +103,40 @@ public class DashboardController {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Student Courses");
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/buet_logo.png")));
+            StudentCoursesController controller=loader.getController();
+            controller.passStudent(currentStudent);
+            try {
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/buet_logo.png"))));
+            } catch (Exception ex) {
+                System.out.println("Image Didn't Load");
+            }
+            stage.setResizable(true);
+
+            stage.show();
+        } catch (Exception ex) {
+            Label errorLabel = new Label();
+            errorLabel.setText("Try again.");
+
+            ex.printStackTrace();
+        }
+    }
+
+    public void changeTOAdd(ActionEvent e){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Courses.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("All Courses");
+            CoursesController controller=loader.getController();
+            controller.Initialize();
+            try {
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/buet_logo.png"))));
+            } catch (Exception ex) {
+                System.out.println("Image Didn't Load");
+            }
             stage.setResizable(true);
 
             stage.show();

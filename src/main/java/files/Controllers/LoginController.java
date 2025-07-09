@@ -34,7 +34,7 @@ public class LoginController {
     public void initialize(){
         roleBox.getItems().addAll("Student", "Teacher");
         A.initializeStudents();
-
+        roleBox.setOnAction(e->roleBox.requestFocus());
         usernameField.setOnAction(e-> passwordField.requestFocus());
         passwordField.setOnAction(e-> submitButton.requestFocus());
 
@@ -55,6 +55,7 @@ public class LoginController {
                     errorLabel.setText("Login successful!");
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
                     Scene scene=new Scene(fxmlLoader.load());
+                    // dashboards student setting up
                     DashboardController controller=fxmlLoader.getController();
                     controller.setCurrentStudent(A.searchStudent(enteredId));
                     Stage stage = (Stage) submitButton.getScene().getWindow();
@@ -76,7 +77,7 @@ public class LoginController {
                 }
             }
             else{
-                errorLabel.setText("Invalid credentials");
+                errorLabel.setText("Invalid Inputs");
             }
         } catch (NumberFormatException e) {
             errorLabel.setText("Please enter numeric ID");

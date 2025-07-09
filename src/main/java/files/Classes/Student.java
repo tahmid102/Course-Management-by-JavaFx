@@ -44,4 +44,8 @@ public class Student extends Person{
         sb.append("]");
         return sb.toString();
     }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
 }

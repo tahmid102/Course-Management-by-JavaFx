@@ -1,0 +1,2 @@
+CSE 101,Structural Programming Language,3.00
+CSE 103,Discreet Mathematics,3.00

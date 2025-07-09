@@ -4,7 +4,7 @@ package files.Classes;
 import java.util.ArrayList;
 import java.util.List;
 
-class Teacher extends Person{
+public class Teacher extends Person{
     List<Course> courseAssigned;
     public Teacher(String name, int ID, String password) {
         super(name, ID, password);

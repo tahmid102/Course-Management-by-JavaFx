@@ -32,7 +32,6 @@ public class StudentHashMap {
             InputStream is=getClass().getResourceAsStream("/database/StudentCredentials.txt");
             assert is != null;
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
             String data;
             while ((data=br.readLine())!=null){
                 String[] creds=data.split(",");
@@ -40,7 +39,6 @@ public class StudentHashMap {
                     int stdID=Integer.parseInt(creds[0].trim());
                     String stdName=creds[1].trim();
                     String stdPass=creds[2].trim();
-
                     Student std=new Student(stdName,stdID,stdPass);
                     addStudent(std);
                 }
@@ -48,7 +46,13 @@ public class StudentHashMap {
         } catch (IOException e) {
             System.out.println("Student cred not found "+e.getMessage());
         }
+    }
 
+    @Override
+    public String toString() {
+        return "StudentHashMap{" +
+                "students=" + students +
+                '}';
     }
 }
 

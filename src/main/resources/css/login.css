@@ -57,7 +57,7 @@
 }
 
 /* Error Labels */
-#errorLabel, #errorLabel1 {
+#errorLabel, #registerErrorLabel {
     -fx-text-fill: red;
     -fx-font-weight: bold;
     -fx-font-size: 12px;

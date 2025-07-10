@@ -3,6 +3,7 @@ package files.Classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Teacher extends Person{
     List<Course> courseAssigned;
@@ -56,7 +57,7 @@ public class Teacher extends Person{
 
     }@Override
     public int hashCode(){
-        return this.getID();
+        return Objects.hashCode(getID());
     }
     @Override
     public String toString() {

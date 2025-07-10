@@ -1,39 +1,48 @@
-/* Global anchor pane style */
-#loginAnchorPane {
-    -fx-background-color: linear-gradient(to bottom right, #3674B5, #578FCA);
+/* Root StackPane */
+#loginStackPane {
+    -fx-background-color: linear-gradient(to bottom right, #1f1c2c, #928dab);
+}
+
+/* Both panes inside the stack - general styling */
+#loginForm, #loginSignUp {
+    -fx-background-color: rgba(255, 255, 255, 0.1); /* Transparent overlay feel */
+    -fx-background-radius: 10;
+    -fx-border-color: #ffffff33;
+    -fx-border-radius: 10;
     -fx-padding: 20;
 }
 
-/* Welcome label */
-#welcomeLabel {
-    -fx-text-fill: #F5F0CD;
-    -fx-font-size: 24px;
+/* Welcome Labels */
+#welcomeLabel, #welcomeLabel1 {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-alignment: center;
 }
 
-/* Text fields */
-#usernameField, #passwordField {
+/* Input Fields */
+#userIDField, #passwordField,
+#userIDsetField, #setPasswordField, #confirmPasswordField {
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-padding: 5 10;
     -fx-border-color: #cccccc;
-    -fx-background-color: #ffffffcc;
+    -fx-background-color: #ffffffdd;
     -fx-font-size: 14px;
 }
 
-/* Combo box */
-#roleBox {
+/* ComboBoxes */
+#roleBox, #roleBoxSetup {
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-border-color: #cccccc;
-    -fx-background-color: #ffffffcc;
+    -fx-background-color: #ffffffdd;
     -fx-padding: 3 8;
     -fx-font-size: 14px;
 }
 
 /* Buttons */
-#submitButton, #cancelButton {
+#submitButton, #cancelButton, #signUpButton {
     -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -43,30 +52,30 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
 }
 
-#submitButton:hover, #cancelButton:hover {
+#submitButton:hover, #cancelButton:hover, #signUpButton:hover {
     -fx-background-color: linear-gradient(to right, #5f0aaf, #1e5fd0);
 }
 
-/* Error label */
-#errorLabel {
+/* Error Labels */
+#errorLabel, #errorLabel1 {
     -fx-text-fill: red;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
     -fx-wrap-text: true;
 }
 
-/* Hyperlink */
-#registerHyperlink {
+/* Hyperlinks */
+#registerHyperlink, #LoginHyperlink {
     -fx-text-fill: #ffdd57;
     -fx-font-weight: bold;
     -fx-underline: true;
 }
 
-#registerHyperlink:hover {
+#registerHyperlink:hover, #LoginHyperlink:hover {
     -fx-text-fill: #ffe484;
 }
 
-/* Label for "Don't have an account?" */
+/* All normal labels */
 .label {
     -fx-text-fill: #dddddd;
     -fx-font-size: 13px;

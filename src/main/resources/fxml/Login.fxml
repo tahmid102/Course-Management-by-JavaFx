@@ -7,22 +7,42 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="loginAnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.LoginController">
-    <children>
-        <TextField fx:id="usernameField" layoutX="204.0" layoutY="152.0" prefHeight="22.0" prefWidth="159.0" promptText="userID" />
-        <PasswordField fx:id="passwordField" layoutX="204.0" layoutY="200.0" prefHeight="26.0" prefWidth="159.0" promptText="Password" />
-        <Button fx:id="submitButton" layoutX="148.0" layoutY="273.0" mnemonicParsing="false" onAction="#onSubmit" prefHeight="26.0" prefWidth="60.0" text="Submit" />
-      <Label fx:id="welcomeLabel" layoutX="74.0" layoutY="34.0" prefHeight="48.0" prefWidth="418.0" text="COURSE MANAGEMENT SYSTEM" textAlignment="CENTER">
-         <font>
-            <Font name="Arial Black" size="23.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="roleBox" layoutX="208.0" layoutY="98.0" prefWidth="150.0" promptText="Select Role" />
-      <Label fx:id="errorLabel" layoutX="228.0" layoutY="298.0" prefHeight="48.0" prefWidth="110.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
-      <Button fx:id="cancelButton" layoutX="358.0" layoutY="274.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
-      <Label layoutX="178.0" layoutY="359.0" text="Don't have an account?" />
-      <Hyperlink fx:id="registerHyperlink" layoutX="316.0" layoutY="357.0" text="Register here" underline="true" />
-    </children>
-</AnchorPane>
+<StackPane fx:id="loginStackPane" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.LoginController">
+    <AnchorPane fx:id="loginAnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/login.css" visible="false" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+            <TextField fx:id="userIDField" layoutX="204.0" layoutY="152.0" prefHeight="22.0" prefWidth="159.0" promptText="userID" />
+            <PasswordField fx:id="passwordField" layoutX="204.0" layoutY="200.0" prefHeight="26.0" prefWidth="159.0" promptText="Password" />
+            <Button fx:id="submitButton" layoutX="148.0" layoutY="273.0" mnemonicParsing="false" onAction="#onSubmit" prefHeight="26.0" prefWidth="60.0" text="Submit" />
+            <Label fx:id="welcomeLabel" layoutX="74.0" layoutY="34.0" prefHeight="48.0" prefWidth="418.0" text="COURSE MANAGEMENT SYSTEM" textAlignment="CENTER">
+                <font>
+                    <Font name="Arial Black" size="23.0" />
+                </font>
+            </Label>
+            <ComboBox fx:id="roleBox" layoutX="208.0" layoutY="98.0" prefWidth="150.0" promptText="Select Role" />
+            <Label fx:id="errorLabel" layoutX="228.0" layoutY="298.0" prefHeight="48.0" prefWidth="110.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
+            <Button fx:id="cancelButton" layoutX="358.0" layoutY="274.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+            <Label layoutX="178.0" layoutY="359.0" text="Don't have an account?" />
+            <Hyperlink fx:id="registerHyperlink" layoutX="316.0" layoutY="357.0" onAction="#onRegisterClick" text="Register here" underline="true" />
+        </children>
+    </AnchorPane>
+   <AnchorPane id="loginAnchorPane" fx:id="signUpAnchorPane" layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/login.css">
+      <children>
+         <TextField fx:id="userIDsetField" layoutX="203.0" layoutY="142.0" prefHeight="30.0" prefWidth="160.0" promptText="UserID" />
+         <PasswordField fx:id="setPasswordField" layoutX="203.0" layoutY="184.0" prefHeight="30.0" prefWidth="160.0" promptText="Password" />
+         <Button fx:id="signUpButton" layoutX="245.0" layoutY="284.0" mnemonicParsing="false" onAction="#onSubmit" prefHeight="26.0" prefWidth="60.0" text="Sign Up" />
+         <Label fx:id="welcomeLabel1" layoutX="74.0" layoutY="34.0" prefHeight="48.0" prefWidth="418.0" text="REGISTER HERE" textAlignment="CENTER">
+            <font>
+               <Font name="Arial Black" size="23.0" />
+            </font>
+         </Label>
+         <ComboBox fx:id="roleBoxSetup" layoutX="208.0" layoutY="98.0" prefWidth="150.0" promptText="Select Role" />
+         <Label fx:id="errorLabel1" layoutX="228.0" layoutY="298.0" prefHeight="48.0" prefWidth="110.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
+         <Label layoutX="178.0" layoutY="359.0" text="Already have an account?" />
+         <Hyperlink fx:id="LoginHyperlink" layoutX="326.0" layoutY="357.0" onAction="#onLoginClick" text="Login here" underline="true" />
+         <PasswordField fx:id="confirmPasswordField" layoutX="203.0" layoutY="230.0" prefHeight="30.0" prefWidth="160.0" promptText="Confirm Password" />
+      </children>
+   </AnchorPane>
+</StackPane>

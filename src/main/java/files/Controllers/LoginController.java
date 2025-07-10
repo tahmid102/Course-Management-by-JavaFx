@@ -1,98 +1,133 @@
 package files.Controllers;
 
 
-import files.Classes.Student;
 import files.Classes.StudentHashMap;
+import files.Classes.TeacherHashMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 
 public class LoginController {
-
-    public Button submitButton;
-    public Hyperlink registerHyperlink;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
+    //TODO:LOGIN
+    @FXML public AnchorPane loginAnchorPane;
+    @FXML public TextField userIDField;
+    @FXML public PasswordField passwordField;
+    @FXML public Button submitButton;
+    @FXML public ComboBox<String> roleBox;
+    @FXML public Button cancelButton;
+    @FXML public Hyperlink registerHyperlink;
     @FXML public Label errorLabel;
-    public Label welcomeLabel;
-    @FXML
-    public ComboBox<String> roleBox;
-    @FXML
-    public Button cancelButton;
-    StudentHashMap A=new StudentHashMap();
+    //TODO:REGISTER
+    @FXML public PasswordField setPasswordField;
+    @FXML public Button signUpButton;
+    @FXML public ComboBox<String> roleBoxSetup;
+    @FXML public PasswordField confirmPasswordField;
+    @FXML public Hyperlink LoginHyperlink;
+    @FXML public AnchorPane signUpAnchorPane;
+    @FXML public TextField userIDsetField;
 
-    @FXML
-    public void initialize(){
-        roleBox.getItems().addAll("Student", "Teacher");
-        A.initializeStudents();
+    //TODO:MAIN PANE
+    @FXML private StackPane loginStackPane;
+
+    //TODO:STUDENT and TEACHER HASHES
+    private final StudentHashMap students = new StudentHashMap();
+    private final TeacherHashMap teachers = new TeacherHashMap();
+    @FXML public void initialize(){
+        loginAnchorPane.setVisible(true);
+        signUpAnchorPane.setVisible(false);
+
+        roleBox.getItems().addAll("Student", "Teacher","Admin");
         roleBox.setOnAction(e->roleBox.requestFocus());
-        usernameField.setOnAction(e-> passwordField.requestFocus());
+        userIDField.setOnAction(e-> passwordField.requestFocus());
         passwordField.setOnAction(e-> submitButton.requestFocus());
 
     }
-    public void onSubmit(ActionEvent actionEvent){
-        String selectedRole=roleBox.getValue();
-        if(selectedRole == null || selectedRole.isBlank()){
-            errorLabel.setText("Please select a role");
+    @FXML public void onSubmit(ActionEvent actionEvent){
+        String role = roleBox.getValue();
+        String idText = userIDField.getText().trim();
+        String password = passwordField.getText();
+
+        if (role == null || idText.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Fill in all fields");
             return;
         }
-        String username=usernameField.getText().trim().toLowerCase();
-        String password=passwordField.getText();
 
         try {
-            int enteredId=Integer.parseInt(username);
-            if(A.isStudentAvailable(enteredId)){
-                if(A.searchStudent(enteredId).getPassword().equals(password)){
-                    errorLabel.setText("Login successful!");
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
-                    Scene scene=new Scene(fxmlLoader.load());
-                    // dashboards student setting up
-                    DashboardController controller=fxmlLoader.getController();
-                    controller.setCurrentStudent(A.searchStudent(enteredId));
-                    Stage stage = (Stage) submitButton.getScene().getWindow();
-                    stage.setScene(scene);
-                    stage.setTitle("Dashboard");
-                    stage.getIcons().add(new Image(getClass().getResourceAsStream("/buet_logo.png")));
-                    stage.show();
-
-                    usernameField.setDisable(true);
-                    passwordField.setDisable(true);
-                    usernameField.setVisible(false);
-                    passwordField.setVisible(false);
-                    roleBox.setVisible(false);
-                    roleBox.setDisable(false);
-
+            int id = Integer.parseInt(idText);
+            if (role.equals("Student")) {
+                students.initializeStudents();
+                if (students.isStudentAvailable(id)) {
+                    if (students.searchStudent(id).getPassword().equals(password)) {
+                        goToDashboard(id);
+                    } else {
+                        errorLabel.setText("Wrong Password");
+                    }
+                } else {
+                    errorLabel.setText("Student ID not found");
                 }
-                else{
-                    errorLabel.setText("Wrong Password");
+            } else if (role.equals("Teacher")) {
+                teachers.initializeTeachers();
+                if (teachers.isTeacherAvailable(id)) {
+                    if (teachers.searchTeacher(id).getPassword().equals(password)) {
+                        goToTeacherDashboard(id); // make this if needed
+                    } else {
+                        errorLabel.setText("Wrong Password");
+                    }
+                } else {
+                    errorLabel.setText("Teacher ID not found");
                 }
             }
-            else{
-                errorLabel.setText("Invalid Inputs");
-            }
+            else if(role.equals("Admin")){}
+
         } catch (NumberFormatException e) {
-            errorLabel.setText("Please enter numeric ID");
+            errorLabel.setText("User ID must be numeric");
         } catch (IOException e) {
-            errorLabel.setText("An error occurred !");
+            errorLabel.setText("Something went wrong loading the dashboard");
         }
     }
-    public void onCancel(){
+
+
+    //TODO:DASHBOARD
+    private void goToDashboard(int enteredId) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+        Scene scene=new Scene(fxmlLoader.load());
+        DashboardController controller=fxmlLoader.getController();
+        controller.setCurrentStudent(students.searchStudent(enteredId));
+        Stage stage = (Stage) submitButton.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Dashboard");
+        stage.show();
+    }
+    private void goToTeacherDashboard(int enteredID) throws IOException{
+
+    }
+    //TODO: NAVIGATION
+    @FXML private void onRegisterClick() {
+        loginAnchorPane.setVisible(false);
+        signUpAnchorPane.setVisible(true);
+        userIDField.requestFocus();
+    }
+
+    @FXML private void onLoginClick() {
+        signUpAnchorPane.setVisible(false);
+        loginAnchorPane.setVisible(true);
+        userIDField.requestFocus();
+    }
+    @FXML public void onCancel() {
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);
         cancelAlert.setTitle("Quit");
         cancelAlert.setHeaderText("Quitting Application");
         cancelAlert.setContentText("Are you sure you want to continue?");
         Optional<ButtonType> result = cancelAlert.showAndWait();
-        if( result.isPresent() && result.get()==ButtonType.OK){
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
         }

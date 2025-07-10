@@ -1,8 +1,7 @@
 package files.Controllers;
 
 
-import files.Classes.StudentHashMap;
-import files.Classes.TeacherHashMap;
+import files.Classes.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,16 +41,20 @@ public class LoginController {
     //TODO:STUDENT and TEACHER HASHES
     private final StudentHashMap students = new StudentHashMap();
     private final TeacherHashMap teachers = new TeacherHashMap();
+    private final PendingStudentsList pendingStudents = new PendingStudentsList();
+    private final PendingTeachersList pendingTeachers = new PendingTeachersList();
     @FXML public void initialize(){
         loginAnchorPane.setVisible(true);
         signUpAnchorPane.setVisible(false);
 
         roleBox.getItems().addAll("Student", "Teacher","Admin");
+        roleBoxSetup.getItems().addAll("Student","Teacher");
         roleBox.setOnAction(e->roleBox.requestFocus());
         userIDField.setOnAction(e-> passwordField.requestFocus());
         passwordField.setOnAction(e-> submitButton.requestFocus());
 
     }
+    //TODO:LOGIN PAGE SUBMISSION
     @FXML public void onSubmit(ActionEvent actionEvent){
         String role = roleBox.getValue();
         String idText = userIDField.getText().trim();
@@ -95,7 +98,63 @@ public class LoginController {
             errorLabel.setText("Something went wrong loading the dashboard");
         }
     }
+    //TODO:REG PAGE SUBMISSION
+    @FXML
+    private void onSignUp() {
+        String name = setNameField.getText().trim();
+        String idText = setUserIDField.getText().trim();
+        String password = setPasswordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+        String role = roleBoxSetup.getValue();
 
+        if (name.isEmpty() || idText.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || role == null) {
+            registerErrorLabel.setText("All fields are required");
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            registerErrorLabel.setText("Passwords do not match");
+            return;
+        }
+
+        int id;
+        try {
+            id = Integer.parseInt(idText);
+        } catch (NumberFormatException e) {
+            registerErrorLabel.setText("User ID must be numeric");
+            return;
+        }
+
+        if (role.equals("Student")) {
+            students.initializeStudents();
+            pendingStudents.loadFromFile();
+            System.out.println(students);
+            if (students.isStudentAvailable(id) || pendingStudents.isDuplicate(id)) {
+                registerErrorLabel.setText("Student ID already exists");
+                return;
+            }
+            pendingStudents.addToPending(new Student(name, id, password));
+            registerErrorLabel.setText("Student request sent! Awaiting admin approval.");
+        } else if (role.equals("Teacher")) {
+            teachers.initializeTeachers();
+            pendingTeachers.loadFromFile();
+            if (teachers.isTeacherAvailable(id) || pendingTeachers.isDuplicate(id)) {
+                registerErrorLabel.setText("Teacher ID already exists");
+                return;
+            }
+            pendingTeachers.addToPending(new Teacher(name, id, password));
+            registerErrorLabel.setText("Teacher request sent! Awaiting admin approval.");
+        } else {
+            registerErrorLabel.setText("Admin cannot register here");
+        }
+
+        // Optional: reset form
+        setNameField.clear();
+        setUserIDField.clear();
+        setPasswordField.clear();
+        confirmPasswordField.clear();
+        roleBoxSetup.getSelectionModel().clearSelection();
+    }
 
     //TODO:DASHBOARD
     private void goToDashboard(int enteredId) throws IOException {

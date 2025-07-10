@@ -32,7 +32,9 @@ public class LoginController {
     @FXML public PasswordField confirmPasswordField;
     @FXML public Hyperlink LoginHyperlink;
     @FXML public AnchorPane signUpAnchorPane;
-    @FXML public TextField userIDsetField;
+    @FXML public TextField setUserIDField;
+    @FXML public Label registerErrorLabel;
+    @FXML public TextField setNameField;
 
     //TODO:MAIN PANE
     @FXML private StackPane loginStackPane;
@@ -113,7 +115,7 @@ public class LoginController {
     @FXML private void onRegisterClick() {
         loginAnchorPane.setVisible(false);
         signUpAnchorPane.setVisible(true);
-        userIDField.requestFocus();
+        setNameField.requestFocus();
     }
 
     @FXML private void onLoginClick() {

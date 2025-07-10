@@ -22,7 +22,7 @@
 
 /* Input Fields */
 #userIDField, #passwordField,
-#userIDsetField, #setPasswordField, #confirmPasswordField {
+#setUserIDField, #setPasswordField, #confirmPasswordField,#setNameField {
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-padding: 5 10;

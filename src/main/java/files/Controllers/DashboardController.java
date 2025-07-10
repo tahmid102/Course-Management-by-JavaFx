@@ -131,7 +131,8 @@ public class DashboardController {
             stage.setScene(scene);
             stage.setTitle("All Courses");
             CoursesController controller=loader.getController();
-            controller.Initialize();
+            controller.passStudent(currentStudent);
+            controller.initialize();
             try {
                 stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/buet_logo.png"))));
             } catch (Exception ex) {

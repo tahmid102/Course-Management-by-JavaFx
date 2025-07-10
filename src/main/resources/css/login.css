@@ -1,16 +1,73 @@
-.root {
-    -fx-background-color: #245A77;
+/* Global anchor pane style */
+#loginAnchorPane {
+    -fx-background-color: linear-gradient(to bottom right, #3674B5, #578FCA);
+    -fx-padding: 20;
 }
 
-.text-field, .password-field {
-    -fx-background-radius: 5;
-    -fx-border-color: #ccc;
-    -fx-padding: 5px;
+/* Welcome label */
+#welcomeLabel {
+    -fx-text-fill: #F5F0CD;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
 }
 
-.button {
-    -fx-background-color: #F8D966;
+/* Text fields */
+#usernameField, #passwordField {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 5 10;
+    -fx-border-color: #cccccc;
+    -fx-background-color: #ffffffcc;
+    -fx-font-size: 14px;
+}
+
+/* Combo box */
+#roleBox {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #cccccc;
+    -fx-background-color: #ffffffcc;
+    -fx-padding: 3 8;
+    -fx-font-size: 14px;
+}
+
+/* Buttons */
+#submitButton, #cancelButton {
+    -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
 }
 
+#submitButton:hover, #cancelButton:hover {
+    -fx-background-color: linear-gradient(to right, #5f0aaf, #1e5fd0);
+}
+
+/* Error label */
+#errorLabel {
+    -fx-text-fill: red;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+/* Hyperlink */
+#registerHyperlink {
+    -fx-text-fill: #ffdd57;
+    -fx-font-weight: bold;
+    -fx-underline: true;
+}
+
+#registerHyperlink:hover {
+    -fx-text-fill: #ffe484;
+}
+
+/* Label for "Don't have an account?" */
+.label {
+    -fx-text-fill: #dddddd;
+    -fx-font-size: 13px;
+}

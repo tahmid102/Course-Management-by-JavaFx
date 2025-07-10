@@ -18,6 +18,7 @@ import java.util.Optional;
 public class LoginController {
 
     public Button submitButton;
+    public Hyperlink registerHyperlink;
     @FXML
     private TextField usernameField;
     @FXML
@@ -60,7 +61,7 @@ public class LoginController {
                     controller.setCurrentStudent(A.searchStudent(enteredId));
                     Stage stage = (Stage) submitButton.getScene().getWindow();
                     stage.setScene(scene);
-                    stage.setTitle("Student Dashboard");
+                    stage.setTitle("Dashboard");
                     stage.getIcons().add(new Image(getClass().getResourceAsStream("/buet_logo.png")));
                     stage.show();
 

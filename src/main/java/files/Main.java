@@ -15,7 +15,6 @@ public class Main extends Application {
         stage.setResizable(false);
         stage.setTitle("Course Management System");
         stage.setScene(scene);
-//mafed baae gae
         stage.show();
     }
 

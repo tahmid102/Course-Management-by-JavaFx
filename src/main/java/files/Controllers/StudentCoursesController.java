@@ -8,11 +8,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class StudentCoursesController extends DashboardController{
@@ -43,9 +45,13 @@ public class StudentCoursesController extends DashboardController{
         }
         else{
             for(Course course:courses){
-                Label label =new Label(course.getCourseName());
-                label.setStyle("-fx-font-size: 14; -fx-padding: 5;");
-                courseVbox.getChildren().add(label);
+                //Label label =new Label(course.getCourseName());
+                Hyperlink hyperlinlk=new Hyperlink(course.getCourseID()+course.getCourseName());
+                hyperlinlk.setStyle("-fx-font-size: 11; -fx-padding: 5;");
+                courseVbox.getChildren().add(hyperlinlk);
+                hyperlinlk.setOnAction(e->{
+                    onCoursePage(course);
+                });
 
             }
         }
@@ -58,10 +64,38 @@ public class StudentCoursesController extends DashboardController{
 
 
     public void toDash(ActionEvent actionEvent) {
-        super.onHomeButton(actionEvent);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+        Scene scene= null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        DashboardController controller=fxmlLoader.getController();
+        controller.setCurrentStudent(student);
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Dashboard");
+        stage.show();
     }
 
-    public void onCoursePage(){
-
+    public void onCoursePage(Course course){
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Student/CoursePage.fxml"));
+        Scene scene= null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CoursePageController controller=fxmlLoader.getController();
+        controller.setCourse(course);
+        controller.setStudent(currentStudent);
+        controller.display();
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("My Courses");
+        stage.show();
     }
+
+
 }

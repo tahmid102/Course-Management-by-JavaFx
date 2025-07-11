@@ -1,2 +1,5 @@
 CSE 101,Structural Programming Language,3.00
 CSE 103,Discreet Mathematics,3.00
+CSE 105,Data Structure and Algorithms,3.00
+EEE 163,Basic Electrical Engineering,3.00
+ME 165,Basic Mechanical Engineering,3.00

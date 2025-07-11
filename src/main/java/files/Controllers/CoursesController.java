@@ -6,15 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -27,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 public class CoursesController {
     public VBox allCourseVbox;
     public Button backButton;
+    public ComboBox filterBox;
+    public TextField SearchBox;
     List<Course> Courses=new ArrayList<>();
     Student currentStudent;
     List<Course> EnrolledCourse=new ArrayList<>();
@@ -37,6 +41,7 @@ public class CoursesController {
     }
 
     public void loadCourses(){
+        Courses.clear();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/database/Courses.txt")))) {
             String line;
             while((line= reader.readLine())!=null){
@@ -80,7 +85,18 @@ public class CoursesController {
                         "-fx-background-radius: 5;" +
                         "-fx-cursor: hand;"
         );
-        addButton.setOnAction(e->currentStudent.addCourses(a));
+        addButton.setOnAction(e->{
+            currentStudent.addCourses(a);
+            EnrolledCourse.add(a);
+            display(Courses);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You enrolled in " + a.getCourseID());
+                    alert.showAndWait();
+        }
+        );
+
         CourseRow.getChildren().addAll(label,addButton);
         return CourseRow;
 
@@ -114,6 +130,18 @@ public class CoursesController {
     @FXML
     public void initialize(){
         loadCourses();
+        Set<String> departments = new HashSet<>();
+
+        for (Course course : Courses) {
+            String deptCode = course.getCourseID().replaceAll("[^A-Za-z]", "").toUpperCase();
+            departments.add(deptCode);
+        }
+
+        filterBox.getItems().add("All"); // optional default
+        filterBox.getItems().addAll(departments);
+        filterBox.setValue("All"); // default selected
+        SearchBox.setOnAction(e->onSearchAndFilter());
+
         display(Courses);
     }
 
@@ -132,4 +160,22 @@ public class CoursesController {
         stage.setTitle("Dashboard");
         stage.show();
     }
+    @FXML
+    public void onSearchAndFilter() {
+        String keyword = SearchBox.getText().trim().toLowerCase();
+        String selectedDept = filterBox.getValue().toString();
+
+        List<Course> filtered = Courses.stream()
+                .filter(course -> {
+                    boolean matchesSearch = course.getCourseID().toLowerCase().contains(keyword)
+                            || course.getCourseName().toLowerCase().contains(keyword);
+                    String deptCode = course.getCourseID().replaceAll("[^A-Za-z]", "").toUpperCase();
+                    boolean matchesFilter = selectedDept == null || selectedDept.equals("All") || deptCode.equals(selectedDept);
+                    return matchesSearch && matchesFilter;
+                })
+                .toList();
+
+        display(filtered);
+    }
+
 }

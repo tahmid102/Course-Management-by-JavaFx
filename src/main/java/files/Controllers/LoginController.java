@@ -43,6 +43,7 @@ public class LoginController {
     private final TeacherHashMap teachers = new TeacherHashMap();
     private final PendingStudentsList pendingStudents = new PendingStudentsList();
     private final PendingTeachersList pendingTeachers = new PendingTeachersList();
+
     @FXML public void initialize(){
         loginAnchorPane.setVisible(true);
         signUpAnchorPane.setVisible(false);
@@ -67,35 +68,49 @@ public class LoginController {
 
         try {
             int id = Integer.parseInt(idText);
-            if (role.equals("Student")) {
-                students.initializeStudents();
-                if (students.isStudentAvailable(id)) {
-                    if (students.searchStudent(id).getPassword().equals(password)) {
-                        goToDashboard(id);
+            switch (role) {
+                case "Student" -> {
+                    students.initializeStudents();
+                    if (students.isStudentAvailable(id)) {
+                        if (students.searchStudent(id).getPassword().equals(password)) {
+                            goToDashboard(id);
+                        } else {
+                            errorLabel.setText("Wrong Password");
+                        }
                     } else {
-                        errorLabel.setText("Wrong Password");
+                        errorLabel.setText("Student ID not found");
                     }
-                } else {
-                    errorLabel.setText("Student ID not found");
                 }
-            } else if (role.equals("Teacher")) {
-                teachers.initializeTeachers();
-                if (teachers.isTeacherAvailable(id)) {
-                    if (teachers.searchTeacher(id).getPassword().equals(password)) {
-                        goToTeacherDashboard(id); // make this if needed
+                case "Teacher" -> {
+                    teachers.initializeTeachers();
+                    if (teachers.isTeacherAvailable(id)) {
+                        if (teachers.searchTeacher(id).getPassword().equals(password)) {
+                            goToTeacherDashboard(id);
+                        } else {
+                            errorLabel.setText("Wrong Password");
+                        }
                     } else {
-                        errorLabel.setText("Wrong Password");
+                        errorLabel.setText("Teacher ID not found");
                     }
-                } else {
-                    errorLabel.setText("Teacher ID not found");
+                }
+                case "Admin" -> {
+                    if(Admin.getAdminInstance().verifyCredentials(id,password)){
+                        System.out.println("Admin logs in");
+                        goToAdminDashboard();
+                    }
+                    else{
+                        errorLabel.setText("Admin credentials incorrect");
+                    }
                 }
             }
-            else if(role.equals("Admin")){}
 
         } catch (NumberFormatException e) {
             errorLabel.setText("User ID must be numeric");
         } catch (IOException e) {
             errorLabel.setText("Something went wrong loading the dashboard");
+        }
+        catch (Exception e){
+            errorLabel.setText("What te fu");
         }
     }
     //TODO:REG PAGE SUBMISSION
@@ -148,7 +163,6 @@ public class LoginController {
             registerErrorLabel.setText("Admin cannot register here");
         }
 
-        // Optional: reset form
         setNameField.clear();
         setUserIDField.clear();
         setPasswordField.clear();
@@ -167,8 +181,16 @@ public class LoginController {
         stage.setTitle("Dashboard");
         stage.show();
     }
-    private void goToTeacherDashboard(int enteredID) throws IOException{
+    private void goToTeacherDashboard(int enteredID){
 
+    }
+    private void goToAdminDashboard() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
+        Scene scene=new Scene(fxmlLoader.load());
+        Stage stage = (Stage) submitButton.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Admin Dashboard");
+        stage.show();
     }
     //TODO: NAVIGATION
     @FXML private void onRegisterClick() {

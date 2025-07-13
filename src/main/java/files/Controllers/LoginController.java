@@ -39,8 +39,8 @@ public class LoginController {
     @FXML private StackPane loginStackPane;
 
     //TODO:STUDENT and TEACHER HASHES
-    private final StudentHashMap students = new StudentHashMap();
-    private final TeacherHashMap teachers = new TeacherHashMap();
+    private final StudentList students = new StudentList();
+    private final TeacherList teachers = new TeacherList();
     private final PendingStudentsList pendingStudents = new PendingStudentsList();
     private final PendingTeachersList pendingTeachers = new PendingTeachersList();
 

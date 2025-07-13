@@ -8,36 +8,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane prefWidth="800.0" prefHeight="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="files.Controllers.DashboardController"
+            >
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.DashboardController">
-   <children>
-      <HBox fx:id="hboxAll" prefHeight="400.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
+   <!-- Top Blue Header -->
+   <top>
+      <HBox styleClass="top-bar">
+         <Button fx:id="logout" text="← Back" onAction="#onlogout" styleClass="back-button"/>
+         <Label text="Student Dashboard" styleClass="header-title"/>
+      </HBox>
+   </top>
+
+   <!-- Sidebar -->
+   <left>
+      <VBox styleClass="sidebar" spacing="20.0">
          <children>
-            <VBox fx:id="vBox" prefHeight="400.0" prefWidth="76.0" spacing="20.0">
-               <children>
-                  <Text fx:id="topText" fill="#bf17bf" strokeType="OUTSIDE" strokeWidth="0.0" text="DRIM JAVA" wrappingWidth="134.13677978515625">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                  </Text>
-                  <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButton" prefHeight="24.0" prefWidth="134.0" text="Home" VBox.vgrow="ALWAYS" />
-                  <AnchorPane>
-                     <children>
-                        <Button fx:id="myCoursesButton" mnemonicParsing="false" onAction="#onMyCourses" prefHeight="27.0" prefWidth="134.0" text="My Courses" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-                  <Button fx:id="addCourseButton" mnemonicParsing="false" onAction="#onAdd" prefHeight="26.0" prefWidth="134.0" text="Add/Drop Course" />
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="134.0" text="Due List" />
-                  <Button fx:id="ProfileButton" mnemonicParsing="false" onAction="#onProfile" prefHeight="26.0" prefWidth="181.0" text="My Profile" />
-               </children>
-            </VBox>
-            <Label />
-            <Label fx:id="welcomeText" text="Welcom" />
+            <Text text="Menu" styleClass="sidebar-title"/>
+            <Button fx:id="homeButton" text="Home" onAction="#onHomeButton" styleClass="button-neutral" />
+            <Button fx:id="myCoursesButton" text="My Courses" onAction="#onMyCourses" styleClass="button-primary"/>
+            <Button fx:id="addCourseButton" text="Add/Drop Course" onAction="#onAdd" styleClass="button-neutral"/>
+            <Button fx:id="ProfileButton" text="My Profile" onAction="#onProfile" styleClass="button-neutral"/>
+            <Button fx:id="backButton" text="← Logout" onAction="#onlogout" styleClass="back-button"/>
 
          </children>
-      </HBox>
-   </children>
-</AnchorPane>
+      </VBox>
+   </left>
+
+   <!-- Center -->
+   <center>
+      <VBox alignment="CENTER" styleClass="center-pane">
+         <Label fx:id="welcomeText" text="Welcome, [Student Name]" styleClass="welcome-label"/>
+      </VBox>
+   </center>
+</BorderPane>

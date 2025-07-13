@@ -8,10 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -86,13 +83,18 @@ public class CoursesController {
                         "-fx-cursor: hand;"
         );
         addButton.setOnAction(e->{
-            currentStudent.addCourses(a);
+
             EnrolledCourse.add(a);
+                    try (FileWriter writer = new FileWriter("src/main/resources/database/enrollments.txt", true)) {
+                        writer.write(currentStudent.getID() + "," + a.getCourseID() + "\n");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
             display(Courses);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setHeaderText(null);
-                    alert.setContentText("You enrolled in " + a.getCourseID());
+                    alert.setContentText("You Applied for" + a.getCourseID());
                     alert.showAndWait();
         }
         );
@@ -140,7 +142,10 @@ public class CoursesController {
         filterBox.getItems().add("All"); // optional default
         filterBox.getItems().addAll(departments);
         filterBox.setValue("All"); // default selected
-        SearchBox.setOnAction(e->onSearchAndFilter());
+        filterBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            onSearchAndFilter();
+        });
+
 
         display(Courses);
     }

@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.CoursePageController">
    <children>
-      <Label fx:id="courseName" layoutX="148.0" layoutY="85.0" prefHeight="58.0" prefWidth="266.0" text="Label" wrapText="true">
+      <Label fx:id="courseName" layoutX="136.0" layoutY="14.0" prefHeight="58.0" prefWidth="395.0" text="Label" textAlignment="CENTER" textFill="#133ebc" textOverrun="WORD_ELLIPSIS" wrapText="true">
          <font>
-            <Font name="System Bold" size="30.0" />
+            <Font name="System Bold" size="23.0" />
          </font>
       </Label>
-      <Label fx:id="creditLOabel" layoutX="148.0" layoutY="191.0" prefHeight="33.0" prefWidth="105.0" text="Total Credits">
+      <Label fx:id="creditLOabel" layoutX="192.0" layoutY="72.0" prefHeight="34.0" prefWidth="142.0" text="Total Credits">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Label>
+      <ScrollPane layoutX="98.0" layoutY="106.0" prefHeight="310.0" prefWidth="498.0" />
+      <VBox layoutY="-4.0" prefHeight="419.0" prefWidth="98.0" style="-fx-background-color: #A4BCCC;" />
    </children>
 </AnchorPane>

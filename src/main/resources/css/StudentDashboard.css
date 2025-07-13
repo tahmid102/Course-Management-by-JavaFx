@@ -1,0 +1,56 @@
+/* ===== Root Background ===== */
+.anchor-pane {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #3e1e68, #2b86c5);
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-padding: 25 15;
+    -fx-spacing: 20;
+    -fx-background-radius: 12;
+}
+
+/* ===== Top Title ===== */
+.title-text {
+    -fx-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 2, 0, 0, 1);
+}
+
+/* ===== Button Styles ===== */
+.button {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 3, 0, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+.button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== Welcome Label ===== */
+.welcome-label {
+    -fx-font-size: 22px;
+    -fx-text-fill: white;
+    -fx-padding: 20 0 0 30;
+    -fx-font-weight: bold;
+}
+
+/* ===== Content Area Placeholder ===== */
+.main-content {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+}

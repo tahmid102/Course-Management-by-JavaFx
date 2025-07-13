@@ -21,6 +21,8 @@ public class DashboardController {
     public Button ProfileButton;
     @FXML
     public javafx.scene.control.Label welcomeText;
+    public Button logout;
+    public Button backButton;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -149,4 +151,7 @@ public class DashboardController {
         }
     }
 
+    public void onlogout(ActionEvent actionEvent) {
+
+    }
 }

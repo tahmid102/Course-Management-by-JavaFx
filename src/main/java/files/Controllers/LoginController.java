@@ -144,6 +144,14 @@ public class LoginController {
             students.initializeStudents();
             pendingStudents.loadFromFile();
             System.out.println(students);
+            if((id+"").length()!=7) {
+                registerErrorLabel.setText("Student ID should be a 7 digit integer");
+                return;
+            }
+            if(password.length()<4){
+                registerErrorLabel.setText("Password must be 4 characters or more");
+                return;
+            }
             if (students.isStudentAvailable(id) || pendingStudents.isDuplicate(id)) {
                 registerErrorLabel.setText("Student ID already exists");
                 return;
@@ -153,6 +161,10 @@ public class LoginController {
         } else if (role.equals("Teacher")) {
             teachers.initializeTeachers();
             pendingTeachers.loadFromFile();
+            if(password.length()<4){
+                registerErrorLabel.setText("Password must be 4 characters or more");
+                return;
+            }
             if (teachers.isTeacherAvailable(id) || pendingTeachers.isDuplicate(id)) {
                 registerErrorLabel.setText("Teacher ID already exists");
                 return;

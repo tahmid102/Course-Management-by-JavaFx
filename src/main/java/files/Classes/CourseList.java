@@ -25,4 +25,12 @@ public class CourseList {
             System.out.println("Error");
         }
     }
+    public Course searchCourse(String courseId) {
+        for (Course course : Courses) {
+            if (course.getCourseID().equalsIgnoreCase(courseId)) {
+                return course;
+            }
+        }
+        return null;
+    }
 }

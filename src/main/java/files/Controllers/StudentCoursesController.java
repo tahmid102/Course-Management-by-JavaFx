@@ -38,6 +38,11 @@ public class StudentCoursesController extends DashboardController{
 
     public void displayCoursesd(){
         courseVbox.getChildren().clear();
+        System.out.println("Loaded courses for student: " + student.getID());
+        for (Course c : courses) {
+            System.out.println("Course: " + c.getCourseID() + " - " + c.getCourseName());
+        }
+
         if(courses.isEmpty()){
             Label label =new Label("You Haven't Enrolled in any course");
             label.setStyle("-fx-font-size: 10; -fx-padding: 5;");

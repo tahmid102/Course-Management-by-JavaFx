@@ -71,6 +71,7 @@ public class LoginController {
             switch (role) {
                 case "Student" -> {
                     students.initializeStudents();
+                    students.LoadCourse();
                     if (students.isStudentAvailable(id)) {
                         if (students.searchStudent(id).getPassword().equals(password)) {
                             goToDashboard(id);

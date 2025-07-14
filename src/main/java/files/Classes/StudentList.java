@@ -57,6 +57,32 @@ public class StudentList {
         } catch (IOException e) {
             System.out.println("Student cred not found: " + e.getMessage());
         }
+
+    }
+    public void LoadCourse(){
+        try{
+            InputStream ic=getClass().getResourceAsStream("/database/enrollments.txt");
+            assert ic!=null;
+            BufferedReader br= new BufferedReader(new InputStreamReader(ic));
+            CourseList courses=new CourseList();
+            courses.loadCourses();
+            String line;
+            while((line=br.readLine())!=null){
+                String[] crs=line.split(",");
+                if(crs.length==2){
+                    int stdId=Integer.parseInt(crs[0].trim());
+                    String CourseID=crs[1].trim();
+                    Student student=searchStudent(stdId);
+                    if(student!=null){
+                        Course course=courses.searchCourse(CourseID);
+                        if(course!=null) student.addCourses(course);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Courses didnt load");
+        }
+
     }
 
     public List<Student> getStudents() {

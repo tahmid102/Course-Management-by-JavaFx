@@ -3,6 +3,7 @@ package files.Classes;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class CourseList {
     List<Course> Courses=new ArrayList<>();
 
     public void loadCourses(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("Courses.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/database/Courses.txt")))) {
             String line;
             while((line= reader.readLine())!=null){
                 String[] words=line.split(",");
@@ -27,7 +28,7 @@ public class CourseList {
     }
     public Course searchCourse(String courseId) {
         for (Course course : Courses) {
-            if (course.getCourseID().equalsIgnoreCase(courseId)) {
+            if (course.getCourseID().equals(courseId)) {
                 return course;
             }
         }

@@ -79,7 +79,7 @@ public class AssignedCourses {
                 hyperlinlk.setStyle("-fx-font-size: 11; -fx-padding: 5;");
                 CourseVBox.getChildren().add(hyperlinlk);
                 hyperlinlk.setOnAction(e->{
-
+                    onCoursePage(course);
                 });
 
             }
@@ -102,4 +102,22 @@ public class AssignedCourses {
         stage.setScene(scene);
         stage.show();
     }
+    public void onCoursePage(Course course){
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TeacherCoursesPage.fxml"));
+        Scene scene= null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        TeacherCoursePage controller=fxmlLoader.getController();
+        controller.setCourse(course);
+        controller.setTeacher(teacher);
+        controller.display();
+        Stage stage = (Stage) homeButton.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("My Courses");
+        stage.show();
+    }
+
 }

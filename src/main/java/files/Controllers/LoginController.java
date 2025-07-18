@@ -84,8 +84,11 @@ public class LoginController {
                 }
                 case "Teacher" -> {
                     teachers.initializeTeachers();
+                    teachers.loadCourses();
+
                     if (teachers.isTeacherAvailable(id)) {
                         if (teachers.searchTeacher(id).getPassword().equals(password)) {
+
                             goToTeacherDashboard(id);
                         } else {
                             errorLabel.setText("Wrong Password");
@@ -205,6 +208,8 @@ public class LoginController {
         }
         TeacherDasahboardController controller=fxmlLoader.getController();
         controller.setTeacher(teachers.searchTeacher(enteredID));
+
+
 
         Stage stage = (Stage) submitButton.getScene().getWindow();
         stage.setScene(scene);

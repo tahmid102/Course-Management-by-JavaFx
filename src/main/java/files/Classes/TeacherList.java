@@ -59,11 +59,11 @@ public class TeacherList {
         } catch (IOException e) {
             System.out.println("Teacher credentials not found: " + e.getMessage());
         }
-        loadCourses();
+
     }
     public void loadCourses(){
         try{
-            InputStream cs=getClass().getResourceAsStream("database/AssignedCoursesTeacher.txt");
+            InputStream cs=getClass().getResourceAsStream("/database/AssignedCoursesTeacher.txt");
             assert cs !=null;
             BufferedReader br=new BufferedReader(new InputStreamReader(cs));
             CourseList courses=new CourseList();

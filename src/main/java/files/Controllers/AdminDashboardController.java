@@ -84,7 +84,7 @@ public class AdminDashboardController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 

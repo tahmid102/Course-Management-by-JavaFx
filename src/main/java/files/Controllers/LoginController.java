@@ -111,6 +111,7 @@ public class LoginController {
             errorLabel.setText("Something went wrong loading the dashboard");
         }
         catch (Exception e){
+            e.printStackTrace();
             errorLabel.setText("What te fu");
         }
     }
@@ -195,7 +196,20 @@ public class LoginController {
         stage.show();
     }
     private void goToTeacherDashboard(int enteredID){
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TeacherDashboard.fxml"));
+        Scene scene= null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        TeacherDasahboardController controller=fxmlLoader.getController();
+        controller.setTeacher(teachers.searchTeacher(enteredID));
 
+        Stage stage = (Stage) submitButton.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Teacher Dashboard");
+        stage.show();
     }
     private void goToAdminDashboard() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));

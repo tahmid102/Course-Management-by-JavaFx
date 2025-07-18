@@ -1,0 +1,71 @@
+.top-bar {
+    -fx-background-color: #2c3e50;
+}
+
+.header-title {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.subtitle-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #bdc3c7;
+    -fx-padding: 4 0 0 12;
+}
+
+.status-bar {
+    -fx-background-color: #34495e;
+}
+
+.status-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #ecf0f1;
+}
+
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #34495e, #2c3e50);
+}
+
+.sidebar-title {
+    -fx-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.center-pane {
+    -fx-background-color: #ecf0f1;
+}
+
+.welcome-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.button-primary {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.button-neutral {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.back-button {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}

@@ -59,7 +59,35 @@ public class TeacherList {
         } catch (IOException e) {
             System.out.println("Teacher credentials not found: " + e.getMessage());
         }
+        loadCourses();
     }
+    public void loadCourses(){
+        try{
+            InputStream cs=getClass().getResourceAsStream("database/AssignedCoursesTeacher.txt");
+            assert cs !=null;
+            BufferedReader br=new BufferedReader(new InputStreamReader(cs));
+            CourseList courses=new CourseList();
+            courses.loadCourses();
+            String line;
+            while((line=br.readLine())!=null){
+                String crs[]=line.split(",");
+                if(crs.length==2){
+                    int id=Integer.parseInt(crs[0].trim());
+                    String CourseId=crs[1].trim();
+                    Teacher t=searchTeacher(id);
+                    if(t!=null){
+                        Course course=courses.searchCourse(CourseId);
+                        if(course!=null)t.assignCourse(course);
+                    }
+                }
+
+            }
+        }
+        catch (Exception e){
+            System.out.println("Didnt Load Courses");
+        }
+    }
+
 
     public List<Teacher> getAllTeachers() {
         return teachers;

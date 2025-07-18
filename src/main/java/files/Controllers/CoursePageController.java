@@ -36,7 +36,7 @@ public class CoursePageController {
 
     public void loadAnnouncements() {
         announcementBox.getChildren().clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("CourseAnnouncements.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("database/CourseAnnouncements.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");

@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -75,17 +76,21 @@ public class TeacherCoursePage {
     }
 
     public void onPost(ActionEvent actionEvent) {
-        String content = t.getText().trim();
-        if (content.isEmpty()) return;
+        String courseId = course.getCourseID();
+        int teacherId = teacher.getID();
+        String message = t.getText().trim(); // You need a TextField with fx:id="announcementTextField"
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("CourseAnnouncements.txt", true))) {
-            bw.write(course.getCourseID() + "|" + content + "|" + LocalDate.now());
-            bw.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (message.isEmpty()) return;
+
+        File file = new File("database/announcements.txt");
+        file.getParentFile().mkdirs(); // ensures folder exists
+
+        try (FileWriter writer = new FileWriter(file, true)) {
+            writer.write(courseId + ";" + teacherId + ";" + message + "\n");
+            t.clear();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-
-        t.clear();
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Announcement Posted!");
         alert.showAndWait();
     }

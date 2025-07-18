@@ -1,0 +1,3 @@
+2305180,Structural Programming Language
+2305180,Discreet Mathematics
+2305180,Data Structure and Algorithms

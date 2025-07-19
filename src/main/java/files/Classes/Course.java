@@ -67,6 +67,16 @@ public class Course {
             System.out.println(t.getName()+" was FAILED to assign to "+courseName);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "courseName='" + courseName + '\'' +
+                ", courseID='" + courseID + '\'' +
+                ", credit=" + credit +
+                '}';
+    }
+
     public void dropStudent(Student s){
         if(courseStudents.contains(s)){
             courseStudents.remove(s);
@@ -77,4 +87,17 @@ public class Course {
             System.out.println(s.getName()+" was NOT found for "+this.courseName);
         }
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Course other = (Course) obj;
+        return this.courseID.equals(other.courseID);
+    }
+
+    @Override
+    public int hashCode() {
+        return courseID.hashCode();
+    }
+
 }

@@ -89,7 +89,7 @@ public class TeacherList {
     }
 
 
-    public List<Teacher> getAllTeachers() {
+    public List<Teacher> getTeachers() {
         return teachers;
     }
 

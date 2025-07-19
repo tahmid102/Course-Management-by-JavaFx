@@ -2,7 +2,6 @@ package files.Controllers;
 
 import files.Classes.Course;
 import files.Classes.Teacher;
-import files.Classes.TeacherList;
 import files.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Attributes;
 
 public class TeacherDasahboardController {
     public Button logoutButton;
@@ -30,8 +28,8 @@ public class TeacherDasahboardController {
 
     public void setTeacher(Teacher teacher){
         this.teacher=teacher;
-        this.courses=teacher.getCourseAssigned();
-        Name.setText(teacher.getName() +teacher.getCourseAssigned());
+        this.courses=teacher.getCoursesAssigned();
+        Name.setText(teacher.getName() +teacher.getCoursesAssigned());
     }
 
     public void onHomeClicked(ActionEvent actionEvent) {

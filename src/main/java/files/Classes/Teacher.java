@@ -1,12 +1,17 @@
 package files.Classes;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Teacher extends Person{
-    List<Course> courseAssigned;
+    private final List<Course> courseAssigned;
+    private boolean coursesLoaded=false;
     public Teacher(String name, int ID, String password) {
         super(name, ID, password);
         courseAssigned=new ArrayList<>();
@@ -41,7 +46,7 @@ public class Teacher extends Person{
             courseAssigned.add(c);
         }
     }
-    public List<Course> getCourseAssigned() {
+    public List<Course> getCoursesAssigned() {
         return courseAssigned;
     }
     public void addStudentToCourse(Student a,Course b){
@@ -69,5 +74,29 @@ public class Teacher extends Person{
         if (!courseAssigned.isEmpty()) sb.setLength(sb.length() - 1);
         sb.append("]");
         return sb.toString();
+    }
+    public void loadCoursesForTeacher(CourseList courseList) {
+        if(coursesLoaded) return;
+        try {
+            InputStream is= getClass().getResourceAsStream("/database/AssignedCoursesTeacher.txt");
+            assert is!=null;
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] tokens = line.split(",");
+                int fileTeacherID = Integer.parseInt(tokens[0].trim());
+                String courseID = tokens[1].trim();
+
+                if (fileTeacherID == this.getID()) {
+                    Course course = courseList.searchCourse(courseID);
+                    if (course != null) {
+                        courseAssigned.add(course);
+                    }
+                }
+            }
+            coursesLoaded=true;
+        } catch (NumberFormatException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }

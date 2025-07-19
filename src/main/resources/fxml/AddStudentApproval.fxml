@@ -25,7 +25,7 @@
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="100.0">
          <children>
             <Button fx:id="approveSelectedButton" mnemonicParsing="false" onAction="#approveSelected" text="Approve Selected" />
-            <Button fx:id="approveAllButton" mnemonicParsing="false" onAction="#approveAll" text="Button" />
+            <Button fx:id="approveAllButton" mnemonicParsing="false" onAction="#approveAll" text="Approve All" />
          </children>
          <padding>
             <Insets bottom="100.0" left="100.0" right="100.0" top="10.0" />

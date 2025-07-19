@@ -1,6 +1,7 @@
+// AddTeacherApprovalController.java - EXACT same structure as AddStudentApprovalController
 package files.Controllers;
 
-import files.Classes.Student;
+import files.Classes.Teacher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,27 +12,26 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-public class AddStudentApprovalController {
-    @FXML private TableView<Student> pendingStudentTable;
-    @FXML private TableColumn<Student, String> nameColumn;
-    @FXML private TableColumn<Student, Integer> idColumn;
+public class AddTeacherApprovalController {
+    @FXML private TableView<Teacher> pendingTeacherTable;
+    @FXML private TableColumn<Teacher, String> nameColumn;
+    @FXML private TableColumn<Teacher, Integer> idColumn;
     @FXML private Button approveSelectedButton;
     @FXML private Button approveAllButton;
 
-    private final ObservableList<Student> pendingStudents = FXCollections.observableArrayList();
+    private final ObservableList<Teacher> pendingTeachers = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        pendingStudentTable.getColumns().forEach(col -> col.setReorderable(false));
+        pendingTeacherTable.getColumns().forEach(col -> col.setReorderable(false));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        loadPendingStudents();
-        pendingStudentTable.setItems(pendingStudents);
+        loadPendingTeachers();
+        pendingTeacherTable.setItems(pendingTeachers);
     }
 
-
-    private void loadPendingStudents() {
-        String PENDING_FILE = "/database/pendingStudentCredentials.txt";
+    private void loadPendingTeachers() {
+        String PENDING_FILE = "/database/pendingTeacherCredentials.txt";
         try (InputStream is = getClass().getResourceAsStream(PENDING_FILE);
              BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 
@@ -42,7 +42,7 @@ public class AddStudentApprovalController {
                     int id = Integer.parseInt(parts[0].trim());
                     String name = parts[1].trim();
                     String pass = parts[2].trim();
-                    pendingStudents.add(new Student(name, id, pass));
+                    pendingTeachers.add(new Teacher(name, id, pass));
                 }
             }
         } catch (Exception e) {
@@ -52,35 +52,35 @@ public class AddStudentApprovalController {
 
     @FXML
     private void approveSelected() {
-        Student selected = pendingStudentTable.getSelectionModel().getSelectedItem();
+        Teacher selected = pendingTeacherTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            approveStudent(selected);
-            pendingStudents.remove(selected);
+            approveTeacher(selected);
+            pendingTeachers.remove(selected);
         }
     }
 
     @FXML
     private void approveAll() {
-        for (Student student : new ArrayList<>(pendingStudents)) {
-            approveStudent(student);
+        for (Teacher teacher : new ArrayList<>(pendingTeachers)) {
+            approveTeacher(teacher);
         }
-        pendingStudents.clear();
+        pendingTeachers.clear();
     }
 
-    private void approveStudent(Student student) {
-        String STUDENT_FILE = "src/main/resources/database/StudentCredentials.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(STUDENT_FILE, true))) {
-            writer.write(student.getID() + "," + student.getName() + "," + student.getPassword());
+    private void approveTeacher(Teacher teacher) {
+        String TEACHER_FILE = "src/main/resources/database/TeacherCredentials.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TEACHER_FILE, true))) {
+            writer.write(teacher.getID() + "," + teacher.getName() + "," + teacher.getPassword());
             writer.newLine();
         } catch (IOException e) {
-            System.out.println(e.getMessage()+" approve student e hocche");
+            System.out.println(e.getMessage()+" approve teacher e hocche");
         }
 
-        removeStudentFromPendingFile(student.getID());
+        removeTeacherFromPendingFile(teacher.getID());
     }
 
-    private void removeStudentFromPendingFile(int id) {
-        Path path = Paths.get("src/main/resources/database/pendingStudentCredentials.txt");
+    private void removeTeacherFromPendingFile(int id) {
+        Path path = Paths.get("src/main/resources/database/PendingTeacherCredentials.txt");
         try {
             List<String> lines = Files.readAllLines(path);
             List<String> updated = new ArrayList<>();
@@ -96,10 +96,10 @@ public class AddStudentApprovalController {
             e.printStackTrace();
         }
     }
+
     private AdminDashboardController dashboardController;
 
     public void setDashboardController(AdminDashboardController controller) {
         this.dashboardController = controller;
     }
-
 }

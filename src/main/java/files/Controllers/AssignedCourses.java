@@ -1,7 +1,6 @@
 package files.Controllers;
 
 import files.Classes.Course;
-import files.Classes.CourseList;
 import files.Classes.Teacher;
 import files.Main;
 import javafx.event.ActionEvent;
@@ -31,7 +30,7 @@ public class AssignedCourses {
 
     public void setTeacher(Teacher teacher){
         this.teacher=teacher;
-        this.courses=teacher.getCourseAssigned();
+        this.courses=teacher.getCoursesAssigned();
         Name.setText(teacher.getName());
         System.out.println("Assigned teacher: " + teacher.getName());
         System.out.println("Courses: " + courses);

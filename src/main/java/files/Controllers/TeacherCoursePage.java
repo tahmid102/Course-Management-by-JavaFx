@@ -78,12 +78,12 @@ public class TeacherCoursePage {
     public void onPost(ActionEvent actionEvent) {
         String courseId = course.getCourseID();
         int teacherId = teacher.getID();
-        String message = t.getText().trim(); // You need a TextField with fx:id="announcementTextField"
+        String message = t.getText().trim();
 
         if (message.isEmpty()) return;
 
         File file = new File("database/announcements.txt");
-        file.getParentFile().mkdirs(); // ensures folder exists
+        file.getParentFile().mkdirs();
 
         try (FileWriter writer = new FileWriter(file, true)) {
             writer.write(courseId + ";" + teacherId + ";" + message + "\n");

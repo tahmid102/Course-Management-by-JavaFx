@@ -1,1 +1,2 @@
 CSE 101;10010;kal class nai
+CSE 101;10010;Hello shuor

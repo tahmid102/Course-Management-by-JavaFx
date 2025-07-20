@@ -29,7 +29,7 @@ public class PendingStudentsList {
 
         try (BufferedWriter writer = Files.newBufferedWriter(filePath,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-            writer.write(student.getName() + "," + student.getID() + "," + student.getPassword());
+            writer.write(student.getID() + "," + student.getName() + "," + student.getPassword());
             writer.newLine();
         } catch (IOException e) {
             System.out.println("Error saving student: " + e.getMessage());

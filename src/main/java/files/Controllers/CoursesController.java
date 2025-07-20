@@ -39,7 +39,7 @@ public class CoursesController {
 
     public void loadCourses(){
         Courses.clear();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/database/Courses.txt")))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("database/Courses.txt"))) {
             String line;
             while((line= reader.readLine())!=null){
                 String[] words=line.split(",");
@@ -85,7 +85,7 @@ public class CoursesController {
         addButton.setOnAction(e->{
 
             EnrolledCourse.add(a);
-                    try (FileWriter writer = new FileWriter("src/main/resources/database/enrollments.txt", true)) {
+                    try (FileWriter writer = new FileWriter("database/enrollments.txt", true)) {
                         writer.write(currentStudent.getID() + "," + a.getCourseID() + "\n");
                     } catch (IOException ex) {
                         ex.printStackTrace();

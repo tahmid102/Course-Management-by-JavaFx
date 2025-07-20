@@ -56,6 +56,7 @@ public class LoginController {
     }
     //TODO:LOGIN PAGE SUBMISSION
     @FXML public void onSubmit(ActionEvent actionEvent){
+        errorLabel.setText("");
         String role = roleBox.getValue();
         String idText = userIDField.getText().trim();
         String password = passwordField.getText();
@@ -120,6 +121,7 @@ public class LoginController {
     //TODO:REG PAGE SUBMISSION
     @FXML
     private void onSignUp() {
+        errorLabel.setText("");
         String name = setNameField.getText().trim();
         String idText = setUserIDField.getText().trim();
         String password = setPasswordField.getText();

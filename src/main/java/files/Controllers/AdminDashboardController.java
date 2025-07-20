@@ -49,11 +49,6 @@ public class AdminDashboardController implements Initializable {
 
 
     //TODO:File paths relative to resources
-    private final String STUDENTS_FILE = "src/main/resources/database/StudentCredentials.txt";
-    private final String TEACHERS_FILE = "src/main/resources/database/TeachersCredentials.txt";
-    private final String COURSES_FILE = "src/main/resources/database/Courses.txt";
-    private final String PENDING_STUDENTS_FILE = "src/main/resources/database/PendingStudentCredentials.txt";
-    private final String PENDING_TEACHERS_FILE = "src/main/resources/database/PendingTeacherCredentials.txt";
 
     //TODO:Data
     private final StudentList studentList = new StudentList();
@@ -91,8 +86,9 @@ public class AdminDashboardController implements Initializable {
                 }
             }
         });
+        //TODO:REMAINING BUTTONS
         ADsignOutButton.setOnAction(event -> signOut());
-        ADrefreshButton.setOnAction(event -> refreshTeacherTable());
+        ADrefreshButton.setOnAction(event -> refreshAllTables());
     }
     //TODO:STUDENT FUNCTIONALITIES
     private void openStudentCoursesWindow(int studentID) {
@@ -184,19 +180,22 @@ public class AdminDashboardController implements Initializable {
     private void setupTeacherTable() {
         ADteacherNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         ADteacherIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-
         teacherList.initializeTeachers();
         ObservableList<Teacher> teacherData = FXCollections.observableArrayList(teacherList.getTeachers());
         ADteacherTable.setItems(teacherData);
         ADteacherCountLabel.setText("Total Teachers: " + teacherData.size());
     }
     public void refreshTeacherTable() {
+        System.out.println("Refreshing Teachers");
+        System.out.println(teacherList.getTeachers());
         teacherList.initializeTeachers();
         ObservableList<Teacher> teachers = FXCollections.observableArrayList(teacherList.getTeachers());
         ADteacherTable.setItems(teachers);
         ADteacherCountLabel.setText("Total Teachers: " + teachers.size());
     }
     public void refreshAllTables() {
+        ADteacherTable.refresh();
+        ADstudentTable.refresh();
         refreshStudentTable();
         refreshTeacherTable();
     }

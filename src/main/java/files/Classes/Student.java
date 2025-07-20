@@ -1,9 +1,6 @@
 package files.Classes;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,10 +53,7 @@ public class Student extends Person{
 
     public void loadCoursesForStudent(CourseList courseList) {
         if(coursesLoaded) return;
-        try {
-            InputStream is= Student.class.getResourceAsStream("/database/enrollments.txt");
-            assert is!=null;
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        try(BufferedReader br=new BufferedReader(new FileReader("database/enrollments.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");

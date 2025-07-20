@@ -31,9 +31,8 @@ public class AddTeacherApprovalController {
     }
 
     private void loadPendingTeachers() {
-        String PENDING_FILE = "/database/pendingTeacherCredentials.txt";
-        try (InputStream is = getClass().getResourceAsStream(PENDING_FILE);
-             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+        String PENDING_FILE = "database/pendingTeacherCredentials.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(PENDING_FILE))) {
 
             String line;
             while ((line = br.readLine()) != null) {
@@ -68,7 +67,7 @@ public class AddTeacherApprovalController {
     }
 
     private void approveTeacher(Teacher teacher) {
-        String TEACHER_FILE = "src/main/resources/database/TeacherCredentials.txt";
+        String TEACHER_FILE = "database/TeacherCredentials.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(TEACHER_FILE, true))) {
             writer.write(teacher.getID() + "," + teacher.getName() + "," + teacher.getPassword());
             writer.newLine();
@@ -80,7 +79,7 @@ public class AddTeacherApprovalController {
     }
 
     private void removeTeacherFromPendingFile(int id) {
-        Path path = Paths.get("src/main/resources/database/PendingTeacherCredentials.txt");
+        Path path = Paths.get("database/PendingTeacherCredentials.txt");
         try {
             List<String> lines = Files.readAllLines(path);
             List<String> updated = new ArrayList<>();

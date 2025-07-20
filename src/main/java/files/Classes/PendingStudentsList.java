@@ -15,7 +15,7 @@ public class PendingStudentsList {
     }
     public void addToPending(Student student){
         pendingStudents.add(student);
-        Path dataDir = Paths.get("src/main/resources/database");
+        Path dataDir = Paths.get("database");
         if (!Files.exists(dataDir)) {
             try {
                 Files.createDirectory(dataDir);
@@ -44,12 +44,9 @@ public class PendingStudentsList {
         return false;
     }
     public void loadFromFile(){
-        try{
-            InputStream is=getClass().getResourceAsStream("/database/pendingStudentCredentials.txt");
-            assert is!=null;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        try(BufferedReader br = new BufferedReader(new FileReader("database/pendingStudentCredentials.txt"))){
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 3) {
                     String name = parts[0];

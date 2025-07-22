@@ -15,7 +15,7 @@ public class PendingTeachersList {
     }
     public void addToPending(Teacher teacher){
         pendingTeachers.add(teacher);
-        Path dataDir = Paths.get("src/main/resources/database");
+        Path dataDir = Paths.get("database");
         if (!Files.exists(dataDir)) {
             try {
                 Files.createDirectory(dataDir);
@@ -29,7 +29,7 @@ public class PendingTeachersList {
 
         try (BufferedWriter writer = Files.newBufferedWriter(filePath,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-            writer.write(teacher.getName() + "," + teacher.getID() + "," + teacher.getPassword());
+            writer.write(teacher.getID() + "," + teacher.getName() + "," + teacher.getPassword());
             writer.newLine();
         } catch (IOException e) {
             System.out.println("Error saving teacher: " + e.getMessage());
@@ -44,16 +44,13 @@ public class PendingTeachersList {
         return false;
     }
     public void loadFromFile(){
-        try {
-            InputStream is=getClass().getResourceAsStream("/database/pendingTeacherCredentials.txt");
-            assert is!=null;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+         try(BufferedReader reader = new BufferedReader(new FileReader("database/pendingTeacherCredentials.txt"))){
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 3) {
-                    String name = parts[0];
-                    int id = Integer.parseInt(parts[1]);
+                    String name = parts[1];
+                    int id = Integer.parseInt(parts[0]);
                     String pass = parts[2];
                     pendingTeachers.add(new Teacher(name, id, pass));
                 }

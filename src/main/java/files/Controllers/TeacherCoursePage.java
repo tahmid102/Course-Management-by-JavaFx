@@ -13,11 +13,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class TeacherCoursePage {
     public Label Name;
@@ -78,12 +76,12 @@ public class TeacherCoursePage {
     public void onPost(ActionEvent actionEvent) {
         String courseId = course.getCourseID();
         int teacherId = teacher.getID();
-        String message = t.getText().trim(); // You need a TextField with fx:id="announcementTextField"
+        String message = t.getText().trim();
 
         if (message.isEmpty()) return;
 
         File file = new File("database/announcements.txt");
-        file.getParentFile().mkdirs(); // ensures folder exists
+        file.getParentFile().mkdirs();
 
         try (FileWriter writer = new FileWriter(file, true)) {
             writer.write(courseId + ";" + teacherId + ";" + message + "\n");

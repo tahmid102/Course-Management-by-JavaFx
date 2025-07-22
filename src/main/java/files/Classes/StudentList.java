@@ -1,9 +1,6 @@
 package files.Classes;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +36,8 @@ public class StudentList {
     }
 
     public void initializeStudents() {
-        try {
-            InputStream is = getClass().getResourceAsStream("/database/StudentCredentials.txt");
-            assert is != null;
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        students.clear();
+        try(BufferedReader br = new BufferedReader(new FileReader("database/StudentCredentials.txt"))) {
             String data;
             while ((data = br.readLine()) != null) {
                 String[] creds = data.split(",");
@@ -60,10 +55,7 @@ public class StudentList {
 
     }
     public void LoadCourse(){
-        try{
-            InputStream ic=getClass().getResourceAsStream("/database/enrollments.txt");
-            assert ic!=null;
-            BufferedReader br= new BufferedReader(new InputStreamReader(ic));
+        try(BufferedReader br= new BufferedReader(new FileReader("database/enrollments.txt"))){
             CourseList courses=new CourseList();
             courses.loadCourses();
             String line;

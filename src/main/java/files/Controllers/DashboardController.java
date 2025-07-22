@@ -1,6 +1,7 @@
 package files.Controllers;
 
 import files.Classes.Student;
+import files.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Objects;
 
 public class DashboardController {
@@ -80,11 +82,12 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Student/Profile.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Student Profile");
+            ProfileController controller=loader.getController();
+            controller.passStuddent(currentStudent);
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/buet_logo.png"))));
             stage.setResizable(true);
             stage.show();
@@ -107,11 +110,6 @@ public class DashboardController {
             stage.setTitle("Student Courses");
             StudentCoursesController controller=loader.getController();
             controller.passStudent(currentStudent);
-            try {
-                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/buet_logo.png"))));
-            } catch (Exception ex) {
-                System.out.println("Image Didn't Load");
-            }
             stage.setResizable(true);
 
             stage.show();
@@ -152,6 +150,17 @@ public class DashboardController {
     }
 
     public void onlogout(ActionEvent actionEvent) {
-
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/login.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = (Stage) logout.getScene().getWindow();
+        stage.setResizable(false);
+        stage.setTitle("Course Management System");
+        stage.setScene(scene);
+        stage.show();
     }
 }

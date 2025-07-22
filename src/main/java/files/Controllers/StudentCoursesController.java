@@ -3,6 +3,7 @@ package files.Controllers;
 
 import files.Classes.Course;
 import files.Classes.Student;
+import files.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,10 +22,11 @@ public class StudentCoursesController extends DashboardController{
     public Button backButton;
     public Label course1;
     public VBox courseVbox;
+    public Button logoutButton;
     private Stage stage;
     private Scene scene;
     private Parent root;
-    Student student;
+    Student student=currentStudent;
 
     List<Course> courses;
 
@@ -94,7 +96,7 @@ public class StudentCoursesController extends DashboardController{
         }
         CoursePageController controller=fxmlLoader.getController();
         controller.setCourse(course);
-        controller.setStudent(currentStudent);
+        controller.setStudent(student);
         controller.display();
         Stage stage = (Stage) backButton.getScene().getWindow();
         stage.setScene(scene);
@@ -103,4 +105,18 @@ public class StudentCoursesController extends DashboardController{
     }
 
 
+    public void onLogout(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/login.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        stage.setResizable(false);
+        stage.setTitle("Course Management System");
+        stage.setScene(scene);
+        stage.show();
+    }
 }

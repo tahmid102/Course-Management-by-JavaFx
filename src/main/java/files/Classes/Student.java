@@ -9,11 +9,20 @@ public class Student extends Person{
     //personal Student class fields
     private final List<Course>courses;
     private boolean coursesLoaded = false;
+    private String imagePath=null;
 
     //Student class constructor
     public Student(String studentName,int studentId,String stdPass){
         super(studentName,studentId,stdPass);
         courses=new ArrayList<>();
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 
     @Override

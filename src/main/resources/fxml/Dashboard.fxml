@@ -3,45 +3,53 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.layout.BorderPane?>
-<BorderPane prefWidth="800.0" prefHeight="600.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="files.Controllers.DashboardController"
-            >
 
-   <!-- Top Blue Header -->
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.DashboardController">
+
+   <!-- Top Bar -->
    <top>
-      <HBox styleClass="top-bar">
-         <Button fx:id="logout" text="← Back" onAction="#onlogout" styleClass="back-button"/>
-         <Label text="Student Dashboard" styleClass="header-title"/>
+      <HBox styleClass="top-bar" stylesheets="@../css/TeacxherDashboard.css">
+         <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+         </padding>
+         <children>
+            <Label styleClass="header-title" text="Student Dashboard" />
+         </children>
       </HBox>
    </top>
 
    <!-- Sidebar -->
    <left>
-      <VBox styleClass="sidebar" spacing="20.0">
+      <VBox spacing="20.0" styleClass="sidebar" stylesheets="@../css/TeacxherDashboard.css">
+         <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+         </padding>
          <children>
-            <Text text="Menu" styleClass="sidebar-title"/>
-            <Button fx:id="homeButton" text="Home" onAction="#onHomeButton" styleClass="button-neutral" />
-            <Button fx:id="myCoursesButton" text="My Courses" onAction="#onMyCourses" styleClass="button-primary"/>
-            <Button fx:id="addCourseButton" text="Add/Drop Course" onAction="#onAdd" styleClass="button-neutral"/>
-            <Button fx:id="ProfileButton" text="My Profile" onAction="#onProfile" styleClass="button-neutral"/>
-            <Button fx:id="backButton" text="← Logout" onAction="#onlogout" styleClass="back-button"/>
-
+            <Text styleClass="sidebar-title" text="Menu" />
+            <Button fx:id="homeButton" onAction="#onHomeButton" styleClass="button-neutral" text="🏠 Home" />
+            <Button fx:id="myCoursesButton" onAction="#onMyCourses" styleClass="button-primary" text="📚My Courses" />
+            <Button fx:id="addCourseButton" onAction="#onAdd" styleClass="button-neutral" text="📚Add Course" />
+            <Button fx:id="ProfileButton" onAction="#onProfile" styleClass="button-neutral" text="👤 My Profile " />
+            <Button fx:id="backButton" onAction="#onlogout" styleClass="back-button" text="← Logout" />
+            <Button fx:id="logout" onAction="#onlogout" styleClass="back-button" text="← Back" />
          </children>
       </VBox>
    </left>
 
    <!-- Center -->
    <center>
-      <VBox alignment="CENTER" styleClass="center-pane">
-         <Label fx:id="welcomeText" text="Welcome, [Student Name]" styleClass="welcome-label"/>
+      <VBox alignment="CENTER" prefHeight="527.0" prefWidth="634.0" spacing="10.0" styleClass="center-pane" stylesheets="@../css/TeacxherDashboard.css">
+         <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+         </padding>
+         <children>
+            <Label fx:id="welcomeText" styleClass="welcome-label" text="Welcome, [Student Name]" />
+         </children>
       </VBox>
    </center>
+
 </BorderPane>

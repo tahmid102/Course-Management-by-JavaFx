@@ -1,4 +1,82 @@
 package files.Controllers;
 
+import files.Classes.Student;
+import files.Main;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
 public class ProfileController {
+    public ImageView profileImage;
+    public Label nameLabel;
+    public Label courseCountLabel;
+    public Label idLabel;
+    Student currentStudent;
+
+    public Button logout;
+    public Button home;
+    public void passStuddent(Student a){
+        this.currentStudent=a;
+        loadProfile();
+    }
+
+    public void loadProfile(){
+
+        nameLabel.setText(       "Name          "+ currentStudent.getName());
+        idLabel.setText(         "ID            "+ currentStudent.getID()+" ");
+        courseCountLabel.setText("Total Courses "+currentStudent.getCourses().size());
+        try {
+            String path = currentStudent.getImagePath();
+
+            if (path != null && !path.isEmpty()) {
+                Image img = new Image(getClass().getResource(path).toExternalForm());
+                profileImage.setImage(img);
+            } else {
+                Image fallback = new Image(getClass().getResource("/Images/muffed.jpg").toExternalForm());
+                profileImage.setImage(fallback);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // So you can see the real error
+            Image fallback = new Image(getClass().getResource("/Images/muffed.jpg").toExternalForm());
+            profileImage.setImage(fallback);
+        }
+    }
+
+    public void onHome(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+        Scene scene= null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        DashboardController controller=fxmlLoader.getController();
+        controller.setCurrentStudent(currentStudent);
+        Stage stage = (Stage) logout.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Dashboard");
+        stage.show();
+    }
+
+    public void onLogout(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/login.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = (Stage) logout.getScene().getWindow();
+        stage.setResizable(false);
+        stage.setTitle("Course Management System");
+        stage.setScene(scene);
+        stage.show();
+    }
 }

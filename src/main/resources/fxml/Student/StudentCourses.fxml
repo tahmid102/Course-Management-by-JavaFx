@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: buet_logo.png;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.StudentCoursesController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-image: buet_logo.png;" stylesheets="@../../css/TeacxherDashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.StudentCoursesController">
    <children>
-      <ImageView fitHeight="118.0" fitWidth="120.0" layoutX="211.0" layoutY="16.0">
+      <ImageView fitHeight="118.0" fitWidth="120.0" layoutX="220.0" layoutY="26.0">
          <image>
             <Image url="@../../buet_logo.png" />
          </image>
@@ -20,8 +20,14 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="backButton" layoutX="8.0" layoutY="14.0" mnemonicParsing="false" onAction="#toDash" prefHeight="39.0" prefWidth="74.0" style="-fx-background-color: #A6CEEA;" text=" Back" textFill="#635555" />
 
-      <VBox fx:id="courseVbox" layoutX="201.0" layoutY="195.0" prefHeight="180.0" prefWidth="180.0" />
+      <VBox fx:id="courseVbox" layoutX="201.0" layoutY="195.0" prefHeight="180.0" prefWidth="180.0" stylesheets="@../../css/TeacxherDashboard.css" />
+      <VBox layoutX="1.0" prefHeight="400.0" prefWidth="90.0" spacing="10.0" stylesheets="@../../css/TeacxherDashboard.css">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#toDash" prefHeight="33.0" prefWidth="90.0" style="-fx-background-color: #A6CEEA;" text=" Back" textFill="#635555" />
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onLogout" prefHeight="38.0" prefWidth="90.0" text="Logout" />
+         </children>
+      </VBox>
+      <Button layoutX="-88.0" mnemonicParsing="false" text="Button" />
    </children>
 </AnchorPane>

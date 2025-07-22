@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="495.0" prefWidth="575.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.CoursesController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.CoursesController">
    <children>
       <VBox fx:id="allCourseVbox" layoutX="199.0" layoutY="139.0" prefHeight="288.0" prefWidth="211.0" />
       <Label layoutX="248.0" layoutY="37.0" prefHeight="33.0" prefWidth="83.0" text="COURSES" textAlignment="CENTER" textFill="#010302">
@@ -28,5 +28,6 @@
             <TextField fx:id="SearchBox" prefHeight="26.0" prefWidth="98.0" promptText="Search" />
          </children>
       </HBox>
+      <Button layoutX="4.0" layoutY="69.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="70.0" text="Logout" />
    </children>
 </AnchorPane>

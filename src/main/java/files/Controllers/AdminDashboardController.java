@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 public class AdminDashboardController implements Initializable {
 
 
+    @FXML public Label ADpendingStudentCountLabel;
+    @FXML public Label ADpendingTeacherCountLabel;
     //TODO:Student Table Components
     @FXML private TableView<Student> ADstudentTable;
     @FXML private TableColumn<Student, String> ADstudentNameColumn;
@@ -49,7 +51,6 @@ public class AdminDashboardController implements Initializable {
     @FXML private Label ADcourseCountLabel;
 
 
-    //TODO:File paths relative to resources
 
     //TODO:Data
     private final StudentList studentList = new StudentList();
@@ -66,8 +67,11 @@ public class AdminDashboardController implements Initializable {
         setupTeacherTable();
         setupCourseTable();
         ADstudentTable.getColumns().forEach(col -> col.setReorderable(false));
+        ADstudentTable.getColumns().forEach(col -> col.setResizable(false));
         ADteacherTable.getColumns().forEach(col -> col.setReorderable(false));
+        ADteacherTable.getColumns().forEach(col -> col.setResizable(false));
         ADcourseTable.getColumns().forEach(col->col.setReorderable(false));
+        ADcourseTable.getColumns().forEach(col->col.setResizable(false));
         //TODO: STUDENT BUTTON EVENT
         ADaddStudentButton.setOnAction(event -> openStudentApprovalWindow());
         ADstudentTable.setOnMouseClicked(event -> {

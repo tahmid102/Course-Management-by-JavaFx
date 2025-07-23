@@ -24,6 +24,7 @@ public class AddTeacherApprovalController {
     @FXML
     public void initialize() {
         pendingTeacherTable.getColumns().forEach(col -> col.setReorderable(false));
+        pendingTeacherTable.getColumns().forEach(col -> col.setResizable(false));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         loadPendingTeachers();

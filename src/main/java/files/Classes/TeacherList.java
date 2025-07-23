@@ -45,7 +45,6 @@ public class TeacherList {
                     int id = Integer.parseInt(creds[0].trim());
                     String name = creds[1].trim();
                     String pass = creds[2].trim();
-
                     Teacher teacher = new Teacher(name, id, pass);
                     addTeacher(teacher);
                 }
@@ -61,7 +60,7 @@ public class TeacherList {
             courses.loadCourses();
             String line;
             while((line=br.readLine())!=null){
-                String crs[]=line.split(",");
+                String []crs=line.split(",");
                 if(crs.length==2){
                     int id=Integer.parseInt(crs[0].trim());
                     String CourseId=crs[1].trim();
@@ -75,7 +74,7 @@ public class TeacherList {
             }
         }
         catch (Exception e){
-            System.out.println("Didnt Load Courses");
+            System.out.println("Didn't Load Courses");
         }
     }
 

@@ -74,7 +74,6 @@ public class AddStudentApprovalController {
         } catch (IOException e) {
             System.out.println(e.getMessage()+" approve student e hocche");
         }
-
         removeStudentFromPendingFile(student.getID());
     }
 

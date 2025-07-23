@@ -97,7 +97,7 @@ public class AdminDashboardController implements Initializable {
     //TODO:STUDENT FUNCTIONALITIES
     private void openStudentCoursesWindow(int studentID) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ViewStudentCourses.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ViewStudentCourses.fxml"));
             Scene scene = new Scene(loader.load());
             Student student=studentList.searchStudent(studentID);
             if (student == null) {
@@ -119,7 +119,7 @@ public class AdminDashboardController implements Initializable {
 
     private void openStudentApprovalWindow() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddStudentApproval.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/AddStudentApproval.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
             stage.setTitle("Approve Students");
@@ -145,7 +145,7 @@ public class AdminDashboardController implements Initializable {
     //TODO: TEACHER FUNCTIONALITIES
     private void openTeacherCoursesWindow(int teacherID) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ViewTeacherCourses.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ViewTeacherCourses.fxml"));
             Scene scene = new Scene(loader.load());
 
             Teacher teacher = teacherList.searchTeacher(teacherID);
@@ -166,7 +166,7 @@ public class AdminDashboardController implements Initializable {
     }
     private void openTeacherApprovalWindow() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddTeacherApproval.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/AddTeacherApproval.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
             stage.setTitle("Approve Teachers");
@@ -202,7 +202,7 @@ public class AdminDashboardController implements Initializable {
     }
     private void openCourseWindow() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddCourse.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/AddCourse.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
             stage.setTitle("Approve Courses");

@@ -218,7 +218,7 @@ public class LoginController {
         stage.show();
     }
     private void goToAdminDashboard() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Admin/AdminDashboard.fxml"));
         Scene scene=new Scene(fxmlLoader.load());
         Stage stage = (Stage) submitButton.getScene().getWindow();
         stage.setScene(scene);

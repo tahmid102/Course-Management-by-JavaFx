@@ -72,9 +72,8 @@ public class StudentList {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Courses didnt load");
+            System.out.println("Courses didn't load");
         }
-
     }
 
     public List<Student> getStudents() {

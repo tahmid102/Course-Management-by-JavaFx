@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -19,8 +18,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AdminDashboardController implements Initializable {
-    @FXML public Label adminTitle;
 
+
+    @FXML public Label ADpendingStudentCountLabel;
+    @FXML public Label ADpendingTeacherCountLabel;
     //TODO:Student Table Components
     @FXML private TableView<Student> ADstudentTable;
     @FXML private TableColumn<Student, String> ADstudentNameColumn;
@@ -32,8 +33,10 @@ public class AdminDashboardController implements Initializable {
     @FXML private TableColumn<Teacher, String> ADteacherIdColumn;
 
     //TODO:Course Display Components
-    @FXML private ListView<Course> ADcourseListView;
-    @FXML private TextArea ADcourseDetailsArea;
+    @FXML private TableView<Course> ADcourseTable;
+    @FXML public TableColumn<Course,String> ADcourseIDColumn;
+    @FXML public TableColumn<Course,String> ADcourseNameColumn;
+    @FXML public TableColumn<Course,Double> ADcourseCreditColumn;
 
     //TODO:Action Buttons
     @FXML private Button ADaddStudentButton;
@@ -48,13 +51,11 @@ public class AdminDashboardController implements Initializable {
     @FXML private Label ADcourseCountLabel;
 
 
-    //TODO:File paths relative to resources
 
     //TODO:Data
     private final StudentList studentList = new StudentList();
     private final TeacherList teacherList = new TeacherList();
     private final CourseList courseList = new CourseList();
-
 
     //TODO:Loader files
     @Override
@@ -64,8 +65,13 @@ public class AdminDashboardController implements Initializable {
         courseList.loadCourses();
         setupStudentTable();
         setupTeacherTable();
+        setupCourseTable();
         ADstudentTable.getColumns().forEach(col -> col.setReorderable(false));
+        ADstudentTable.getColumns().forEach(col -> col.setResizable(false));
         ADteacherTable.getColumns().forEach(col -> col.setReorderable(false));
+        ADteacherTable.getColumns().forEach(col -> col.setResizable(false));
+        ADcourseTable.getColumns().forEach(col->col.setReorderable(false));
+        ADcourseTable.getColumns().forEach(col->col.setResizable(false));
         //TODO: STUDENT BUTTON EVENT
         ADaddStudentButton.setOnAction(event -> openStudentApprovalWindow());
         ADstudentTable.setOnMouseClicked(event -> {
@@ -86,6 +92,8 @@ public class AdminDashboardController implements Initializable {
                 }
             }
         });
+        //TODO:COURSE BUTTONS
+        ADaddCourseButton.setOnAction(event -> openCourseWindow());
         //TODO:REMAINING BUTTONS
         ADsignOutButton.setOnAction(event -> signOut());
         ADrefreshButton.setOnAction(event -> refreshAllTables());
@@ -93,7 +101,7 @@ public class AdminDashboardController implements Initializable {
     //TODO:STUDENT FUNCTIONALITIES
     private void openStudentCoursesWindow(int studentID) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ViewStudentCourses.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ViewStudentCourses.fxml"));
             Scene scene = new Scene(loader.load());
             Student student=studentList.searchStudent(studentID);
             if (student == null) {
@@ -115,7 +123,7 @@ public class AdminDashboardController implements Initializable {
 
     private void openStudentApprovalWindow() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddStudentApproval.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/AddStudentApproval.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
             stage.setTitle("Approve Students");
@@ -128,12 +136,9 @@ public class AdminDashboardController implements Initializable {
     private void setupStudentTable() {
         ADstudentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         ADstudentIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-
         studentList.initializeStudents();
-
         ObservableList<Student> studentData = FXCollections.observableArrayList(studentList.getStudents());
         ADstudentTable.setItems(studentData);
-
         ADstudentCountLabel.setText("Total Students: " + studentData.size());
     }
     public void refreshStudentTable() {
@@ -144,7 +149,7 @@ public class AdminDashboardController implements Initializable {
     //TODO: TEACHER FUNCTIONALITIES
     private void openTeacherCoursesWindow(int teacherID) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ViewTeacherCourses.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ViewTeacherCourses.fxml"));
             Scene scene = new Scene(loader.load());
 
             Teacher teacher = teacherList.searchTeacher(teacherID);
@@ -152,11 +157,9 @@ public class AdminDashboardController implements Initializable {
                 System.out.println("Teacher not found in TeacherList: " + teacherID);
                 return;
             }
-            // Load courses for teacher (assuming similar method exists)
             teacher.loadCoursesForTeacher(courseList);
             ViewTeacherCoursesController controller = loader.getController();
             controller.setTeacher(teacher);
-
             Stage stage = new Stage();
             stage.setTitle("Courses for " + teacher.getName());
             stage.setScene(scene);
@@ -167,7 +170,7 @@ public class AdminDashboardController implements Initializable {
     }
     private void openTeacherApprovalWindow() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddTeacherApproval.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/AddTeacherApproval.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
             stage.setTitle("Approve Teachers");
@@ -186,18 +189,47 @@ public class AdminDashboardController implements Initializable {
         ADteacherCountLabel.setText("Total Teachers: " + teacherData.size());
     }
     public void refreshTeacherTable() {
-        System.out.println("Refreshing Teachers");
-        System.out.println(teacherList.getTeachers());
         teacherList.initializeTeachers();
         ObservableList<Teacher> teachers = FXCollections.observableArrayList(teacherList.getTeachers());
         ADteacherTable.setItems(teachers);
         ADteacherCountLabel.setText("Total Teachers: " + teachers.size());
     }
+    //TODO:COURSE FUNCTIONALITIES
+    private void setupCourseTable() {
+        courseList.loadCourses();
+        ObservableList<Course> courseData = FXCollections.observableArrayList(courseList.getCourses());
+        ADcourseIDColumn.setCellValueFactory(new PropertyValueFactory<>("courseID"));
+        ADcourseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        ADcourseCreditColumn.setCellValueFactory(new PropertyValueFactory<>("credit"));
+        ADcourseTable.setItems(courseData);
+        ADcourseCountLabel.setText("Total Courses: " + courseData.size());
+    }
+    private void openCourseWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/AddCourse.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = new Stage();
+            stage.setTitle("Approve Courses");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("Error opening course approval window: " + e.getMessage());
+        }
+    }
+    public void refreshCourseTable() {
+        courseList.loadCourses();
+        ObservableList<Course> courses = FXCollections.observableArrayList(courseList.getCourses());
+        ADcourseTable.setItems(courses);
+        ADcourseCountLabel.setText("Total Courses: " + courses.size());
+    }
+
     public void refreshAllTables() {
         ADteacherTable.refresh();
         ADstudentTable.refresh();
+        ADcourseTable.refresh();
         refreshStudentTable();
         refreshTeacherTable();
+        refreshCourseTable();
     }
     //TODO:SIGN OUT
     public void signOut(){

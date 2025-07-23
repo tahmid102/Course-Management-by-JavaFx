@@ -23,6 +23,7 @@ public class AddStudentApprovalController {
     @FXML
     public void initialize() {
         pendingStudentTable.getColumns().forEach(col -> col.setReorderable(false));
+        pendingStudentTable.getColumns().forEach(col -> col.setResizable(false));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         loadPendingStudents();
@@ -74,7 +75,6 @@ public class AddStudentApprovalController {
         } catch (IOException e) {
             System.out.println(e.getMessage()+" approve student e hocche");
         }
-
         removeStudentFromPendingFile(student.getID());
     }
 

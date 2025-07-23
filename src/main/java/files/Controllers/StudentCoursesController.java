@@ -105,6 +105,7 @@ public class StudentCoursesController extends DashboardController{
         controller.setStudent(student);
         controller.setSocketWrapper(new SocketWrapper(new Socket("127.0.0.1",44444)));
         controller.display();
+        controller.loadAnnouncements();
         Stage stage = (Stage) backButton.getScene().getWindow();
         stage.setScene(scene);
         stage.setTitle("My Courses");

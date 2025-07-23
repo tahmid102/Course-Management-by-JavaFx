@@ -1,2 +1,3 @@
 CSE 105;10010;Shobai Ghumao
 CSE 101;10010;kire ki khobor shobar
+CSE 105;10010;kire

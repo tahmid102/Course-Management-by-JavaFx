@@ -4,6 +4,7 @@ package files.Controllers;
 import files.Classes.Course;
 import files.Classes.Student;
 import files.Main;
+import files.Server.SocketWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.List;
 
 public class StudentCoursesController extends DashboardController{
@@ -57,7 +59,11 @@ public class StudentCoursesController extends DashboardController{
                 hyperlinlk.setStyle("-fx-font-size: 11; -fx-padding: 5;");
                 courseVbox.getChildren().add(hyperlinlk);
                 hyperlinlk.setOnAction(e->{
-                    onCoursePage(course);
+                    try {
+                        onCoursePage(course);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 });
 
             }
@@ -86,7 +92,7 @@ public class StudentCoursesController extends DashboardController{
         stage.show();
     }
 
-    public void onCoursePage(Course course){
+    public void onCoursePage(Course course) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Student/CoursePage.fxml"));
         Scene scene= null;
         try {
@@ -97,6 +103,7 @@ public class StudentCoursesController extends DashboardController{
         CoursePageController controller=fxmlLoader.getController();
         controller.setCourse(course);
         controller.setStudent(student);
+        controller.setSocketWrapper(new SocketWrapper(new Socket("127.0.0.1",44444)));
         controller.display();
         Stage stage = (Stage) backButton.getScene().getWindow();
         stage.setScene(scene);

@@ -3,6 +3,8 @@ package files.Controllers;
 import files.Classes.Course;
 import files.Classes.Teacher;
 import files.Main;
+import files.Server.Notification;
+import files.Server.SocketWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,6 +29,10 @@ public class TeacherCoursePage {
     public Button post;
     Teacher teacher;
     Course course;
+    private SocketWrapper socketWrapper;
+    public void setSocketWrapper(SocketWrapper socketWrapper) {
+        this.socketWrapper = socketWrapper;
+    }
     public void setTeacher(Teacher teacher){
         this.teacher=teacher;
         Name.setText(teacher.getName());
@@ -80,16 +86,27 @@ public class TeacherCoursePage {
 
         if (message.isEmpty()) return;
 
-        File file = new File("database/announcements.txt");
-        file.getParentFile().mkdirs();
+        try {
+            // Save to file
+            File file = new File("database/CourseAnnouncements.txt");
+            file.getParentFile().mkdirs();
+            try (FileWriter writer = new FileWriter(file, true)) {
+                writer.write(courseId + ";" + teacherId + ";" + message + "\n");
+            }
 
-        try (FileWriter writer = new FileWriter(file, true)) {
-            writer.write(courseId + ";" + teacherId + ";" + message + "\n");
+            // Send to server via socket
+            Notification notification = new Notification();
+            notification.setNotification(courseId + ";" + teacherId + ";" + message);
+            if (socketWrapper != null) {
+                socketWrapper.write(notification);
+            }
+
             t.clear();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Announcement Posted!");
+            alert.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Announcement Posted!");
-        alert.showAndWait();
     }
 }

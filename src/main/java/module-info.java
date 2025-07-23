@@ -4,6 +4,7 @@ module src.drimjavafxproject {
     requires jdk.dynalink;
     requires org.jetbrains.annotations;
     requires java.desktop;
+    requires java.xml.crypto;
 
 
     opens files to javafx.fxml;

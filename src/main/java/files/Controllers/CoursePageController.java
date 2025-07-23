@@ -3,6 +3,10 @@ package files.Controllers;
 import files.Classes.Course;
 import files.Classes.Student;
 import files.Main;
+import files.Server.Notification;
+import files.Server.ReadThread;
+import files.Server.SocketWrapper;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,6 +29,8 @@ public class CoursePageController {
     public Button home;
     Course course;
     Student student;
+    private SocketWrapper socketWrapper;
+    private ReadThread readThread;
 
     public void setCourse(Course course) {
         this.course = course;
@@ -32,6 +38,10 @@ public class CoursePageController {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+    public void setSocketWrapper(SocketWrapper socketWrapper) {
+        this.socketWrapper = socketWrapper;
+        startListening();  // Start listening for server broadcasts
     }
 
     public void display(){
@@ -41,27 +51,55 @@ public class CoursePageController {
 
 
 
+
     public void Initialize(){
         display();
     }
     public VBox announcementBox; // From FXML
 
     public void loadAnnouncements() {
-        announcementBox.getChildren().clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("database/CourseAnnouncements.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split("\\|");
-                if (parts.length == 3 && parts[0].equals(course.getCourseID())) {
-                    Label announcement = new Label(parts[2] + ": " + parts[1]);  // date: message
-                    announcement.setStyle("-fx-font-size: 12; -fx-padding: 5;");
-                    announcementBox.getChildren().add(announcement);
+
+            announcementBox.getChildren().clear();
+            try (BufferedReader br = new BufferedReader(new FileReader("database/CourseAnnouncements.txt"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] parts = line.split(";");
+                    if (parts.length == 3 && parts[0].equals(course.getCourseID())) {
+                        Label announcement = new Label(parts[2]);
+                        announcement.setStyle("-fx-font-size: 12; -fx-padding: 5;");
+                        announcementBox.getChildren().add(announcement);
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
+    private void startListening() {
+        Thread thread = new Thread(() -> {
+            try {
+                while (true) {
+                    Object o = socketWrapper.read();
+                    if (o instanceof Notification) {
+                        Notification notification = (Notification) o;
+                        String[] parts = notification.getNotification().split(";");
+                        if (parts.length == 3 && parts[0].equals(course.getCourseID())) {
+                            Platform.runLater(() -> {
+                                Label label = new Label(parts[2]);
+                                label.setStyle("-fx-font-size: 12; -fx-padding: 5;");
+                                announcementBox.getChildren().add(label);
+                            });
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Client read error: " + e.getMessage());
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
 
     public void onHome(ActionEvent actionEvent) {
         try {

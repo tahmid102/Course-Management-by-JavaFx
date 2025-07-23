@@ -3,6 +3,7 @@ package files.Controllers;
 import files.Classes.Course;
 import files.Classes.Teacher;
 import files.Main;
+import files.Server.SocketWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +80,11 @@ public class AssignedCourses {
                 hyperlinlk.setStyle("-fx-font-size: 11; -fx-padding: 5;");
                 CourseVBox.getChildren().add(hyperlinlk);
                 hyperlinlk.setOnAction(e->{
-                    onCoursePage(course);
+                    try {
+                        onCoursePage(course);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 });
 
             }
@@ -101,7 +107,7 @@ public class AssignedCourses {
         stage.setScene(scene);
         stage.show();
     }
-    public void onCoursePage(Course course){
+    public void onCoursePage(Course course) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TeacherCoursesPage.fxml"));
         Scene scene= null;
         try {
@@ -109,9 +115,12 @@ public class AssignedCourses {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Socket socket=new Socket("127.0.0.1",44444);
+        SocketWrapper socketWrapper = new SocketWrapper(socket);
         TeacherCoursePage controller=fxmlLoader.getController();
         controller.setCourse(course);
         controller.setTeacher(teacher);
+        controller.setSocketWrapper(socketWrapper);
         controller.display();
         Stage stage = (Stage) homeButton.getScene().getWindow();
         stage.setScene(scene);

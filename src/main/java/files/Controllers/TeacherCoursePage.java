@@ -3,6 +3,7 @@ package files.Controllers;
 import files.Classes.Course;
 import files.Classes.Teacher;
 import files.Main;
+import files.Server.FilePacket;
 import files.Server.Notification;
 import files.Server.SocketWrapper;
 import javafx.event.ActionEvent;
@@ -13,11 +14,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class TeacherCoursePage {
     public Label Name;
@@ -25,9 +25,13 @@ public class TeacherCoursePage {
     public Button logoutButton;
     public VBox mainContentBox;
     public Label welcomeLabel;
+    public Label attachedFileName;
     public TextArea t;
     public Button post;
+    public Button filePost;
     Teacher teacher;
+    private File selectedFile;
+
     Course course;
     private SocketWrapper socketWrapper;
     public void setSocketWrapper(SocketWrapper socketWrapper) {
@@ -79,7 +83,7 @@ public class TeacherCoursePage {
         stage.show();
     }
 
-    public void onPost(ActionEvent actionEvent) {
+    public void onPost(ActionEvent actionEvent) throws IOException {
         String courseId = course.getCourseID();
         int teacherId = teacher.getID();
         String message = t.getText().trim();
@@ -93,7 +97,13 @@ public class TeacherCoursePage {
             try (FileWriter writer = new FileWriter(file, true)) {
                 writer.write(courseId + ";" + teacherId + ";" + message + "\n");
             }
-
+            if(selectedFile!=null) {
+                try (FileWriter writer = new FileWriter("database/UploadedFiles.txt", true)) {
+                    writer.write(course.getCourseID() + ";" + selectedFile.getName() + "\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             // Send to server via socket
             Notification notification = new Notification();
             notification.setNotification(courseId + ";" + teacherId + ";" + message);
@@ -107,6 +117,33 @@ public class TeacherCoursePage {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if (selectedFile != null) {
+            // 1. Send the post text (already done)
+            // 2. Send file separately
+            FileInputStream fis = new FileInputStream(selectedFile);
+            byte[] fileData = fis.readAllBytes();
+            try {
+                fis.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            FilePacket packet = new FilePacket(course.getCourseID(), selectedFile.getName(), fileData);
+            try {
+                socketWrapper.write(packet);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void onFilepost(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select File");
+        selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            attachedFileName.setText(selectedFile.getName());
         }
     }
 }

@@ -2,32 +2,57 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.CoursesController">
    <children>
-      <VBox fx:id="allCourseVbox" layoutX="199.0" layoutY="139.0" prefHeight="288.0" prefWidth="211.0" />
-      <Label layoutX="248.0" layoutY="37.0" prefHeight="33.0" prefWidth="83.0" text="COURSES" textAlignment="CENTER" textFill="#010302">
-         <font>
-            <Font name="System Bold" size="17.0" />
-         </font>
-      </Label>
-      <VBox layoutY="8.0" prefHeight="58.0" prefWidth="83.0" spacing="20.0">
+      <VBox fx:id="allCourseVbox" layoutX="198.0" layoutY="139.0" prefHeight="288.0" prefWidth="211.0" stylesheets="@../css/TeacxherDashboard.css">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBack" prefHeight="34.0" prefWidth="86.0" text="Back" />
-         </children>
-      </VBox>
-      <HBox layoutX="185.0" layoutY="84.0" prefHeight="29.0" prefWidth="238.0">
+            <ComboBox fx:id="filterBox" prefHeight="30.0" prefWidth="213.0" promptText="Filter By Department" style="-fx-background-color: neviblue;" />
+         </children></VBox>
+      <VBox layoutY="8.0" prefHeight="58.0" prefWidth="83.0" spacing="20.0" />
+      <HBox layoutX="185.0" layoutY="84.0" prefHeight="29.0" prefWidth="238.0" />
+      <HBox alignment="CENTER" layoutY="-4.0" prefHeight="78.0" prefWidth="806.0" style="-fx-background-color: #2c3e50;">
          <children>
-            <ComboBox fx:id="filterBox" prefHeight="29.0" prefWidth="138.0" promptText="Filter By Dept" />
-            <TextField fx:id="SearchBox" prefHeight="26.0" prefWidth="98.0" promptText="Search" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OTHER COURSES">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.25699806213378906" green="0.6736842393875122" blue="0.4375620484352112" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Text>
          </children>
       </HBox>
-      <Button layoutX="4.0" layoutY="69.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="70.0" text="Logout" />
+      <VBox layoutY="72.0" prefHeight="530.0" prefWidth="112.0" spacing="20.0" style="-fx-background-color: #34495e;" stylesheets="@../css/TeacxherDashboard.css">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" style="-fx-background-color: #95a5a6; -fx-background-radius: 6;" text="Logout" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBack" prefHeight="34.0" prefWidth="134.0" style="-fx-background-color: #95a5a6; -fx-background-radius: 6;" text="Back">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

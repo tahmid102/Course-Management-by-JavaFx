@@ -100,4 +100,11 @@ public class Course {
         return courseID.hashCode();
     }
 
+    public List<Student> getCourseStudents() {
+        return courseStudents;
+    }
+
+    public List<Teacher> getCourseTeachers() {
+        return courseTeachers;
+    }
 }

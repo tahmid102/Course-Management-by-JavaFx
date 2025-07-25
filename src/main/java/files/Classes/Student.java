@@ -39,7 +39,10 @@ public class Student extends Person{
 
     //Student methods
     public void addCourses(Course c){
-        if(!courses.contains(c))  courses.add(c);
+        if(!courses.contains(c)) {
+            courses.add(c);
+            c.addStudent(this);
+        }
     }
     public void removeCourse(Course c){
         courses.remove(c);

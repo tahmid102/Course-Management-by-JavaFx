@@ -54,7 +54,8 @@
          </Text>
          <TextArea fx:id="t" prefHeight="62.0" prefWidth="644.0" promptText="Write Your Announcement here" />
          <Button fx:id="post" mnemonicParsing="false" onAction="#onPost" text="Post" textFill="#315621" />
-        <!-- Dynamic content (e.g. TableView, Profile Info) appears here -->
+         <Button fx:id="filePost" mnemonicParsing="false" onAction="#onFilepost" text="Upload File" />
+        <Label fx:id="attachedFileName" text="No file selected" />
     </VBox>
 </center>
 

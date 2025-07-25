@@ -2,11 +2,15 @@ package files.Controllers;
 
 import files.Classes.Course;
 import files.Classes.Student;
+import files.Classes.Teacher;
 import files.Main;
 import files.Server.Notification;
 import files.Server.ReadThread;
 import files.Server.SocketWrapper;
 import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,12 +18,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.scene.control.Hyperlink;
 
 public class CoursePageController {
     public Label courseName;
@@ -27,13 +38,23 @@ public class CoursePageController {
     public Button logout;
     public Button courses;
     public Button home;
+    public VBox announcementContainer;
+    public TableView participantsTable;
+    public TableColumn studentIdColumn;
+    public TableColumn studentNameColumn;
     Course course;
     Student student;
+    public Button uploadFileButton;
+    public VBox fileListBox;
     private SocketWrapper socketWrapper;
     private ReadThread readThread;
+    List<Student> enrolledStudents=new ArrayList<>();
+    List<Teacher> assignedTechers=new ArrayList<>();
 
     public void setCourse(Course course) {
         this.course = course;
+        this.enrolledStudents=course.getCourseStudents();
+        this.assignedTechers=course.getCourseTeachers();
     }
 
     public void setStudent(Student student) {
@@ -47,6 +68,13 @@ public class CoursePageController {
     public void display(){
         courseName.setText(course.getCourseName());
         creditLOabel.setText("Total Credits: "+ course.getCredit());
+        System.out.println(course.getCourseStudents());
+        ObservableList<Student> students= FXCollections.observableArrayList(enrolledStudents);
+        studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        participantsTable.setItems(students);
+        loadUploadedFiles();
+
     }
 
 
@@ -64,8 +92,8 @@ public class CoursePageController {
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(";");
-                    if (parts.length == 3 && parts[0].equals(course.getCourseID())) {
-                        Label announcement = new Label(parts[2]);
+                    if (parts.length == 4 && parts[0].equals(course.getCourseID())) {
+                        Label announcement = new Label(parts[1]+": "+parts[2]+"  "+parts[3]);
                         announcement.setStyle("-fx-font-size: 12; -fx-padding: 5;");
                         announcementBox.getChildren().add(announcement);
                     }
@@ -83,9 +111,9 @@ public class CoursePageController {
                     if (o instanceof Notification) {
                         Notification notification = (Notification) o;
                         String[] parts = notification.getNotification().split(";");
-                        if (parts.length == 3 && parts[0].equals(course.getCourseID())) {
+                        if (parts.length == 4 && parts[0].equals(course.getCourseID())) {
                             Platform.runLater(() -> {
-                                Label label = new Label(parts[2]);
+                                Label label = new Label(parts[1]+": "+parts[2]+"  "+parts[3]);
                                 label.setStyle("-fx-font-size: 12; -fx-padding: 5;");
                                 announcementBox.getChildren().add(label);
                             });
@@ -153,5 +181,39 @@ public class CoursePageController {
         stage.setTitle("Course Management System");
         stage.setScene(scene);
         stage.show();
+    }
+    public void loadUploadedFiles() {
+        fileListBox.getChildren().clear();
+
+        File record = new File("database/UploadedFiles.txt");
+        if (!record.exists()) return;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(record))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(";", 2);
+                if (parts.length == 2 && parts[0].equals(course.getCourseID())) {
+                    String filename = parts[1];
+
+                    Hyperlink fileLink = new Hyperlink(filename);
+                    fileLink.setOnAction(e -> openFile(new File("uploaded_files/" + course.getCourseID() + "/" + filename)));
+
+                    fileListBox.getChildren().add(fileLink);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void openFile(File file) {
+        try {
+            if (file.exists()) {
+                java.awt.Desktop.getDesktop().open(file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,7 +1,5 @@
 package files.Classes;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,18 +103,8 @@ public class Course {
     public List<Student> getCourseStudents() {
         return courseStudents;
     }
-    public void loadStudents(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("database/enrollments.txt"))) {
-            String line;
-            while((line= reader.readLine())!=null){
-                String[] words=line.split(",");
-                if(words.length==2){
 
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading courses in CourseList");
-            e.printStackTrace();
-        }
+    public List<Teacher> getCourseTeachers() {
+        return courseTeachers;
     }
 }

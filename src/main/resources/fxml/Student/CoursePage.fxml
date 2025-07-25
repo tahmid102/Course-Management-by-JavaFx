@@ -3,31 +3,56 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.CoursePageController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.CoursePageController">
+
    <children>
-      <Label fx:id="courseName" contentDisplay="CENTER" layoutX="99.0" layoutY="-3.0" prefHeight="75.0" prefWidth="498.0" style="-fx-background-color: #2c3e50;" text="Label" textAlignment="CENTER" textFill="#eff2fa" textOverrun="WORD_ELLIPSIS" wrapText="true">
+
+      <!-- Top Course Name -->
+      <Label fx:id="courseName" layoutX="99.0" layoutY="-3.0" prefHeight="75.0" prefWidth="498.0" style="-fx-background-color: #2c3e50;" text="Label" textAlignment="CENTER" textFill="#eff2fa" textOverrun="WORD_ELLIPSIS" wrapText="true">
          <font>
             <Font name="System Bold" size="23.0" />
          </font>
       </Label>
+
+      <!-- Credits Label -->
       <Label fx:id="creditLOabel" layoutX="197.0" layoutY="72.0" prefHeight="34.0" prefWidth="142.0" text="Total Credits">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Label>
 
-      <ScrollPane layoutX="98.0" layoutY="106.0" prefHeight="310.0" prefWidth="498.0">
+      <!-- Scrollable Content Area for Announcements + Table -->
+      <ScrollPane layoutX="98.0" layoutY="106.0" prefHeight="492.0" prefWidth="702.0">
          <content>
-            <VBox fx:id="announcementBox" spacing="10.0" style="-fx-padding: 10;" />
+            <VBox fx:id="announcementContainer" spacing="20.0" style="-fx-padding: 10;">
+               <children>
+
+                  <!-- Announcements -->
+                  <VBox fx:id="announcementBox" spacing="10.0" />
+
+                  <!-- Participant Table -->
+                  <TableView fx:id="participantsTable" prefHeight="200.0" prefWidth="316.0">
+                     <columns>
+                        <TableColumn fx:id="studentIdColumn" prefWidth="150.0" text="Student ID" />
+                        <TableColumn fx:id="studentNameColumn" prefWidth="250.0" text="Name" />
+                     </columns>
+                  </TableView>
+                  <Label text="Uploaded Files:" />
+                  <VBox fx:id="fileListBox" spacing="10.0" />
+               </children>
+            </VBox>
          </content>
       </ScrollPane>
 
-      <VBox alignment="TOP_CENTER" layoutY="-4.0" prefHeight="419.0" prefWidth="98.0" spacing="20.0" style="-fx-background-color: #2c3e50;">
+      <!-- Sidebar Menu -->
+      <VBox alignment="TOP_CENTER" layoutY="-4.0" prefHeight="600.0" prefWidth="98.0" spacing="20.0" style="-fx-background-color: #2c3e50;">
          <children>
             <Text fill="#efeaea" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu">
                <font>
@@ -35,10 +60,11 @@
                </font>
             </Text>
 
-            <Button fx:id="home" mnemonicParsing="false" onAction="#onHome" text="🏠 Home" textFill="#0e6121" />
-            <Button fx:id="courses" mnemonicParsing="false" onAction="#Oncourses" text="📚My Courses" textFill="#733737" />
-            <Button fx:id="logout" mnemonicParsing="false" onAction="#onLogout" text="← Logout" />
+            <Button fx:id="home" onAction="#onHome" text="🏠 Home" textFill="#0e6121" />
+            <Button fx:id="courses" onAction="#Oncourses" text="📚My Courses" textFill="#733737" />
+            <Button fx:id="logout" onAction="#onLogout" text="← Logout" />
          </children>
       </VBox>
+
    </children>
 </AnchorPane>

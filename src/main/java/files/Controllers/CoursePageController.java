@@ -92,8 +92,8 @@ public class CoursePageController {
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] parts = line.split(";");
-                    if (parts.length == 3 && parts[0].equals(course.getCourseID())) {
-                        Label announcement = new Label(parts[2]);
+                    if (parts.length == 4 && parts[0].equals(course.getCourseID())) {
+                        Label announcement = new Label(parts[1]+": "+parts[2]+"  "+parts[3]);
                         announcement.setStyle("-fx-font-size: 12; -fx-padding: 5;");
                         announcementBox.getChildren().add(announcement);
                     }
@@ -111,9 +111,9 @@ public class CoursePageController {
                     if (o instanceof Notification) {
                         Notification notification = (Notification) o;
                         String[] parts = notification.getNotification().split(";");
-                        if (parts.length == 3 && parts[0].equals(course.getCourseID())) {
+                        if (parts.length == 4 && parts[0].equals(course.getCourseID())) {
                             Platform.runLater(() -> {
-                                Label label = new Label(parts[2]);
+                                Label label = new Label(parts[1]+": "+parts[2]+"  "+parts[3]);
                                 label.setStyle("-fx-font-size: 12; -fx-padding: 5;");
                                 announcementBox.getChildren().add(label);
                             });

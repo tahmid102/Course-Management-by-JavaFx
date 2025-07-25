@@ -1,3 +1,3 @@
-CSE 105;10010;Shobai Ghumao
-CSE 101;10010;kire ki khobor shobar
-CSE 105;10010;kire
+CSE 101;10010;No Extra Assignment will be taken
+CSE 101;Dr Strange;No Extra Assignment;2025-07-25T12:36:49.767555300
+CSE 105;Dr Strange;CT:DP and Master Theorem;2025-07-25T12:39:58.498112500

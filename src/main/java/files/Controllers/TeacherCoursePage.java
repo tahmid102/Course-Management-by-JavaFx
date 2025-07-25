@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.time.LocalDateTime;
 
 public class TeacherCoursePage {
     public Label Name;
@@ -87,15 +88,16 @@ public class TeacherCoursePage {
         String courseId = course.getCourseID();
         int teacherId = teacher.getID();
         String message = t.getText().trim();
+        Notification notification = new Notification();
+        LocalDateTime now= LocalDateTime.now();
 
         if (message.isEmpty()) return;
 
         try {
-            // Save to file
             File file = new File("database/CourseAnnouncements.txt");
             file.getParentFile().mkdirs();
             try (FileWriter writer = new FileWriter(file, true)) {
-                writer.write(courseId + ";" + teacherId + ";" + message + "\n");
+                writer.write(courseId + ";" + teacher.getName() + ";" + message +";"+now+ "\n");
             }
             if(selectedFile!=null) {
                 try (FileWriter writer = new FileWriter("database/UploadedFiles.txt", true)) {
@@ -105,8 +107,8 @@ public class TeacherCoursePage {
                 }
             }
             // Send to server via socket
-            Notification notification = new Notification();
-            notification.setNotification(courseId + ";" + teacherId + ";" + message);
+
+            notification.setNotification(courseId + ";" + teacher.getName() + ";" + message+";"+now);
             if (socketWrapper != null) {
                 socketWrapper.write(notification);
             }
@@ -119,8 +121,7 @@ public class TeacherCoursePage {
             e.printStackTrace();
         }
         if (selectedFile != null) {
-            // 1. Send the post text (already done)
-            // 2. Send file separately
+
             FileInputStream fis = new FileInputStream(selectedFile);
             byte[] fileData = fis.readAllBytes();
             try {

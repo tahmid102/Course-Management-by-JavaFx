@@ -116,6 +116,7 @@ public class AdminDashboardController implements Initializable {
             stage.setTitle("Courses for " + student.getName());
             stage.setScene(scene);
             stage.show();
+            stage.setResizable(false);
         } catch (IOException e) {
             System.out.println("Error opening student course window: " + e.getMessage());
         }
@@ -129,6 +130,8 @@ public class AdminDashboardController implements Initializable {
             stage.setTitle("Approve Students");
             stage.setScene(scene);
             stage.show();
+            stage.setResizable(false);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,6 +166,7 @@ public class AdminDashboardController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Courses for " + teacher.getName());
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             System.out.println("Error opening teacher course window: " + e.getMessage());
@@ -175,6 +179,7 @@ public class AdminDashboardController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Approve Teachers");
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             System.out.println("Error opening teacher approval window: " + e.getMessage());
@@ -211,6 +216,7 @@ public class AdminDashboardController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Approve Courses");
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             System.out.println("Error opening course approval window: " + e.getMessage());

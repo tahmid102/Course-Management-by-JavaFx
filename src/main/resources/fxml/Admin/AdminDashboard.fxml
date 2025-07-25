@@ -121,8 +121,8 @@
 
                                 <TableView fx:id="ADcourseTable" prefHeight="400.0" VBox.vgrow="ALWAYS">
                                     <columns>
-                                        <TableColumn fx:id="ADcourseIDColumn" prefWidth="120.0" text="Course ID" />
-                                        <TableColumn fx:id="ADcourseNameColumn" prefWidth="180.0" text="Course Name" />
+                                        <TableColumn fx:id="ADcourseIDColumn" prefWidth="100.0" text="Course ID" />
+                                        <TableColumn fx:id="ADcourseNameColumn" prefWidth="200.0" text="Course Name" />
                                         <TableColumn fx:id="ADcourseCreditColumn" prefWidth="100.0" text="Credit" />
                                     </columns>
                                     <columnResizePolicy>

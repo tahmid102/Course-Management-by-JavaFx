@@ -1,6 +1,8 @@
 package files.Classes;
 
-abstract class Person {
+import java.io.Serializable;
+
+abstract class Person implements Serializable {
     private String name;
     private int ID;
     private String password;

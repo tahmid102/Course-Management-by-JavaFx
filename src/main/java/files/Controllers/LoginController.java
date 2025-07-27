@@ -65,6 +65,10 @@ public class LoginController {
         signUpAnchorPane.setVisible(false);
         Loader.loadAll();
         System.out.println(Loader.toDampString());
+        
+        // DEBUGGING: Check consistency after initial load
+        files.Classes.ConsistencyChecker.printFullConsistencyReport();
+        
         roleBox.getItems().addAll("Student", "Teacher", "Admin");
         roleBoxSetup.getItems().addAll("Student", "Teacher");
         roleBox.setOnAction(e -> roleBox.requestFocus());

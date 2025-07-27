@@ -37,6 +37,11 @@ public class StudentList {
     public List<Student> getStudents() {
         return students;
     }
+    
+    // CRITICAL FIX: Add method to clear all students
+    public void clear() {
+        students.clear();
+    }
 
     @Override
     public String toString() {

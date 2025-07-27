@@ -37,6 +37,11 @@ public class TeacherList {
     public List<Teacher> getTeachers() {
         return teachers;
     }
+    
+    // CRITICAL FIX: Add method to clear all teachers
+    public void clear() {
+        teachers.clear();
+    }
 
     @Override
     public String toString() {

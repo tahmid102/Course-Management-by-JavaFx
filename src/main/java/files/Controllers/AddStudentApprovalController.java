@@ -86,6 +86,11 @@ public class AddStudentApprovalController {
                 }
             }
             Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            
+            // CRITICAL FIX: Add approved student to in-memory list
+            files.Classes.Loader.studentList.addStudent(student);
+            System.out.println("Student " + student.getName() + " (ID: " + student.getID() + ") approved and added to memory");
+            
         } catch (IOException e) {
             System.out.println("Error approving student: "+e.getMessage());
         }

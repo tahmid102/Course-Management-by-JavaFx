@@ -86,6 +86,11 @@ public class AddTeacherApprovalController {
                 }
             }
             Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            
+            // CRITICAL FIX: Add approved teacher to in-memory list
+            files.Classes.Loader.teacherList.addTeacher(teacher);
+            System.out.println("Teacher " + teacher.getName() + " (ID: " + teacher.getID() + ") approved and added to memory");
+            
         } catch (IOException e) {
             System.out.println("Error approving Teacher: "+e.getMessage());;
         }

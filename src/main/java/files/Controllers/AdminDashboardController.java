@@ -220,13 +220,18 @@ public class AdminDashboardController implements Initializable {
     }
 
     public void refreshAllTables() {
-        Loader.loadAll();
-        ADteacherTable.refresh();
-        ADstudentTable.refresh();
-        ADcourseTable.refresh();
+        // CRITICAL FIX: Use reloadAll instead of loadAll to properly clear and reload
+        Loader.reloadAll();
+        
+        // Refresh table data
         refreshStudentTable();
         refreshTeacherTable();
         refreshCourseTable();
+        
+        // DEBUGGING: Check consistency after refresh
+        files.Classes.ConsistencyChecker.printFullConsistencyReport();
+        
+        System.out.println("All tables refreshed with current file data");
     }
     //TODO:SIGN OUT
     public void signOut(){

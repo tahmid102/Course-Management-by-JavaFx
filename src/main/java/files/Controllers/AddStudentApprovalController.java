@@ -18,6 +18,8 @@ public class AddStudentApprovalController {
     @FXML private TableColumn<Student, Integer> idColumn;
     @FXML private Button approveSelectedButton;
     @FXML private Button approveAllButton;
+    @FXML private Button deleteSelectedButton;
+    @FXML private Button deleteAllButton;
 
     private final ObservableList<Student> pendingStudents = FXCollections.observableArrayList();
 
@@ -92,6 +94,48 @@ public class AddStudentApprovalController {
             System.out.println("Error approving student: "+e.getMessage());
         }
     }
+    @FXML
+    private void deleteSelected() {
+        Student selected = pendingStudentTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            deleteStudent(selected);
+            pendingStudents.remove(selected);
+        }
+    }
+
+    @FXML
+    private void deleteAll() {
+        for (Student student : new ArrayList<>(pendingStudents)) {
+            deleteStudent(student);
+        }
+        pendingStudents.clear();
+    }
+
+    private void deleteStudent(Student student) {
+        Path path = Paths.get("database/StudentCredentials.txt");
+        try {
+            List<String> lines = Files.readAllLines(path);
+            List<String> updated = new ArrayList<>();
+
+            for (String line : lines) {
+                // Only keep lines that don't match the student ID or are approved
+                if (!line.startsWith(student.getID() + ",")) {
+                    updated.add(line);
+                } else {
+                    // Check if this is an approved student (true), if so keep it
+                    String[] parts = line.split(",");
+                    if (parts.length == 4 && Boolean.parseBoolean(parts[3].trim())) {
+                        updated.add(line);
+                    }
+                    // If false (not approved), we don't add it to updated list (effectively deleting it)
+                }
+            }
+            Files.write(path, updated, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            System.out.println("Error deleting student: " + e.getMessage());
+        }
+    }
+
     private AdminDashboardController dashboardController;
 
     public void setDashboardController(AdminDashboardController controller) {

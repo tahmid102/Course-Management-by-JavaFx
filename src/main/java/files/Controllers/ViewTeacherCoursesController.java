@@ -45,10 +45,14 @@ public class ViewTeacherCoursesController {
         courseTable.setItems(courseList);
     }
     private void loadStudentUnderCourses(Course course) {
+        if (course == null) {
+            studentTable.getItems().clear();
+            return;
+        }
         
         studentTable.getItems().clear();
-        colStudentID.setCellValueFactory(new PropertyValueFactory<>("studentId"));
-        colStudentName.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        colStudentID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        colStudentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         ObservableList<Student> studentsList = FXCollections.observableArrayList(course.getCourseStudents());
         studentTable.setItems(studentsList);
     }

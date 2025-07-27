@@ -19,6 +19,8 @@ public class AddTeacherApprovalController {
     @FXML private TableColumn<Teacher, Integer> idColumn;
     @FXML private Button approveSelectedButton;
     @FXML private Button approveAllButton;
+    @FXML private Button deleteSelectedButton;
+    @FXML private Button deleteAllButton;
 
     private final ObservableList<Teacher> pendingTeachers = FXCollections.observableArrayList();
 
@@ -89,6 +91,48 @@ public class AddTeacherApprovalController {
             Loader.teacherList.addTeacher(teacher);
         } catch (IOException e) {
             System.out.println("Error approving Teacher: "+e.getMessage());;
+        }
+    }
+
+    @FXML
+    private void deleteSelected() {
+        Teacher selected = pendingTeacherTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            deleteTeacher(selected);
+            pendingTeachers.remove(selected);
+        }
+    }
+
+    @FXML
+    private void deleteAll() {
+        for (Teacher teacher : new ArrayList<>(pendingTeachers)) {
+            deleteTeacher(teacher);
+        }
+        pendingTeachers.clear();
+    }
+
+    private void deleteTeacher(Teacher teacher) {
+        Path path = Paths.get("database/TeacherCredentials.txt");
+        try {
+            List<String> lines = Files.readAllLines(path);
+            List<String> updated = new ArrayList<>();
+
+            for (String line : lines) {
+                // Only keep lines that don't match the teacher ID or are approved
+                if (!line.startsWith(teacher.getID() + ",")) {
+                    updated.add(line);
+                } else {
+                    // Check if this is an approved teacher (true), if so keep it
+                    String[] parts = line.split(",");
+                    if (parts.length == 4 && Boolean.parseBoolean(parts[3].trim())) {
+                        updated.add(line);
+                    }
+                    // If false (not approved), we don't add it to updated list (effectively deleting it)
+                }
+            }
+            Files.write(path, updated, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            System.out.println("Error deleting teacher: " + e.getMessage());
         }
     }
 

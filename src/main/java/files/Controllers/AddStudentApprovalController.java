@@ -1,5 +1,6 @@
 package files.Controllers;
 
+import files.Classes.Loader;
 import files.Classes.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -86,6 +87,7 @@ public class AddStudentApprovalController {
                 }
             }
             Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            Loader.studentList.addStudent(student);
         } catch (IOException e) {
             System.out.println("Error approving student: "+e.getMessage());
         }

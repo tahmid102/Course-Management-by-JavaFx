@@ -8,7 +8,12 @@ public class Loader {
     public static final CourseList courseList=new CourseList();
     public static final StudentList studentList=new StudentList();
     public static final TeacherList teacherList=new TeacherList();
-
+    public static void relaodAll(){
+        courseList.getCourses().clear();
+        studentList.getStudents().clear();
+        teacherList.getTeachers().clear();
+        loadAll();
+    }
     public static void loadAll(){
         loadCourses();
         loadStudents();

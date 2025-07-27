@@ -45,10 +45,7 @@ public class ViewTeacherCoursesController {
         courseTable.setItems(courseList);
     }
     private void loadStudentUnderCourses(Course course) {
-        courseList.loadCourses();
-        //TODO STUDENT BAKI BHAI
-
-
+        
         studentTable.getItems().clear();
         colStudentID.setCellValueFactory(new PropertyValueFactory<>("studentId"));
         colStudentName.setCellValueFactory(new PropertyValueFactory<>("studentName"));

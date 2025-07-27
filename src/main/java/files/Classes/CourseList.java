@@ -11,23 +11,6 @@ import java.util.List;
 //DO NOT DELETE THE FILE THAMID - muf
 public class CourseList {
     List<Course> Courses=new ArrayList<>();
-
-    public void loadCourses(){
-        Courses.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader("database/Courses.txt"))) {
-            String line;
-            while((line= reader.readLine())!=null){
-                String[] words=line.split(",");
-                if(words.length==3){
-                    Course course=new Course(words[0].trim(),words[1].trim(),Double.parseDouble(words[2].trim()));
-                    addCourse(course);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading courses in CourseList");
-            e.printStackTrace();
-        }
-    }
     public Course searchCourse(String courseId) {
         for (Course course : Courses) {
             if (course.getCourseID().equals(courseId)) {

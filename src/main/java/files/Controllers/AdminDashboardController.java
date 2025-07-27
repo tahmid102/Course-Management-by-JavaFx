@@ -221,9 +221,6 @@ public class AdminDashboardController implements Initializable {
 
     public void refreshAllTables() {
         Loader.loadAll();
-        ADteacherTable.refresh();
-        ADstudentTable.refresh();
-        ADcourseTable.refresh();
         refreshStudentTable();
         refreshTeacherTable();
         refreshCourseTable();

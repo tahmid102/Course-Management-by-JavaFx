@@ -1,6 +1,7 @@
 // AddTeacherApprovalController.java - EXACT same structure as AddStudentApprovalController
 package files.Controllers;
 
+import files.Classes.Loader;
 import files.Classes.Teacher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,7 +35,6 @@ public class AddTeacherApprovalController {
     private void loadPendingTeachers() {
         String PATH = "database/TeacherCredentials.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(PATH))) {
-
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -86,6 +86,7 @@ public class AddTeacherApprovalController {
                 }
             }
             Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            Loader.teacherList.addTeacher(teacher);
         } catch (IOException e) {
             System.out.println("Error approving Teacher: "+e.getMessage());;
         }

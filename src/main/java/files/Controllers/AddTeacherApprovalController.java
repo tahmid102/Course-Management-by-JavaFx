@@ -32,17 +32,19 @@ public class AddTeacherApprovalController {
     }
 
     private void loadPendingTeachers() {
-        String PENDING_FILE = "database/pendingTeacherCredentials.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(PENDING_FILE))) {
-
+        String CRED_FILE = "database/TeacherCred.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(CRED_FILE))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    int id = Integer.parseInt(parts[0].trim());
-                    String name = parts[1].trim();
-                    String pass = parts[2].trim();
-                    pendingTeachers.add(new Teacher(name, id, pass));
+                if (parts.length >= 4) {
+                    boolean approved = Boolean.parseBoolean(parts[3].trim());
+                    if (!approved) {
+                        int id = Integer.parseInt(parts[0].trim());
+                        String name = parts[1].trim();
+                        String pass = parts[2].trim();
+                        pendingTeachers.add(new Teacher(name, id, pass));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -68,32 +70,27 @@ public class AddTeacherApprovalController {
     }
 
     private void approveTeacher(Teacher teacher) {
-        String TEACHER_FILE = "database/TeacherCredentials.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TEACHER_FILE, true))) {
-            writer.write(teacher.getID() + "," + teacher.getName() + "," + teacher.getPassword());
-            writer.newLine();
-        } catch (IOException e) {
-            System.out.println(e.getMessage()+" approve teacher e hocche");
-        }
-
-        removeTeacherFromPendingFile(teacher.getID());
-    }
-
-    private void removeTeacherFromPendingFile(int id) {
-        Path path = Paths.get("database/PendingTeacherCredentials.txt");
+        Path credPath = Paths.get("database/TeacherCred.txt");
         try {
-            List<String> lines = Files.readAllLines(path);
+            List<String> lines = Files.readAllLines(credPath);
             List<String> updated = new ArrayList<>();
 
             for (String line : lines) {
-                if (!line.startsWith(id + ",")) {
+                if (line.startsWith(teacher.getID() + ",")) {
+                    String[] parts = line.split(",");
+                    if (parts.length < 4) {
+                        parts = Arrays.copyOf(parts, 4);
+                    }
+                    parts[3] = "true";
+                    updated.add(String.join(",", parts));
+                } else {
                     updated.add(line);
                 }
             }
 
-            Files.write(path, updated);
+            Files.write(credPath, updated, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error approving teacher: " + e.getMessage());
         }
     }
 

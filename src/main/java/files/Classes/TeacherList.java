@@ -37,20 +37,26 @@ public class TeacherList {
 
     public void initializeTeachers() {
         teachers.clear();
-        try(BufferedReader br= new BufferedReader(new FileReader("database/TeacherCredentials.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("database/TeacherCred.txt"))) {
             String data;
             while ((data = br.readLine()) != null) {
                 String[] creds = data.split(",");
-                if (creds.length == 3) {
-                    int id = Integer.parseInt(creds[0].trim());
-                    String name = creds[1].trim();
-                    String pass = creds[2].trim();
+
+                if (creds.length < 3) continue; // invalid line
+
+                int id = Integer.parseInt(creds[0].trim());
+                String name = creds[1].trim();
+                String pass = creds[2].trim();
+
+                boolean approved = creds.length >= 4 ? Boolean.parseBoolean(creds[3].trim()) : true;
+
+                if (approved) {
                     Teacher teacher = new Teacher(name, id, pass);
                     addTeacher(teacher);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Teacher credentials not found: " + e.getMessage());
+            System.out.println("Teacher credentials file not found: " + e.getMessage());
         }
 
     }

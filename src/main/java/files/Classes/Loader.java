@@ -5,18 +5,14 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Loader {
-    public static final CourseList courseList=new CourseList();
-    public static final StudentList studentList=new StudentList();
-    public static final TeacherList teacherList=new TeacherList();
-    public static final PendingStudentsList pendingStudentsList=new PendingStudentsList();
-    public static final PendingTeachersList pendingTeachersList=new PendingTeachersList();
+    public static final CourseList courseList = new CourseList();
+    public static final StudentList studentList = new StudentList();
+    public static final TeacherList teacherList = new TeacherList();
 
     public static void loadAll(){
         loadCourses();
         loadStudents();
         loadTeachers();
-        loadPendingTeachers();
-        loadPendingStudents();
         coordinateStudentCourse();
         coordinateTeacherCourse();
     }
@@ -35,70 +31,50 @@ public class Loader {
             e.printStackTrace();
         }
     }
-    private static void loadStudents(){
-        try(BufferedReader br = new BufferedReader(new FileReader("database/StudentCredentials.txt"))) {
+    private static void loadStudents() {
+        try (BufferedReader br = new BufferedReader(new FileReader("database/StudentCred.txt"))) {
             String data;
             while ((data = br.readLine()) != null) {
                 String[] creds = data.split(",");
-                if (creds.length == 3) {
-                    int stdID = Integer.parseInt(creds[0].trim());
-                    String stdName = creds[1].trim();
-                    String stdPass = creds[2].trim();
+
+                if (creds.length < 3) continue;
+
+                int stdID = Integer.parseInt(creds[0].trim());
+                String stdName = creds[1].trim();
+                String stdPass = creds[2].trim();
+
+                boolean approved = creds.length >= 4 ? Boolean.parseBoolean(creds[3].trim()) : true;
+
+                if (approved) {
                     Student std = new Student(stdName, stdID, stdPass);
                     studentList.addStudent(std);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Student cred not found: " + e.getMessage());
+            System.out.println("Student credentials not found: " + e.getMessage());
         }
     }
-    private static void loadTeachers(){
-        try(BufferedReader br= new BufferedReader(new FileReader("database/TeacherCredentials.txt"))) {
+    private static void loadTeachers() {
+        try (BufferedReader br = new BufferedReader(new FileReader("database/TeacherCred.txt"))) {
             String data;
             while ((data = br.readLine()) != null) {
                 String[] creds = data.split(",");
-                if (creds.length == 3) {
-                    int id = Integer.parseInt(creds[0].trim());
-                    String name = creds[1].trim();
-                    String pass = creds[2].trim();
+
+                if (creds.length < 3) continue;
+
+                int id = Integer.parseInt(creds[0].trim());
+                String name = creds[1].trim();
+                String pass = creds[2].trim();
+
+                boolean approved = creds.length >= 4 ? Boolean.parseBoolean(creds[3].trim()) : true;
+
+                if (approved) {
                     Teacher teacher = new Teacher(name, id, pass);
                     teacherList.addTeacher(teacher);
                 }
             }
         } catch (IOException e) {
             System.out.println("Teacher credentials not found: " + e.getMessage());
-        }
-    }
-    private static void loadPendingTeachers(){
-        try(BufferedReader reader = new BufferedReader(new FileReader("database/pendingTeacherCredentials.txt"))){
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String name = parts[1];
-                    int id = Integer.parseInt(parts[0]);
-                    String pass = parts[2];
-                    pendingTeachersList.addToPending(new Teacher(name, id, pass));
-                }
-            }
-        } catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
-    private static void loadPendingStudents(){
-        try(BufferedReader br = new BufferedReader(new FileReader("database/pendingStudentCredentials.txt"))){
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String name = parts[1].trim();
-                    int id = Integer.parseInt(parts[0].trim());
-                    String pass = parts[2].trim();
-                    pendingStudentsList.addToPending(new Student(name, id, pass));
-                }
-            }
-        } catch (IOException e){
-            e.printStackTrace();
         }
     }
     private static void coordinateStudentCourse()  {
@@ -146,8 +122,6 @@ public class Loader {
                 "courseList=" + courseList +
                 ",\n studentList=" + studentList +
                 ",\n teacherList=" + teacherList +
-                ",\n pendingStudentsList=" + pendingStudentsList +
-                ",\n pendingTeachersList=" + pendingTeachersList +
                 '}';
     }
 }

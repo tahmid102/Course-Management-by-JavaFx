@@ -37,20 +37,28 @@ public class StudentList {
 
     public void initializeStudents() {
         students.clear();
-        try(BufferedReader br = new BufferedReader(new FileReader("database/StudentCredentials.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("database/StudentCred.txt"))) {
             String data;
             while ((data = br.readLine()) != null) {
                 String[] creds = data.split(",");
-                if (creds.length == 3) {
-                    int stdID = Integer.parseInt(creds[0].trim());
-                    String stdName = creds[1].trim();
-                    String stdPass = creds[2].trim();
+
+                // Expected format: ID,name,pass,approvedFlag
+                if (creds.length < 3) continue; // invalid line
+
+                int stdID = Integer.parseInt(creds[0].trim());
+                String stdName = creds[1].trim();
+                String stdPass = creds[2].trim();
+
+                // Default to approved when the flag is missing (backward compatibility)
+                boolean approved = creds.length >= 4 ? Boolean.parseBoolean(creds[3].trim()) : true;
+
+                if (approved) {
                     Student std = new Student(stdName, stdID, stdPass);
                     addStudent(std);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Student cred not found: " + e.getMessage());
+            System.out.println("Student credentials file not found: " + e.getMessage());
         }
 
     }

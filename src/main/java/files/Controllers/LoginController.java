@@ -10,6 +10,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -40,8 +44,6 @@ public class LoginController {
     //TODO:STUDENT and TEACHER HASHES
     private final StudentList students = new StudentList();
     private final TeacherList teachers = new TeacherList();
-    private final PendingStudentsList pendingStudents = new PendingStudentsList();
-    private final PendingTeachersList pendingTeachers = new PendingTeachersList();
 
     @FXML public void initialize(){
         loginAnchorPane.setVisible(true);
@@ -148,35 +150,41 @@ public class LoginController {
 
         if (role.equals("Student")) {
             students.initializeStudents();
-            pendingStudents.loadFromFile();
-            System.out.println(students);
-            if((id+"").length()!=7) {
+
+            // Validate Student specific credentials
+            if ((id + "").length() != 7) {
                 registerErrorLabel.setText("Student ID should be a 7 digit integer");
                 return;
             }
-            if(password.length()<4){
+            if (password.length() < 4) {
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (students.isStudentAvailable(id) || pendingStudents.isDuplicate(id)) {
+
+            if (students.isStudentAvailable(id) || idExistsInCredentialFile("database/StudentCred.txt", id)) {
                 registerErrorLabel.setText("Student ID already exists");
                 return;
             }
-            pendingStudents.addToPending(new Student(name, id, password));
+
+            appendCredentialToFile("database/StudentCred.txt", id, name, password, false);
             registerErrorLabel.setText("Student request sent! Awaiting admin approval.");
+
         } else if (role.equals("Teacher")) {
             teachers.initializeTeachers();
-            pendingTeachers.loadFromFile();
-            if(password.length()<4){
+
+            if (password.length() < 4) {
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (teachers.isTeacherAvailable(id) || pendingTeachers.isDuplicate(id)) {
+
+            if (teachers.isTeacherAvailable(id) || idExistsInCredentialFile("database/TeacherCred.txt", id)) {
                 registerErrorLabel.setText("Teacher ID already exists");
                 return;
             }
-            pendingTeachers.addToPending(new Teacher(name, id, password));
+
+            appendCredentialToFile("database/TeacherCred.txt", id, name, password, false);
             registerErrorLabel.setText("Teacher request sent! Awaiting admin approval.");
+
         } else {
             registerErrorLabel.setText("Admin cannot register here");
         }
@@ -246,6 +254,28 @@ public class LoginController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
+        }
+    }
+
+    private boolean idExistsInCredentialFile(String filePath, int id) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith(id + ",")) {
+                    return true;
+                }
+            }
+        } catch (IOException ignored) {
+        }
+        return false;
+    }
+
+    private void appendCredentialToFile(String filePath, int id, String name, String pass, boolean approved) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(id + "," + name + "," + pass + "," + approved);
+            writer.newLine();
+        } catch (IOException e) {
+            System.out.println("Error writing credentials: " + e.getMessage());
         }
     }
 }

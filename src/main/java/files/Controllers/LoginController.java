@@ -1,6 +1,7 @@
 package files.Controllers;
 
 import files.Classes.*;
+import files.Server.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -70,31 +71,59 @@ public class LoginController {
             int id = Integer.parseInt(idText);
             switch (role) {
                 case "Student" -> {
-                    students.initializeStudents();
-                    students.LoadCourse();
-                    if (students.isStudentAvailable(id)) {
-                        if (students.searchStudent(id).getPassword().equals(password)) {
-                            goToDashboard(id);
+                    // Try to load data from network first, fallback to local
+                    if (NetworkLoader.isServerAvailable()) {
+                        NetworkLoader.loadAll();
+                        if (NetworkLoader.studentList.isStudentAvailable(id)) {
+                            if (NetworkLoader.studentList.searchStudent(id).getPassword().equals(password)) {
+                                goToDashboard(id);
+                            } else {
+                                errorLabel.setText("Wrong Password");
+                            }
                         } else {
-                            errorLabel.setText("Wrong Password");
+                            errorLabel.setText("Student ID not found");
                         }
                     } else {
-                        errorLabel.setText("Student ID not found");
+                        // Fallback to local data
+                        students.initializeStudents();
+                        students.LoadCourse();
+                        if (students.isStudentAvailable(id)) {
+                            if (students.searchStudent(id).getPassword().equals(password)) {
+                                goToDashboard(id);
+                            } else {
+                                errorLabel.setText("Wrong Password");
+                            }
+                        } else {
+                            errorLabel.setText("Student ID not found");
+                        }
                     }
                 }
                 case "Teacher" -> {
-                    teachers.initializeTeachers();
-                    teachers.loadCourses();
-
-                    if (teachers.isTeacherAvailable(id)) {
-                        if (teachers.searchTeacher(id).getPassword().equals(password)) {
-
-                            goToTeacherDashboard(id);
+                    // Try to load data from network first, fallback to local
+                    if (NetworkLoader.isServerAvailable()) {
+                        NetworkLoader.loadAll();
+                        if (NetworkLoader.teacherList.isTeacherAvailable(id)) {
+                            if (NetworkLoader.teacherList.searchTeacher(id).getPassword().equals(password)) {
+                                goToTeacherDashboard(id);
+                            } else {
+                                errorLabel.setText("Wrong Password");
+                            }
                         } else {
-                            errorLabel.setText("Wrong Password");
+                            errorLabel.setText("Teacher ID not found");
                         }
                     } else {
-                        errorLabel.setText("Teacher ID not found");
+                        // Fallback to local data
+                        teachers.initializeTeachers();
+                        teachers.loadCourses();
+                        if (teachers.isTeacherAvailable(id)) {
+                            if (teachers.searchTeacher(id).getPassword().equals(password)) {
+                                goToTeacherDashboard(id);
+                            } else {
+                                errorLabel.setText("Wrong Password");
+                            }
+                        } else {
+                            errorLabel.setText("Teacher ID not found");
+                        }
                     }
                 }
                 case "Admin" -> {
@@ -147,9 +176,6 @@ public class LoginController {
         }
 
         if (role.equals("Student")) {
-            students.initializeStudents();
-            pendingStudents.loadFromFile();
-            System.out.println(students);
             if((id+"").length()!=7) {
                 registerErrorLabel.setText("Student ID should be a 7 digit integer");
                 return;
@@ -158,25 +184,57 @@ public class LoginController {
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (students.isStudentAvailable(id) || pendingStudents.isDuplicate(id)) {
-                registerErrorLabel.setText("Student ID already exists");
-                return;
+            
+            // Try network registration first
+            RegistrationRequest request = new RegistrationRequest(name, id, password, 
+                RegistrationRequest.UserType.STUDENT);
+            
+            if (NetworkLoader.isServerAvailable()) {
+                boolean success = NetworkLoader.submitRegistration(request);
+                if (success) {
+                    registerErrorLabel.setText("Student request sent! Awaiting admin approval.");
+                } else {
+                    registerErrorLabel.setText("Registration failed. Please try again.");
+                }
+            } else {
+                // Fallback to local registration
+                students.initializeStudents();
+                pendingStudents.loadFromFile();
+                if (students.isStudentAvailable(id) || pendingStudents.isDuplicate(id)) {
+                    registerErrorLabel.setText("Student ID already exists");
+                    return;
+                }
+                pendingStudents.addToPending(new Student(name, id, password));
+                registerErrorLabel.setText("Student request sent! Awaiting admin approval.");
             }
-            pendingStudents.addToPending(new Student(name, id, password));
-            registerErrorLabel.setText("Student request sent! Awaiting admin approval.");
         } else if (role.equals("Teacher")) {
-            teachers.initializeTeachers();
-            pendingTeachers.loadFromFile();
             if(password.length()<4){
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (teachers.isTeacherAvailable(id) || pendingTeachers.isDuplicate(id)) {
-                registerErrorLabel.setText("Teacher ID already exists");
-                return;
+            
+            // Try network registration first
+            RegistrationRequest request = new RegistrationRequest(name, id, password, 
+                RegistrationRequest.UserType.TEACHER);
+            
+            if (NetworkLoader.isServerAvailable()) {
+                boolean success = NetworkLoader.submitRegistration(request);
+                if (success) {
+                    registerErrorLabel.setText("Teacher request sent! Awaiting admin approval.");
+                } else {
+                    registerErrorLabel.setText("Registration failed. Please try again.");
+                }
+            } else {
+                // Fallback to local registration
+                teachers.initializeTeachers();
+                pendingTeachers.loadFromFile();
+                if (teachers.isTeacherAvailable(id) || pendingTeachers.isDuplicate(id)) {
+                    registerErrorLabel.setText("Teacher ID already exists");
+                    return;
+                }
+                pendingTeachers.addToPending(new Teacher(name, id, password));
+                registerErrorLabel.setText("Teacher request sent! Awaiting admin approval.");
             }
-            pendingTeachers.addToPending(new Teacher(name, id, password));
-            registerErrorLabel.setText("Teacher request sent! Awaiting admin approval.");
         } else {
             registerErrorLabel.setText("Admin cannot register here");
         }
@@ -193,7 +251,16 @@ public class LoginController {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
         Scene scene=new Scene(fxmlLoader.load());
         DashboardController controller=fxmlLoader.getController();
-        controller.setCurrentStudent(students.searchStudent(enteredId));
+        
+        // Use the appropriate student list (network or local)
+        Student student = null;
+        if (NetworkLoader.isServerAvailable()) {
+            student = NetworkLoader.studentList.searchStudent(enteredId);
+        } else {
+            student = students.searchStudent(enteredId);
+        }
+        
+        controller.setCurrentStudent(student);
         Stage stage = (Stage) submitButton.getScene().getWindow();
         stage.setScene(scene);
         stage.setTitle("Dashboard");
@@ -208,9 +275,16 @@ public class LoginController {
             throw new RuntimeException(e);
         }
         TeacherDasahboardController controller=fxmlLoader.getController();
-        controller.setTeacher(teachers.searchTeacher(enteredID));
-
-
+        
+        // Use the appropriate teacher list (network or local)
+        Teacher teacher = null;
+        if (NetworkLoader.isServerAvailable()) {
+            teacher = NetworkLoader.teacherList.searchTeacher(enteredID);
+        } else {
+            teacher = teachers.searchTeacher(enteredID);
+        }
+        
+        controller.setTeacher(teacher);
 
         Stage stage = (Stage) submitButton.getScene().getWindow();
         stage.setScene(scene);

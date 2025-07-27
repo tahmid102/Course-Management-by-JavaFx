@@ -2,6 +2,7 @@
 package files.Controllers;
 
 import files.Classes.Loader;
+import files.Classes.Student;
 import files.Classes.Teacher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +20,8 @@ public class AddTeacherApprovalController {
     @FXML private TableColumn<Teacher, Integer> idColumn;
     @FXML private Button approveSelectedButton;
     @FXML private Button approveAllButton;
+    @FXML private Button deleteSelectedButton;
+    @FXML private Button deleteAllButton;
 
     private final ObservableList<Teacher> pendingTeachers = FXCollections.observableArrayList();
 
@@ -89,6 +92,38 @@ public class AddTeacherApprovalController {
             Loader.teacherList.addTeacher(teacher);
         } catch (IOException e) {
             System.out.println("Error approving Teacher: "+e.getMessage());;
+        }
+    }
+    @FXML private void deleteSelected() {
+        Teacher selected = pendingTeacherTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            deleteTeacher(selected);
+            pendingTeachers.remove(selected);
+        }
+    }
+
+    @FXML private void deleteAll() {
+        for (Teacher teacher : new ArrayList<>(pendingTeachers)) {
+            deleteTeacher(teacher);
+        }
+        pendingTeachers.clear();
+    }
+
+    private void deleteTeacher(Teacher teacher) {
+        Path path = Paths.get("database/TeacherCredentials.txt");
+        try {
+            List<String> lines = Files.readAllLines(path);
+            List<String> updated = new ArrayList<>();
+
+            for (String line : lines) {
+                if(!line.startsWith((teacher.getID()+","))) {
+                    updated.add(line);
+                }
+            }
+            Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            Loader.teacherList.removeTeacher(teacher);
+        } catch (IOException e) {
+            System.out.println("Error deleting student: "+e.getMessage());
         }
     }
 

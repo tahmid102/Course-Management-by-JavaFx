@@ -18,6 +18,8 @@ public class AddStudentApprovalController {
     @FXML private TableColumn<Student, Integer> idColumn;
     @FXML private Button approveSelectedButton;
     @FXML private Button approveAllButton;
+    @FXML private Button deleteSelectedButton;
+    @FXML private Button deleteAllButton;
 
     private final ObservableList<Student> pendingStudents = FXCollections.observableArrayList();
 
@@ -50,12 +52,11 @@ public class AddStudentApprovalController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Student approval failed in controller "+e.getMessage());
         }
     }
 
-    @FXML
-    private void approveSelected() {
+    @FXML private void approveSelected() {
         Student selected = pendingStudentTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             approveStudent(selected);
@@ -63,8 +64,7 @@ public class AddStudentApprovalController {
         }
     }
 
-    @FXML
-    private void approveAll() {
+    @FXML private void approveAll() {
         for (Student student : new ArrayList<>(pendingStudents)) {
             approveStudent(student);
         }
@@ -92,10 +92,40 @@ public class AddStudentApprovalController {
             System.out.println("Error approving student: "+e.getMessage());
         }
     }
-    private AdminDashboardController dashboardController;
+    @FXML private void deleteSelected() {
+        Student selected = pendingStudentTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            deleteStudent(selected);
+            pendingStudents.remove(selected);
+        }
+    }
+
+    @FXML private void deleteAll() {
+        for (Student student : new ArrayList<>(pendingStudents)) {
+            deleteStudent(student);
+        }
+        pendingStudents.clear();
+    }
+
+    private void deleteStudent(Student student) {
+        Path path = Paths.get("database/StudentCredentials.txt");
+        try {
+            List<String> lines = Files.readAllLines(path);
+            List<String> updated = new ArrayList<>();
+
+            for (String line : lines) {
+                if(!line.startsWith((student.getID()+","))) {
+                    updated.add(line);
+                }
+            }
+            Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            Loader.studentList.removeStudent(student);
+        } catch (IOException e) {
+            System.out.println("Error deleting student: "+e.getMessage());
+        }
+    }
 
     public void setDashboardController(AdminDashboardController controller) {
-        this.dashboardController = controller;
     }
 
 }

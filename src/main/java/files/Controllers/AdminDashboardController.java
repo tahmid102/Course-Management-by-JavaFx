@@ -220,7 +220,7 @@ public class AdminDashboardController implements Initializable {
     }
 
     public void refreshAllTables() {
-        Loader.loadAll();
+        Loader.reloadAll();
         refreshStudentTable();
         refreshTeacherTable();
         refreshCourseTable();

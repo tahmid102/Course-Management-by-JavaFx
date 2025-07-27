@@ -34,51 +34,6 @@ public class TeacherList {
         }
         return null;
     }
-
-    public void initializeTeachers() {
-        teachers.clear();
-        try(BufferedReader br= new BufferedReader(new FileReader("database/TeacherCredentials.txt"))) {
-            String data;
-            while ((data = br.readLine()) != null) {
-                String[] creds = data.split(",");
-                if (creds.length == 3) {
-                    int id = Integer.parseInt(creds[0].trim());
-                    String name = creds[1].trim();
-                    String pass = creds[2].trim();
-                    Teacher teacher = new Teacher(name, id, pass);
-                    addTeacher(teacher);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Teacher credentials not found: " + e.getMessage());
-        }
-
-    }
-    public void loadCourses(){
-        try(BufferedReader br = new BufferedReader(new FileReader("database/AssignedCoursesTeacher.txt"))){
-            CourseList courses=new CourseList();
-            courses.loadCourses();
-            String line;
-            while((line=br.readLine())!=null){
-                String []crs=line.split(",");
-                if(crs.length==2){
-                    int id=Integer.parseInt(crs[0].trim());
-                    String CourseId=crs[1].trim();
-                    Teacher t=searchTeacher(id);
-                    if(t!=null){
-                        Course course=courses.searchCourse(CourseId);
-                        if(course!=null)t.assignCourse(course);
-                    }
-                }
-
-            }
-        }
-        catch (Exception e){
-            System.out.println("Didn't Load Courses");
-        }
-    }
-
-
     public List<Teacher> getTeachers() {
         return teachers;
     }

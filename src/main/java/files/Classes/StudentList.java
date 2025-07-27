@@ -34,48 +34,6 @@ public class StudentList {
         }
         return null;
     }
-
-    public void initializeStudents() {
-        students.clear();
-        try(BufferedReader br = new BufferedReader(new FileReader("database/StudentCredentials.txt"))) {
-            String data;
-            while ((data = br.readLine()) != null) {
-                String[] creds = data.split(",");
-                if (creds.length == 3) {
-                    int stdID = Integer.parseInt(creds[0].trim());
-                    String stdName = creds[1].trim();
-                    String stdPass = creds[2].trim();
-                    Student std = new Student(stdName, stdID, stdPass);
-                    addStudent(std);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Student cred not found: " + e.getMessage());
-        }
-
-    }
-    public void LoadCourse(){
-        try(BufferedReader br= new BufferedReader(new FileReader("database/enrollments.txt"))){
-            CourseList courses=new CourseList();
-            courses.loadCourses();
-            String line;
-            while((line=br.readLine())!=null){
-                String[] crs=line.split(",");
-                if(crs.length==2){
-                    int stdId=Integer.parseInt(crs[0].trim());
-                    String CourseID=crs[1].trim();
-                    Student student=searchStudent(stdId);
-                    if(student!=null){
-                        Course course=courses.searchCourse(CourseID);
-                        if(course!=null) student.addCourses(course);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Courses didn't load");
-        }
-    }
-
     public List<Student> getStudents() {
         return students;
     }

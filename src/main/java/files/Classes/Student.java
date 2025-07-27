@@ -52,7 +52,7 @@ public class Student extends Person{
         StringBuilder sb=new StringBuilder(super.toString());
         sb.append(", AssignedCourses=[");
         for(Course c: courses){
-            sb.append(c.getCourseName()).append(",");
+            sb.append(c.getCourseID()).append(",");
         }
         if(!courses.isEmpty()) sb.setLength(sb.length()-1);
         sb.append("]");

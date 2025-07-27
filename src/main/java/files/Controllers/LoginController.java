@@ -10,52 +10,72 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Optional;
 
 public class LoginController {
     //TODO:LOGIN
-    @FXML public AnchorPane loginAnchorPane;
-    @FXML public TextField userIDField;
-    @FXML public PasswordField passwordField;
-    @FXML public Button submitButton;
-    @FXML public ComboBox<String> roleBox;
-    @FXML public Button cancelButton;
-    @FXML public Hyperlink registerHyperlink;
-    @FXML public Label errorLabel;
+    @FXML
+    public AnchorPane loginAnchorPane;
+    @FXML
+    public TextField userIDField;
+    @FXML
+    public PasswordField passwordField;
+    @FXML
+    public Button submitButton;
+    @FXML
+    public ComboBox<String> roleBox;
+    @FXML
+    public Button cancelButton;
+    @FXML
+    public Hyperlink registerHyperlink;
+    @FXML
+    public Label errorLabel;
     //TODO:REGISTER
-    @FXML public PasswordField setPasswordField;
-    @FXML public Button signUpButton;
-    @FXML public ComboBox<String> roleBoxSetup;
-    @FXML public PasswordField confirmPasswordField;
-    @FXML public Hyperlink LoginHyperlink;
-    @FXML public AnchorPane signUpAnchorPane;
-    @FXML public TextField setUserIDField;
-    @FXML public Label registerErrorLabel;
-    @FXML public TextField setNameField;
+    @FXML
+    public PasswordField setPasswordField;
+    @FXML
+    public Button signUpButton;
+    @FXML
+    public ComboBox<String> roleBoxSetup;
+    @FXML
+    public PasswordField confirmPasswordField;
+    @FXML
+    public Hyperlink LoginHyperlink;
+    @FXML
+    public AnchorPane signUpAnchorPane;
+    @FXML
+    public TextField setUserIDField;
+    @FXML
+    public Label registerErrorLabel;
+    @FXML
+    public TextField setNameField;
 
     //TODO:MAIN PANE
-    @FXML private StackPane loginStackPane;
+    @FXML
+    private StackPane loginStackPane;
 
     //TODO:STUDENT and TEACHER HASHES
-    private final StudentList students = new StudentList();
-    private final TeacherList teachers = new TeacherList();
-    private final PendingStudentsList pendingStudents = new PendingStudentsList();
-    private final PendingTeachersList pendingTeachers = new PendingTeachersList();
+    private final StudentList students = Loader.studentList;
+    private final TeacherList teachers = Loader.teacherList;
 
-    @FXML public void initialize(){
+    @FXML
+    public void initialize() {
         loginAnchorPane.setVisible(true);
         signUpAnchorPane.setVisible(false);
-
-        roleBox.getItems().addAll("Student", "Teacher","Admin");
-        roleBoxSetup.getItems().addAll("Student","Teacher");
-        roleBox.setOnAction(e->roleBox.requestFocus());
-        userIDField.setOnAction(e-> passwordField.requestFocus());
-        passwordField.setOnAction(e-> submitButton.requestFocus());
+        Loader.loadAll();
+        System.out.println(Loader.toDampString());
+        roleBox.getItems().addAll("Student", "Teacher", "Admin");
+        roleBoxSetup.getItems().addAll("Student", "Teacher");
+        roleBox.setOnAction(e -> roleBox.requestFocus());
+        userIDField.setOnAction(e -> passwordField.requestFocus());
+        passwordField.setOnAction(e -> submitButton.requestFocus());
 
     }
+
     //TODO:LOGIN PAGE SUBMISSION
-    @FXML public void onSubmit(ActionEvent actionEvent){
+    @FXML
+    public void onSubmit(ActionEvent actionEvent) {
         errorLabel.setText("");
         String role = roleBox.getValue();
         String idText = userIDField.getText().trim();
@@ -70,8 +90,6 @@ public class LoginController {
             int id = Integer.parseInt(idText);
             switch (role) {
                 case "Student" -> {
-                    students.initializeStudents();
-                    students.LoadCourse();
                     if (students.isStudentAvailable(id)) {
                         if (students.searchStudent(id).getPassword().equals(password)) {
                             goToDashboard(id);
@@ -83,8 +101,6 @@ public class LoginController {
                     }
                 }
                 case "Teacher" -> {
-                    teachers.initializeTeachers();
-                    teachers.loadCourses();
 
                     if (teachers.isTeacherAvailable(id)) {
                         if (teachers.searchTeacher(id).getPassword().equals(password)) {
@@ -98,11 +114,10 @@ public class LoginController {
                     }
                 }
                 case "Admin" -> {
-                    if(Admin.getAdminInstance().verifyCredentials(id,password)){
+                    if (Admin.getAdminInstance().verifyCredentials(id, password)) {
                         System.out.println("Admin logs in");
                         goToAdminDashboard();
-                    }
-                    else{
+                    } else {
                         errorLabel.setText("Admin credentials incorrect");
                     }
                 }
@@ -112,12 +127,12 @@ public class LoginController {
             errorLabel.setText("User ID must be numeric");
         } catch (IOException e) {
             errorLabel.setText("Something went wrong loading the dashboard");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             errorLabel.setText("What te fu");
         }
     }
+
     //TODO:REG PAGE SUBMISSION
     @FXML
     private void onSignUp() {
@@ -147,35 +162,31 @@ public class LoginController {
         }
 
         if (role.equals("Student")) {
-            students.initializeStudents();
-            pendingStudents.loadFromFile();
             System.out.println(students);
-            if((id+"").length()!=7) {
+            if ((id + "").length() != 7) {
                 registerErrorLabel.setText("Student ID should be a 7 digit integer");
                 return;
             }
-            if(password.length()<4){
+            if (password.length() < 4) {
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (students.isStudentAvailable(id) || pendingStudents.isDuplicate(id)) {
+            if (students.isStudentAvailable(id) || idExistsInCredentialFile("database/StudentCredentials.txt", id)) {
                 registerErrorLabel.setText("Student ID already exists");
                 return;
             }
-            pendingStudents.addToPending(new Student(name, id, password));
+            appendCredentialToFile("database/StudentCredentials.txt", id, name, password, false);
             registerErrorLabel.setText("Student request sent! Awaiting admin approval.");
         } else if (role.equals("Teacher")) {
-            teachers.initializeTeachers();
-            pendingTeachers.loadFromFile();
-            if(password.length()<4){
+            if (password.length() < 4) {
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (teachers.isTeacherAvailable(id) || pendingTeachers.isDuplicate(id)) {
+            if (teachers.isTeacherAvailable(id) || idExistsInCredentialFile("database/TeacherCredentials.txt", id)) {
                 registerErrorLabel.setText("Teacher ID already exists");
                 return;
             }
-            pendingTeachers.addToPending(new Teacher(name, id, password));
+            appendCredentialToFile("database/TeacherCredentials.txt", id, name, password, false);
             registerErrorLabel.setText("Teacher request sent! Awaiting admin approval.");
         } else {
             registerErrorLabel.setText("Admin cannot register here");
@@ -186,6 +197,29 @@ public class LoginController {
         setPasswordField.clear();
         confirmPasswordField.clear();
         roleBoxSetup.getSelectionModel().clearSelection();
+    }
+
+    private void appendCredentialToFile(String s, int id, String name, String password, boolean b) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(s, true))) {
+            writer.write(id + "," + name + "," + password +","+b);
+            writer.newLine();
+        } catch (IOException e) {
+            System.out.println("Error writing creds" + e.getMessage());
+        }
+    }
+
+    private boolean idExistsInCredentialFile(String s, int id) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(s))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(id + ",")) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("error in searching existing cred in file"+e.getMessage());
+        }
+            return false;
     }
 
     //TODO:DASHBOARD

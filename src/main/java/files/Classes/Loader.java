@@ -8,15 +8,11 @@ public class Loader {
     public static final CourseList courseList=new CourseList();
     public static final StudentList studentList=new StudentList();
     public static final TeacherList teacherList=new TeacherList();
-    public static final PendingStudentsList pendingStudentsList=new PendingStudentsList();
-    public static final PendingTeachersList pendingTeachersList=new PendingTeachersList();
 
     public static void loadAll(){
         loadCourses();
         loadStudents();
         loadTeachers();
-        loadPendingTeachers();
-        loadPendingStudents();
         coordinateStudentCourse();
         coordinateTeacherCourse();
     }
@@ -40,12 +36,15 @@ public class Loader {
             String data;
             while ((data = br.readLine()) != null) {
                 String[] creds = data.split(",");
-                if (creds.length == 3) {
+                if (creds.length == 4) {
                     int stdID = Integer.parseInt(creds[0].trim());
                     String stdName = creds[1].trim();
                     String stdPass = creds[2].trim();
                     Student std = new Student(stdName, stdID, stdPass);
-                    studentList.addStudent(std);
+                    boolean approved=Boolean.parseBoolean(creds[3].trim());
+                    if(approved){
+                        studentList.addStudent(std);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -57,48 +56,19 @@ public class Loader {
             String data;
             while ((data = br.readLine()) != null) {
                 String[] creds = data.split(",");
-                if (creds.length == 3) {
+                if (creds.length == 4) {
                     int id = Integer.parseInt(creds[0].trim());
                     String name = creds[1].trim();
                     String pass = creds[2].trim();
                     Teacher teacher = new Teacher(name, id, pass);
-                    teacherList.addTeacher(teacher);
+                    boolean approved=Boolean.parseBoolean(creds[3].trim());
+                    if(approved) {
+                        teacherList.addTeacher(teacher);
+                    }
                 }
             }
         } catch (IOException e) {
             System.out.println("Teacher credentials not found: " + e.getMessage());
-        }
-    }
-    private static void loadPendingTeachers(){
-        try(BufferedReader reader = new BufferedReader(new FileReader("database/pendingTeacherCredentials.txt"))){
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String name = parts[1];
-                    int id = Integer.parseInt(parts[0]);
-                    String pass = parts[2];
-                    pendingTeachersList.addToPending(new Teacher(name, id, pass));
-                }
-            }
-        } catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
-    private static void loadPendingStudents(){
-        try(BufferedReader br = new BufferedReader(new FileReader("database/pendingStudentCredentials.txt"))){
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String name = parts[1].trim();
-                    int id = Integer.parseInt(parts[0].trim());
-                    String pass = parts[2].trim();
-                    pendingStudentsList.addToPending(new Student(name, id, pass));
-                }
-            }
-        } catch (IOException e){
-            e.printStackTrace();
         }
     }
     private static void coordinateStudentCourse()  {
@@ -116,7 +86,6 @@ public class Loader {
                         System.out.println("Course nai");
                         continue;
                     }
-
                     courseList.addStudentToCourse(course,student);
                 }
             }
@@ -146,8 +115,6 @@ public class Loader {
                 "courseList=" + courseList +
                 ",\n studentList=" + studentList +
                 ",\n teacherList=" + teacherList +
-                ",\n pendingStudentsList=" + pendingStudentsList +
-                ",\n pendingTeachersList=" + pendingTeachersList +
                 '}';
     }
 }

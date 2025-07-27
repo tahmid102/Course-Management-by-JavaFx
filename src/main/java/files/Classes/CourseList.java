@@ -50,4 +50,23 @@ public class CourseList {
         }
         return false;
     }
+    public void addStudentToCourse(Course course, Student student) {
+        for(Course c:Courses){
+            if(c.equals(course)) {
+                c.addStudent(student);
+                break;
+            }
+        }
+    }public void addTeacherToCourse(Course course, Teacher teacher) {
+        for(Course c:Courses){
+            if(c.equals(course)) c.addTeacher(teacher);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "CourseList{" +
+                "Courses=\n" + Courses +
+                '}';
+    }
 }

@@ -50,21 +50,13 @@ public class Course {
         if(!courseStudents.contains(s)){
             courseStudents.add(s);
             s.addCourses(this);
-            System.out.println(s.getName()+" was added to "+this.courseName);
-        }
-        else{
-            System.out.println(s.getName()+" was NOT added to "+this.courseName);
         }
     }
 
     public void addTeacher(Teacher t){
         if(!courseTeachers.contains(t)){
             courseTeachers.add(t);
-            t.assignCourse(this);
-            System.out.println(t.getName()+" was assigned to teach "+courseName);
-        }
-        else {
-            System.out.println(t.getName()+" was FAILED to assign to "+courseName);
+
         }
     }
 
@@ -81,10 +73,7 @@ public class Course {
         if(courseStudents.contains(s)){
             courseStudents.remove(s);
             s.removeCourse(this);
-            System.out.println(s.getName()+" was removed from "+this.courseName);
-        }
-        else{
-            System.out.println(s.getName()+" was NOT found for "+this.courseName);
+
         }
     }
     @Override

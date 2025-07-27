@@ -32,17 +32,20 @@ public class AddStudentApprovalController {
 
 
     private void loadPendingStudents() {
-        String PENDING_FILE = "database/pendingStudentCredentials.txt";
+        String PENDING_FILE = "database/StudentCredentials.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(PENDING_FILE))) {
 
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    int id = Integer.parseInt(parts[0].trim());
-                    String name = parts[1].trim();
-                    String pass = parts[2].trim();
-                    pendingStudents.add(new Student(name, id, pass));
+                if (parts.length == 4) {
+                    boolean approved= Boolean.parseBoolean(parts[3].trim());
+                    if(!approved){
+                        int id = Integer.parseInt(parts[0].trim());
+                        String name = parts[1].trim();
+                        String pass = parts[2].trim();
+                        pendingStudents.add(new Student(name, id, pass));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -68,31 +71,23 @@ public class AddStudentApprovalController {
     }
 
     private void approveStudent(Student student) {
-        String STUDENT_FILE = "database/StudentCredentials.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(STUDENT_FILE, true))) {
-            writer.write(student.getID() + "," + student.getName() + "," + student.getPassword());
-            writer.newLine();
-        } catch (IOException e) {
-            System.out.println(e.getMessage()+" approve student e hocche");
-        }
-        removeStudentFromPendingFile(student.getID());
-    }
-
-    private void removeStudentFromPendingFile(int id) {
-        Path path = Paths.get("database/pendingStudentCredentials.txt");
+        Path path = Paths.get("database/StudentCredentials.txt");
         try {
             List<String> lines = Files.readAllLines(path);
             List<String> updated = new ArrayList<>();
 
             for (String line : lines) {
-                if (!line.startsWith(id + ",")) {
+                if(line.startsWith((student.getID()+","))){
+                    String []parts=line.split(",");
+                    parts[3]="true";
+                    updated.add(String.join(",",parts));
+                }else{
                     updated.add(line);
                 }
             }
-
-            Files.write(path, updated);
+            Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error approving student: "+e.getMessage());
         }
     }
     private AdminDashboardController dashboardController;

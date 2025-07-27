@@ -53,16 +53,13 @@ public class AdminDashboardController implements Initializable {
 
 
     //TODO:Data
-    private final StudentList studentList = new StudentList();
-    private final TeacherList teacherList = new TeacherList();
-    private final CourseList courseList = new CourseList();
+    private final StudentList studentList = Loader.studentList;
+    private final TeacherList teacherList = Loader.teacherList;
+    private final CourseList courseList = Loader.courseList;
 
     //TODO:Loader files
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        studentList.initializeStudents();
-        teacherList.initializeTeachers();
-        courseList.loadCourses();
         setupStudentTable();
         setupTeacherTable();
         setupCourseTable();
@@ -139,13 +136,11 @@ public class AdminDashboardController implements Initializable {
     private void setupStudentTable() {
         ADstudentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         ADstudentIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        studentList.initializeStudents();
         ObservableList<Student> studentData = FXCollections.observableArrayList(studentList.getStudents());
         ADstudentTable.setItems(studentData);
         ADstudentCountLabel.setText("Total Students: " + studentData.size());
     }
     public void refreshStudentTable() {
-        studentList.initializeStudents();
         ObservableList<Student> students = FXCollections.observableArrayList(studentList.getStudents());
         ADstudentTable.setItems(students);
     }
@@ -160,7 +155,6 @@ public class AdminDashboardController implements Initializable {
                 System.out.println("Teacher not found in TeacherList: " + teacherID);
                 return;
             }
-            teacher.loadCoursesForTeacher(courseList);
             ViewTeacherCoursesController controller = loader.getController();
             controller.setTeacher(teacher);
             Stage stage = new Stage();
@@ -188,20 +182,17 @@ public class AdminDashboardController implements Initializable {
     private void setupTeacherTable() {
         ADteacherNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         ADteacherIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        teacherList.initializeTeachers();
         ObservableList<Teacher> teacherData = FXCollections.observableArrayList(teacherList.getTeachers());
         ADteacherTable.setItems(teacherData);
         ADteacherCountLabel.setText("Total Teachers: " + teacherData.size());
     }
     public void refreshTeacherTable() {
-        teacherList.initializeTeachers();
         ObservableList<Teacher> teachers = FXCollections.observableArrayList(teacherList.getTeachers());
         ADteacherTable.setItems(teachers);
         ADteacherCountLabel.setText("Total Teachers: " + teachers.size());
     }
     //TODO:COURSE FUNCTIONALITIES
     private void setupCourseTable() {
-        courseList.loadCourses();
         ObservableList<Course> courseData = FXCollections.observableArrayList(courseList.getCourses());
         ADcourseIDColumn.setCellValueFactory(new PropertyValueFactory<>("courseID"));
         ADcourseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
@@ -223,13 +214,13 @@ public class AdminDashboardController implements Initializable {
         }
     }
     public void refreshCourseTable() {
-        courseList.loadCourses();
         ObservableList<Course> courses = FXCollections.observableArrayList(courseList.getCourses());
         ADcourseTable.setItems(courses);
         ADcourseCountLabel.setText("Total Courses: " + courses.size());
     }
 
     public void refreshAllTables() {
+        Loader.loadAll();
         ADteacherTable.refresh();
         ADstudentTable.refresh();
         ADcourseTable.refresh();

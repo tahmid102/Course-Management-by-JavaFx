@@ -1,7 +1,6 @@
 package files.Controllers;
 
-import files.Classes.*;
-import files.Server.*;
+import files.Classes.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,25 +32,9 @@ public class AddStudentApprovalController {
 
 
     private void loadPendingStudents() {
-        // Try to load from network first
-        if (NetworkLoader.isServerAvailable()) {
-            try {
-                NetworkLoader.loadAll();
-                // The NetworkLoader would have loaded pending students
-                // For now, we'll still read from local file as a fallback
-                loadPendingStudentsFromLocal();
-            } catch (Exception e) {
-                System.err.println("Network loading failed, using local data: " + e.getMessage());
-                loadPendingStudentsFromLocal();
-            }
-        } else {
-            loadPendingStudentsFromLocal();
-        }
-    }
-
-    private void loadPendingStudentsFromLocal() {
         String PENDING_FILE = "database/pendingStudentCredentials.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(PENDING_FILE))) {
+
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -85,16 +68,6 @@ public class AddStudentApprovalController {
     }
 
     private void approveStudent(Student student) {
-        // Try network approval first
-        if (NetworkLoader.isServerAvailable()) {
-            boolean success = NetworkLoader.approveRegistration(student.getID(), "student");
-            if (success) {
-                System.out.println("Student approved via network: " + student.getName());
-                return;
-            }
-        }
-        
-        // Fallback to local approval
         String STUDENT_FILE = "database/StudentCredentials.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(STUDENT_FILE, true))) {
             writer.write(student.getID() + "," + student.getName() + "," + student.getPassword());

@@ -1,10 +1,9 @@
 package files.Classes;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Course implements Serializable {
+public class Course {
     private String courseName;
     private String courseID;
     private double credit;

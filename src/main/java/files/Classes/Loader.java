@@ -117,7 +117,7 @@ public class Loader {
                         continue;
                     }
 
-                    courseList.addStudentToCourse(course,student);
+                   // courseList.addStudentToCourse(course,student);
                 }
             }
         }catch (IOException e){
@@ -132,7 +132,7 @@ public class Loader {
                 if(parts.length==2){
                     Teacher teacher=teacherList.searchTeacher(Integer.parseInt(parts[0].trim()));
                     Course course=courseList.searchCourse(parts[1].trim());
-                    courseList.addTeacherToCourse(course,teacher);
+                   // courseList.addTeacherToCourse(course,teacher);
                 }
             }
         }catch (IOException e){

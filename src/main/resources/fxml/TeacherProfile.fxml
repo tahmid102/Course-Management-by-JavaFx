@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.TeacherProfileController">
+
+    <children>
+
+        <!-- 🔷 Top Bar -->
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;">
+            <children>
+                <Text fill="#d2d4dc" text="Your Profile">
+                    <font>
+                        <Font name="System Bold" size="30.0" />
+                    </font>
+                </Text>
+            </children>
+        </HBox>
+
+        <!-- 🔷 Sidebar -->
+        <VBox alignment="TOP_CENTER" layoutY="100.0" prefHeight="500.0" prefWidth="140.0" spacing="20.0" style="-fx-background-color: #34495e;">
+            <children>
+                <Text fill="#ffffff" text="Menu">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Text>
+                <Button fx:id="home" onAction="#onHome" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="🏠 Home" />
+                <Button fx:id="logout" onAction="#onLogout" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="← Logout" />
+            </children>
+        </VBox>
+
+        <!-- 🔷 Profile Content -->
+        <HBox layoutX="160.0" layoutY="140.0" spacing="30.0">
+            <children>
+
+                <!-- 📷 Profile Image -->
+                <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0" />
+
+                <!-- 👤 Info -->
+                <VBox spacing="20.0">
+                    <Label fx:id="nameLabel" style="-fx-font-size: 16px;" text="Name: ">
+                        <font>
+                            <Font name="System Bold" size="12.0" />
+                        </font></Label>
+                    <Label fx:id="idLabel" style="-fx-font-size: 14px;" text="User ID: ">
+                        <font>
+                            <Font name="System Bold" size="12.0" />
+                        </font></Label>
+                    <Label fx:id="courseCountLabel" style="-fx-font-size: 14px;" text="Total Courses: ">
+                        <font>
+                            <Font name="System Bold" size="12.0" />
+                        </font></Label>
+                </VBox>
+
+            </children>
+        </HBox>
+
+    </children>
+</AnchorPane>

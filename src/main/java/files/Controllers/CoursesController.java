@@ -2,6 +2,7 @@ package files.Controllers;
 
 import files.Classes.Course;
 import files.Classes.Student;
+import files.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -28,13 +26,28 @@ public class CoursesController {
     public Button backButton;
     public ComboBox filterBox;
     public TextField SearchBox;
+    public Button logout;
     List<Course> Courses=new ArrayList<>();
     Student currentStudent;
     List<Course> EnrolledCourse=new ArrayList<>();
+    List<Course> PendingEnrollment=new ArrayList<>();
+    Map<String,String> requirements=new HashMap<>();
 
     public void passStudent(Student student){
         currentStudent=student;
         this.EnrolledCourse=student.getCourses();
+        loadCourses();
+        try {
+            loadPending();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            loadRequirements();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void loadCourses(){
@@ -50,6 +63,44 @@ public class CoursesController {
             }
         } catch (Exception e) {
             System.out.println("Error");
+        }
+
+    }
+    public void loadPending() throws FileNotFoundException {
+        try(BufferedReader reader=new BufferedReader(new FileReader("database/PendingEnrollment.txt"))){
+            String line;
+            while ((line= reader.readLine())!=null){
+                String parts[]=line.split(",");
+                if(parts.length==2){
+                    String studentId=parts[0].trim();
+                    String courseId=parts[1].trim();
+                    if(studentId.equals(String.valueOf(currentStudent.getID()))){
+                        for(Course c: Courses){
+                            if(courseId.equals(c.getCourseID())){
+                                PendingEnrollment.add(c);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+            System.out.println("Pending not loaded");
+        }
+    }
+    public void loadRequirements() throws FileNotFoundException {
+        try(BufferedReader reader=new BufferedReader(new FileReader("database/CourseRequirement.txt"))){
+            String line;
+            while((line=reader.readLine())!=null){
+                String parts[]=line.split(",");
+                if(parts.length==2){
+                    requirements.put(parts[0].trim(),parts[1].trim());
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Vul hoye gelo");
         }
     }
 
@@ -84,8 +135,26 @@ public class CoursesController {
         );
         addButton.setOnAction(e->{
 
-            EnrolledCourse.add(a);
-                    try (FileWriter writer = new FileWriter("database/enrollments.txt", true)) {
+            //EnrolledCourse.add(a);
+
+            String courseID=a.getCourseID();
+            String requiredCourse=requirements.get(courseID);
+            if(requiredCourse!=null){
+                boolean found=false;
+                for(Course c:EnrolledCourse){
+                    if(c.getCourseID().trim().equals(requiredCourse.trim())) found=true;
+                }
+                if(!found){
+                    Alert alert=new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Not Eligible");
+                    alert.setHeaderText(null);
+                    alert.setContentText("To apply for " + courseID + ", you must be enrolled in " + requiredCourse);
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            PendingEnrollment.add(a);
+                    try (FileWriter writer = new FileWriter("database/PendingEnrollment.txt", true)) {
                         writer.write(currentStudent.getID() + "," + a.getCourseID() + "\n");
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -108,6 +177,9 @@ public class CoursesController {
         allCourseVbox.getChildren().clear();
         for(Course a: Courses){
             if(EnrolledCourse.contains(a)) continue;
+            if(PendingEnrollment.contains(a)) {
+                continue;
+            }
             HBox courseRow=createCourseRow(a);
             allCourseVbox.getChildren().add(courseRow);
         }
@@ -145,6 +217,8 @@ public class CoursesController {
         filterBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             onSearchAndFilter();
         });
+        SearchBox.textProperty().addListener((obs, oldVal, newVal) -> onSearchAndFilter());
+
 
 
         display(Courses);
@@ -168,7 +242,8 @@ public class CoursesController {
     @FXML
     public void onSearchAndFilter() {
         String keyword = SearchBox.getText().trim().toLowerCase();
-        String selectedDept = filterBox.getValue().toString();
+        String selectedDept = (filterBox.getValue() != null) ? filterBox.getValue().toString() : "All";
+        //String selectedDept = filterBox.getValue().toString();
 
         List<Course> filtered = Courses.stream()
                 .filter(course -> {
@@ -183,4 +258,19 @@ public class CoursesController {
         display(filtered);
     }
 
+
+    public void onLogout(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/login.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = (Stage) logout.getScene().getWindow();
+        stage.setResizable(false);
+        stage.setTitle("Course Management System");
+        stage.setScene(scene);
+        stage.show();
+    }
 }

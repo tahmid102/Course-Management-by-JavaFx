@@ -4,10 +4,7 @@ package files.Server;
 import files.Server.SocketWrapper;
 
 import javax.xml.crypto.Data;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class ReadThread implements Runnable {
     private Thread thr;
@@ -23,6 +20,8 @@ public class ReadThread implements Runnable {
         try {
             while (true) {
                 Object o = socketWrapper.read();
+
+
                 if (o instanceof Notification) {
                     Notification obj = (Notification) o;
                     System.out.println("Received: " + obj.getNotification());
@@ -41,7 +40,23 @@ public class ReadThread implements Runnable {
                     fos.close();
 
                     System.out.println("File saved: " + filePath);
+                } else if (o instanceof Deadline deadline) {
+                    File file = new File("database/deadlines.txt");
+                    file.getParentFile().mkdirs();
+
+                    synchronized (this) {
+                        try (FileWriter fw = new FileWriter(file, true)) {
+                            fw.write(deadline.toString() + "\n");
+                            socketWrapper.write("DEADLINE_SAVED"); // ✅ must reply to unblock client
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            socketWrapper.write("DEADLINE_SAVE_FAILED");
+                        }
+                    }
                 }
+
+
+
             }
         } catch (Exception e) {
             System.out.println(e);

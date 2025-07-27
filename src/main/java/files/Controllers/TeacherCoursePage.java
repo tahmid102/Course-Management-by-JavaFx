@@ -6,19 +6,19 @@ import files.Main;
 import files.Server.FilePacket;
 import files.Server.Notification;
 import files.Server.SocketWrapper;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import files.Server.Deadline;
 
 public class TeacherCoursePage {
     public Label Name;
@@ -30,6 +30,9 @@ public class TeacherCoursePage {
     public TextArea t;
     public Button post;
     public Button filePost;
+    public TextField taskField;
+    public ComboBox typeBox;
+    public DatePicker dueDatePicker;
     Teacher teacher;
     private File selectedFile;
 
@@ -41,6 +44,7 @@ public class TeacherCoursePage {
     public void setTeacher(Teacher teacher){
         this.teacher=teacher;
         Name.setText(teacher.getName());
+        typeBox.getItems().addAll("Assignment", "Quiz", "Lab Report", "CT", "Project");
     }
 
     public void setCourse(Course course) {
@@ -146,5 +150,48 @@ public class TeacherCoursePage {
         if (selectedFile != null) {
             attachedFileName.setText(selectedFile.getName());
         }
+    }
+
+    public void uploadDeadline(ActionEvent actionEvent) {
+        String task = taskField.getText().trim();
+        String type = (String) typeBox.getValue();
+        LocalDate dueDate = dueDatePicker.getValue();
+
+        if (task.isEmpty() || type == null || dueDate == null) {
+            showAlert("❗ Please fill in all fields before uploading.");
+            return;
+        }
+
+        String courseId = course.getCourseID();
+        Deadline deadline = new Deadline(courseId, task, type, dueDate);
+
+        new Thread(() -> {
+            try {
+                socketWrapper.write(deadline); // send Deadline object
+                Object response = socketWrapper.read(); // read reply (blocking, but not on UI thread)
+
+                if (response instanceof String res) {
+                    Platform.runLater(() -> {
+                        if (res.equals("DEADLINE_SAVED")) {
+                            showAlert("✅ Deadline uploaded successfully!");
+                            taskField.clear();
+                            typeBox.getSelectionModel().clearSelection();
+                            dueDatePicker.setValue(null);
+                        } else {
+                            showAlert("⚠️ Server failed to save deadline.");
+                        }
+                    });
+                }
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> showAlert("❌ Error sending deadline to server."));
+            }
+        }).start(); // 🔁 RUN IN BACKGROUND THREAD
+    }
+    private void showAlert(String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 }

@@ -29,7 +29,8 @@ public class TeacherDasahboardController {
     public void setTeacher(Teacher teacher){
         this.teacher=teacher;
         this.courses=teacher.getCoursesAssigned();
-        Name.setText(teacher.getName() +teacher.getCoursesAssigned());
+        Name.setText(teacher.getName());
+        welcomeLabel.setText("Welcome "+teacher.getName());
     }
 
     public void onHomeClicked(ActionEvent actionEvent) {
@@ -68,6 +69,22 @@ public class TeacherDasahboardController {
     }
 
     public void onProfileClicked(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TeacherProfile.fxml"));
+        Scene scene= null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        TeacherProfileController controller=fxmlLoader.getController();
+        controller.setTeacher(this.teacher);
+        //controller.displayCoursesd();
+
+        Stage stage = (Stage) assignedCoursesButton.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Course");
+        stage.show();
+
     }
 
     public void onLogout(ActionEvent actionEvent) {

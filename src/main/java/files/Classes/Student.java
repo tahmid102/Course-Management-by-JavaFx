@@ -11,6 +11,7 @@ public class Student extends Person{
     private boolean coursesLoaded = false;
     private String imagePath=null;
 
+
     //Student class constructor
     public Student(String studentName,int studentId,String stdPass){
         super(studentName,studentId,stdPass);

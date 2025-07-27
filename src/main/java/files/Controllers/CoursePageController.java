@@ -4,6 +4,7 @@ import files.Classes.Course;
 import files.Classes.Student;
 import files.Classes.Teacher;
 import files.Main;
+import files.Server.Deadline;
 import files.Server.Notification;
 import files.Server.ReadThread;
 import files.Server.SocketWrapper;
@@ -16,10 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -28,9 +26,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Hyperlink;
 
 public class CoursePageController {
     public Label courseName;
@@ -42,6 +41,7 @@ public class CoursePageController {
     public TableView participantsTable;
     public TableColumn studentIdColumn;
     public TableColumn studentNameColumn;
+    public VBox deadlineContainer;
     Course course;
     Student student;
     public Button uploadFileButton;
@@ -55,6 +55,7 @@ public class CoursePageController {
         this.course = course;
         this.enrolledStudents=course.getCourseStudents();
         this.assignedTechers=course.getCourseTeachers();
+        loadDeadlines();
     }
 
     public void setStudent(Student student) {
@@ -74,6 +75,7 @@ public class CoursePageController {
         studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         participantsTable.setItems(students);
         loadUploadedFiles();
+
 
     }
 
@@ -216,4 +218,60 @@ public class CoursePageController {
             e.printStackTrace();
         }
     }
+    public void loadDeadlines() {
+        new Thread(() -> {
+            try {
+                socketWrapper.write("GET_DEADLINES;" + course.getCourseID());  // e.g., "GET_DEADLINES;CSE101"
+                Object o = socketWrapper.read();  // ⏳ blocking read
+
+                if (o instanceof List<?> list) {
+                    List<Deadline> deadlines = (List<Deadline>) list;
+                    Platform.runLater(() -> showDeadlines(deadlines));
+                }
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> showAlert("❌ Failed to load deadlines."));
+            }
+        }).start();  // ✅ background thread
+    }
+
+
+    private void showDeadlines(List<Deadline> deadlines) {
+        deadlineContainer.getChildren().clear();
+
+        for (Deadline d : deadlines) {
+            long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), d.getDueDate());
+
+            String status;
+            String color;
+
+            if (daysLeft < 0) {
+                status = "⛔ Overdue";
+                color = "#bdc3c7";
+            } else if (daysLeft == 0) {
+                status = "🔥 Due Today";
+                color = "#e74c3c";
+            } else if (daysLeft <= 2) {
+                status = "⚠️ Due in " + daysLeft + " day(s)";
+                color = "#f39c12";
+            } else {
+                status = "✅ Due in " + daysLeft + " day(s)";
+                color = "#27ae60";
+            }
+
+            Label label = new Label(String.format("%s – %s", d.getTaskName(), status));
+            label.setStyle("-fx-background-color: " + color +
+                    "; -fx-background-radius: 5; -fx-padding: 6px; -fx-text-fill: white; -fx-font-size: 13px;");
+            deadlineContainer.getChildren().add(label);
+        }
+    }
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Info");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

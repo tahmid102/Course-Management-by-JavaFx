@@ -11,6 +11,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.TeacherCoursePage">
 
 <!-- Top Header -->
@@ -56,6 +59,14 @@
          <Button fx:id="post" mnemonicParsing="false" onAction="#onPost" text="Post" textFill="#315621" />
          <Button fx:id="filePost" mnemonicParsing="false" onAction="#onFilepost" text="Upload File" />
         <Label fx:id="attachedFileName" text="No file selected" />
+        <Label text="📅 Upload Deadline" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+        <HBox spacing="10">
+            <TextField fx:id="taskField" promptText="Task Name (e.g., Assignment 2)" prefWidth="200"/>
+            <ComboBox fx:id="typeBox" promptText="Select Type" prefWidth="150"/>
+            <DatePicker fx:id="dueDatePicker" promptText="Due Date" prefWidth="150"/>
+            <Button text="Upload" onAction="#uploadDeadline" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+        </HBox>
     </VBox>
 </center>
 

@@ -15,7 +15,7 @@
    <children>
 
       <!-- Top Course Name -->
-      <Label fx:id="courseName" layoutX="99.0" layoutY="-3.0" prefHeight="75.0" prefWidth="498.0" style="-fx-background-color: #2c3e50;" text="Label" textAlignment="CENTER" textFill="#eff2fa" textOverrun="WORD_ELLIPSIS" wrapText="true">
+      <Label fx:id="courseName" layoutX="99.0" layoutY="-3.0" prefHeight="75.0" prefWidth="702.0" style="-fx-background-color: #2c3e50;" text="Label" textAlignment="CENTER" textFill="#eff2fa" textOverrun="WORD_ELLIPSIS" wrapText="true">
          <font>
             <Font name="System Bold" size="23.0" />
          </font>
@@ -31,14 +31,14 @@
       <!-- Scrollable Content Area for Announcements + Table -->
       <ScrollPane layoutX="98.0" layoutY="106.0" prefHeight="492.0" prefWidth="702.0">
          <content>
-            <VBox fx:id="announcementContainer" spacing="20.0" style="-fx-padding: 10;">
+            <VBox fx:id="announcementContainer" prefHeight="284.0" prefWidth="385.0" spacing="20.0" style="-fx-padding: 10;">
                <children>
 
                   <!-- Announcements -->
                   <VBox fx:id="announcementBox" spacing="10.0" />
 
                   <!-- Participant Table -->
-                  <TableView fx:id="participantsTable" prefHeight="200.0" prefWidth="316.0">
+                  <TableView fx:id="participantsTable" prefHeight="200.0" prefWidth="598.0">
                      <columns>
                         <TableColumn fx:id="studentIdColumn" prefWidth="150.0" text="Student ID" />
                         <TableColumn fx:id="studentNameColumn" prefWidth="250.0" text="Name" />
@@ -46,6 +46,9 @@
                   </TableView>
                   <Label text="Uploaded Files:" />
                   <VBox fx:id="fileListBox" spacing="10.0" />
+                  <Label text="📅 Upcoming Deadlines" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                  <VBox fx:id="deadlineContainer" spacing="10" prefWidth="500"/>
+
                </children>
             </VBox>
          </content>

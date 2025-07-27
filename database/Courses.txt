@@ -1,8 +1,16 @@
 CSE 101,Structural Programming Language,3.00
+CSE 102,Structural Programming Language Sessional,1.50
 CSE 103,Discreet Mathematics,3.00
 CSE 105,Data Structure and Algorithms,3.00
+CSE 106,Data Struture and Algorithms Sessional,1.5
+CSE 107,Object Oriented Programming,3.00
+CSE 108,Object Oriented Programming Sessioal,1.5
 EEE 163,Basic Electrical Engineering,3.00
+EEE 168,EEE Sessional,1.5
 ME 165,Basic Mechanical Engineering,3.00
 CSE 109,Database,3.00
 CSE 420,Introduction to Youtubing,3.00
 CSE 69,Introduction to FAANG,0.69
+ME 174,Mechanical Engineering Drawing,1.5
+CSE 100,From SpiderMan to IronMan,10.0
+

@@ -101,9 +101,11 @@ public class StudentCoursesController extends DashboardController{
             throw new RuntimeException(e);
         }
         CoursePageController controller=fxmlLoader.getController();
+        controller.setSocketWrapper(new SocketWrapper(new Socket("127.0.0.1",44444)));
+
         controller.setCourse(course);
         controller.setStudent(student);
-        controller.setSocketWrapper(new SocketWrapper(new Socket("127.0.0.1",44444)));
+
         controller.display();
         controller.loadAnnouncements();
         Stage stage = (Stage) backButton.getScene().getWindow();

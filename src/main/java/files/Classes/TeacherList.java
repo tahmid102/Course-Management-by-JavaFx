@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeacherList {
+public class TeacherList implements Serializable {
     private final List<Teacher> teachers;
 
     public TeacherList() {
@@ -34,59 +34,17 @@ public class TeacherList {
         }
         return null;
     }
-
-    public void initializeTeachers() {
-        teachers.clear();
-        try(BufferedReader br= new BufferedReader(new FileReader("database/TeacherCredentials.txt"))) {
-            String data;
-            while ((data = br.readLine()) != null) {
-                String[] creds = data.split(",");
-                if (creds.length == 3) {
-                    int id = Integer.parseInt(creds[0].trim());
-                    String name = creds[1].trim();
-                    String pass = creds[2].trim();
-                    Teacher teacher = new Teacher(name, id, pass);
-                    addTeacher(teacher);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Teacher credentials not found: " + e.getMessage());
-        }
-
-    }
-    public void loadCourses(){
-        try(BufferedReader br = new BufferedReader(new FileReader("database/AssignedCoursesTeacher.txt"))){
-            CourseList courses=new CourseList();
-            courses.loadCourses();
-            String line;
-            while((line=br.readLine())!=null){
-                String []crs=line.split(",");
-                if(crs.length==2){
-                    int id=Integer.parseInt(crs[0].trim());
-                    String CourseId=crs[1].trim();
-                    Teacher t=searchTeacher(id);
-                    if(t!=null){
-                        Course course=courses.searchCourse(CourseId);
-                        if(course!=null)t.assignCourse(course);
-                    }
-                }
-
-            }
-        }
-        catch (Exception e){
-            System.out.println("Didn't Load Courses");
-        }
-    }
-
-
     public List<Teacher> getTeachers() {
         return teachers;
     }
 
     @Override
     public String toString() {
-        return "TeacherList{" +
-                "teachers=" + teachers +
-                '}';
+        StringBuilder sb = new StringBuilder("TeacherList:\n");
+        for (Teacher t : teachers) {
+            sb.append("  ").append(t).append("\n");
+        }
+        return sb.toString();
     }
+
 }

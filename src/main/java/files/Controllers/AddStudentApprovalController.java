@@ -1,5 +1,6 @@
 package files.Controllers;
 
+import files.Classes.Loader;
 import files.Classes.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,8 @@ public class AddStudentApprovalController {
     @FXML private TableColumn<Student, Integer> idColumn;
     @FXML private Button approveSelectedButton;
     @FXML private Button approveAllButton;
+    @FXML private Button deleteSelectedButton;
+    @FXML private Button deleteAllButton;
 
     private final ObservableList<Student> pendingStudents = FXCollections.observableArrayList();
 
@@ -32,26 +35,28 @@ public class AddStudentApprovalController {
 
 
     private void loadPendingStudents() {
-        String PENDING_FILE = "database/pendingStudentCredentials.txt";
+        String PENDING_FILE = "database/StudentCredentials.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(PENDING_FILE))) {
 
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    int id = Integer.parseInt(parts[0].trim());
-                    String name = parts[1].trim();
-                    String pass = parts[2].trim();
-                    pendingStudents.add(new Student(name, id, pass));
+                if (parts.length == 4) {
+                    boolean approved= Boolean.parseBoolean(parts[3].trim());
+                    if(!approved){
+                        int id = Integer.parseInt(parts[0].trim());
+                        String name = parts[1].trim();
+                        String pass = parts[2].trim();
+                        pendingStudents.add(new Student(name, id, pass));
+                    }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Student approval failed in controller "+e.getMessage());
         }
     }
 
-    @FXML
-    private void approveSelected() {
+    @FXML private void approveSelected() {
         Student selected = pendingStudentTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             approveStudent(selected);
@@ -59,8 +64,7 @@ public class AddStudentApprovalController {
         }
     }
 
-    @FXML
-    private void approveAll() {
+    @FXML private void approveAll() {
         for (Student student : new ArrayList<>(pendingStudents)) {
             approveStudent(student);
         }
@@ -68,37 +72,60 @@ public class AddStudentApprovalController {
     }
 
     private void approveStudent(Student student) {
-        String STUDENT_FILE = "database/StudentCredentials.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(STUDENT_FILE, true))) {
-            writer.write(student.getID() + "," + student.getName() + "," + student.getPassword());
-            writer.newLine();
-        } catch (IOException e) {
-            System.out.println(e.getMessage()+" approve student e hocche");
-        }
-        removeStudentFromPendingFile(student.getID());
-    }
-
-    private void removeStudentFromPendingFile(int id) {
-        Path path = Paths.get("database/pendingStudentCredentials.txt");
+        Path path = Paths.get("database/StudentCredentials.txt");
         try {
             List<String> lines = Files.readAllLines(path);
             List<String> updated = new ArrayList<>();
 
             for (String line : lines) {
-                if (!line.startsWith(id + ",")) {
+                if(line.startsWith((student.getID()+","))){
+                    String []parts=line.split(",");
+                    parts[3]="true";
+                    updated.add(String.join(",",parts));
+                }else{
                     updated.add(line);
                 }
             }
-
-            Files.write(path, updated);
+            Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            Loader.studentList.addStudent(student);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error approving student: "+e.getMessage());
         }
     }
-    private AdminDashboardController dashboardController;
+    @FXML private void deleteSelected() {
+        Student selected = pendingStudentTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            deleteStudent(selected);
+            pendingStudents.remove(selected);
+        }
+    }
+
+    @FXML private void deleteAll() {
+        for (Student student : new ArrayList<>(pendingStudents)) {
+            deleteStudent(student);
+        }
+        pendingStudents.clear();
+    }
+
+    private void deleteStudent(Student student) {
+        Path path = Paths.get("database/StudentCredentials.txt");
+        try {
+            List<String> lines = Files.readAllLines(path);
+            List<String> updated = new ArrayList<>();
+
+            for (String line : lines) {
+                if(!line.startsWith((student.getID()+","))) {
+                    updated.add(line);
+                }
+            }
+            Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
+            Loader.studentList.removeStudent(student);
+        } catch (IOException e) {
+            System.out.println("Error deleting student: "+e.getMessage());
+        }
+    }
 
     public void setDashboardController(AdminDashboardController controller) {
-        this.dashboardController = controller;
     }
 
 }

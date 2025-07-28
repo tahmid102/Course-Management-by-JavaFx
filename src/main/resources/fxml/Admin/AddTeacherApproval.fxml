@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.AddTeacherApprovalController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.AddTeacherApprovalController">
     <children>
         <Label text="Approve Pending Teachers">
             <font>
@@ -19,13 +19,15 @@
         <TableView prefHeight="200.0" prefWidth="200.0" fx:id="pendingTeacherTable">
             <columns>
                 <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Name" />
-                <TableColumn fx:id="idColumn" prefWidth="100.0" text="ID" />
+                <TableColumn fx:id="idColumn" prefWidth="20.0" text="ID" />
             </columns>
         </TableView>
         <HBox prefHeight="100.0" prefWidth="200.0" spacing="100.0">
             <children>
                 <Button fx:id="approveSelectedButton" mnemonicParsing="false" onAction="#approveSelected" text="Approve Selected" />
                 <Button fx:id="approveAllButton" mnemonicParsing="false" onAction="#approveAll" text="Approve All" />
+                <Button fx:id="deleteSelectedButton" mnemonicParsing="false" onAction="#deleteSelected" text="Delete Selected" wrapText="true" />
+                <Button fx:id="deleteAllButton" mnemonicParsing="false" onAction="#deleteAll" text="Delete All" wrapText="true" />
             </children>
             <padding>
                 <Insets bottom="100.0" left="100.0" right="100.0" top="10.0" />

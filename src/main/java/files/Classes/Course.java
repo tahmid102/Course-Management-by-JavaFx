@@ -1,9 +1,10 @@
 package files.Classes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Course {
+public class Course implements Serializable {
     private String courseName;
     private String courseID;
     private double credit;
@@ -50,10 +51,6 @@ public class Course {
         if(!courseStudents.contains(s)){
             courseStudents.add(s);
             s.addCourses(this);
-            System.out.println(s.getName()+" was added to "+this.courseName);
-        }
-        else{
-            System.out.println(s.getName()+" was NOT added to "+this.courseName);
         }
     }
 
@@ -61,30 +58,37 @@ public class Course {
         if(!courseTeachers.contains(t)){
             courseTeachers.add(t);
             t.assignCourse(this);
-            System.out.println(t.getName()+" was assigned to teach "+courseName);
-        }
-        else {
-            System.out.println(t.getName()+" was FAILED to assign to "+courseName);
         }
     }
 
     @Override
     public String toString() {
-        return "Course{" +
-                "courseName='" + courseName + '\'' +
-                ", courseID='" + courseID + '\'' +
-                ", credit=" + credit +
-                '}'+courseStudents;
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Course{ID='%s', Name='%s', Credit=%.2f}", courseID, courseName, credit));
+
+        sb.append("\n  Students: [");
+        for (Student s : courseStudents) {
+            sb.append(String.format("(%d, %s), ", s.getID(), s.getName()));
+        }
+        if (!courseStudents.isEmpty()) sb.setLength(sb.length() - 2);
+        sb.append("]");
+
+        sb.append("\n  Teachers: [");
+        for (Teacher t : courseTeachers) {
+            sb.append(String.format("(%d, %s), ", t.getID(), t.getName()));
+        }
+        if (!courseTeachers.isEmpty()) sb.setLength(sb.length() - 2);
+        sb.append("]");
+
+        return sb.toString();
     }
+
 
     public void dropStudent(Student s){
         if(courseStudents.contains(s)){
             courseStudents.remove(s);
             s.removeCourse(this);
-            System.out.println(s.getName()+" was removed from "+this.courseName);
-        }
-        else{
-            System.out.println(s.getName()+" was NOT found for "+this.courseName);
+
         }
     }
     @Override

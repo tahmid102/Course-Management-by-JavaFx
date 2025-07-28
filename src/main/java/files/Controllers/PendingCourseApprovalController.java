@@ -107,10 +107,21 @@ public class PendingCourseApprovalController {
                 if (!line.equals(studentId + "," + courseId)) {
                     updated.add(line);
                 }
+                else{
+                    adjustInEnrollments(line);
+                }
             }
             Files.write(path, updated, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             System.out.println("Error updating pending enrollments: " + e.getMessage());
+        }
+    }
+    private void adjustInEnrollments(String line){
+        try(BufferedWriter bw=new BufferedWriter(new FileWriter("database/enrollments.txt",true))){
+            bw.write(line);
+            bw.newLine();
+        } catch (IOException e) {
+            System.out.println("Problem in adjusting enrollments "+e.getMessage());
         }
     }
 }

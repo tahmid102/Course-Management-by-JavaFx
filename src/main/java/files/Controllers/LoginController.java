@@ -63,7 +63,9 @@ public class LoginController {
     public void initialize() {
         loginAnchorPane.setVisible(true);
         signUpAnchorPane.setVisible(false);
-        System.out.println(Loader.toDampString());
+//        System.out.println(Loader.toDampString());
+        System.out.println(students);
+        System.out.println(teachers);
         roleBox.getItems().addAll("Student", "Teacher", "Admin");
         roleBoxSetup.getItems().addAll("Student", "Teacher");
         roleBox.setOnAction(e -> roleBox.requestFocus());

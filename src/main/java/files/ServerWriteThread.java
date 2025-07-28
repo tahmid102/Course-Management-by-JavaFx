@@ -3,9 +3,7 @@ package files;
 import files.Classes.*;
 import files.Server.SocketWrapper;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Queue;
 
 public class ServerWriteThread implements Runnable{
@@ -82,6 +80,7 @@ public class ServerWriteThread implements Runnable{
 
                             System.out.println("All coordinated data sent successfully");
                         }
+                        case WRITE_TO_FILE -> writeToFile(request);
                     }
                 }
             }
@@ -215,6 +214,14 @@ public class ServerWriteThread implements Runnable{
             System.out.println("Processed " + assignments + " teacher assignments");
         } catch (IOException e){
             System.err.println("Problem coordinating teacher-course: " + e.getMessage());
+        }
+    }
+    private void writeToFile(Request request){
+        try(BufferedWriter writer=new BufferedWriter(new FileWriter(request.getPath(),true))){
+            writer.write(request.getLine());
+            writer.newLine();
+        } catch (IOException e) {
+            System.out.println("SWT write to file error "+e.getMessage()+" "+request.getPath());
         }
     }
 }

@@ -1,6 +1,7 @@
 package files.Controllers;
 
 import files.Classes.Course;
+import files.Classes.Loader;
 import files.Classes.Teacher;
 import files.Main;
 import files.Server.SocketWrapper;
@@ -24,7 +25,7 @@ public class AssignedCourses {
     public Button logoutButton;
     public VBox mainContentBox;
     public Label welcomeLabel;
-    ;
+    public Button refresh;
     public VBox CourseVBox;
     public Label Name;
     Teacher teacher;
@@ -126,6 +127,22 @@ public class AssignedCourses {
         stage.setScene(scene);
         stage.setTitle("My Courses");
         stage.show();
+    }
+    public void onRefresh(ActionEvent actionEvent){
+        System.out.println("🔁 Refresh button clicked");
+
+        Loader.reloadAll(); // Reload from server
+
+        // Update student reference with new list data
+        teacher = Loader.teacherList.searchTeacher(teacher.getID());
+        if (teacher == null) {
+            System.out.println("⚠️ Student not found after reload");
+            return;
+        }
+
+        courses = teacher.getCoursesAssigned();
+        displayCoursesd(); // Re-render UI
+        System.out.println("✅ Refreshed courses for: " + teacher.getID());
     }
 
 }

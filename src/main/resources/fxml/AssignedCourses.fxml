@@ -44,6 +44,7 @@
         <VBox fx:id="mainContentBox" alignment="TOP_CENTER" spacing="15.0" styleClass="center-pane" stylesheets="@../css/TeacxherDashboard.css">
             <padding><Insets bottom="25" left="25" right="25" top="25" /></padding>
             <Label fx:id="welcomeLabel" styleClass="welcome-label" text="YOUR ASSIGNED COURSES" />
+         <Button fx:id="refresh" mnemonicParsing="false" onAction="#onRefresh" text="Refresh" />
             <Separator />
          <VBox fx:id="CourseVBox" prefHeight="330.0" prefWidth="644.0" />
             <!-- Dynamic content (e.g. TableView, Profile Info) appears here -->

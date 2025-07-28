@@ -59,9 +59,7 @@ public class AdminDashboardController implements Initializable {
 
 
     //TODO:Data
-    private final StudentList studentList = Loader.studentList;
-    private final TeacherList teacherList = Loader.teacherList;
-    private final CourseList courseList = Loader.courseList;
+    // Remove final keyword and get fresh references each time
     private FilteredList<Student> filteredStudentList;
     private FilteredList<Teacher> filteredTeacherList;
     private FilteredList<Course> filteredCourseList;
@@ -77,9 +75,9 @@ public class AdminDashboardController implements Initializable {
         ADteacherTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
         ADcourseTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
 
-        filteredStudentList = new FilteredList<>(FXCollections.observableArrayList(studentList.getStudents()), p -> true);
-        filteredTeacherList = new FilteredList<>(FXCollections.observableArrayList(teacherList.getTeachers()), p -> true);
-        filteredCourseList = new FilteredList<>(FXCollections.observableArrayList(courseList.getCourses()), p -> true);
+        filteredStudentList = new FilteredList<>(FXCollections.observableArrayList(Loader.studentList.getStudents()), p -> true);
+        filteredTeacherList = new FilteredList<>(FXCollections.observableArrayList(Loader.teacherList.getTeachers()), p -> true);
+        filteredCourseList = new FilteredList<>(FXCollections.observableArrayList(Loader.courseList.getCourses()), p -> true);
 
         ADstudentTable.setItems(filteredStudentList);
         ADteacherTable.setItems(filteredTeacherList);
@@ -163,7 +161,7 @@ public class AdminDashboardController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ViewStudentCourses.fxml"));
             Scene scene = new Scene(loader.load());
-            Student student=studentList.searchStudent(studentID);
+            Student student = Loader.studentList.searchStudent(studentID);
             if (student == null) {
                 System.out.println("Student not found in StudentList: " + studentID);
                 return;
@@ -198,14 +196,14 @@ public class AdminDashboardController implements Initializable {
     private void setupStudentTable() {
         ADstudentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         ADstudentIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        ObservableList<Student> studentData = FXCollections.observableArrayList(studentList.getStudents());
-        ADstudentTable.setItems(studentData);
+        ObservableList<Student> studentData = FXCollections.observableArrayList(Loader.studentList.getStudents());
         ADstudentCountLabel.setText("Total Students: " + studentData.size());
     }
     public void refreshStudentTable() {
-        filteredStudentList = new FilteredList<>(FXCollections.observableArrayList(studentList.getStudents()), p -> true);
-        ADstudentTable.setItems(filteredStudentList);
-        ADstudentCountLabel.setText("Total Students: " + studentList.getStudents().size());
+        ObservableList<Student> sourceList = (ObservableList<Student>) filteredStudentList.getSource();
+        sourceList.clear();
+        sourceList.addAll(Loader.studentList.getStudents());
+        ADstudentCountLabel.setText("Total Students: " + Loader.studentList.getStudents().size());
     }
     //TODO: TEACHER FUNCTIONALITIES
     private void openTeacherCoursesWindow(int teacherID) {
@@ -213,7 +211,7 @@ public class AdminDashboardController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/ViewTeacherCourses.fxml"));
             Scene scene = new Scene(loader.load());
 
-            Teacher teacher = teacherList.searchTeacher(teacherID);
+            Teacher teacher = Loader.teacherList.searchTeacher(teacherID);
             if (teacher == null) {
                 System.out.println("Teacher not found in TeacherList: " + teacherID);
                 return;
@@ -245,15 +243,14 @@ public class AdminDashboardController implements Initializable {
     private void setupTeacherTable() {
         ADteacherNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         ADteacherIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        ObservableList<Teacher> teacherData = FXCollections.observableArrayList(teacherList.getTeachers());
-        ADteacherTable.setItems(teacherData);
+        ObservableList<Teacher> teacherData = FXCollections.observableArrayList(Loader.teacherList.getTeachers());
         ADteacherCountLabel.setText("Total Teachers: " + teacherData.size());
     }
     public void refreshTeacherTable() {
-        filteredTeacherList = new FilteredList<>(FXCollections.observableArrayList(teacherList.getTeachers()), p -> true);
-        ADteacherTable.setItems(filteredTeacherList);
-        ADteacherCountLabel.setText("Total Teachers: " + teacherList.getTeachers().size());
-
+        ObservableList<Teacher> sourceList = (ObservableList<Teacher>) filteredTeacherList.getSource();
+        sourceList.clear();
+        sourceList.addAll(Loader.teacherList.getTeachers());
+        ADteacherCountLabel.setText("Total Teachers: " + Loader.teacherList.getTeachers().size());
     }
     private void openAssignCourseWindow(Teacher selectedTeacher) {
         try {
@@ -275,11 +272,10 @@ public class AdminDashboardController implements Initializable {
     }
     //TODO:COURSE FUNCTIONALITIES
     private void setupCourseTable() {
-        ObservableList<Course> courseData = FXCollections.observableArrayList(courseList.getCourses());
         ADcourseIDColumn.setCellValueFactory(new PropertyValueFactory<>("courseID"));
         ADcourseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         ADcourseCreditColumn.setCellValueFactory(new PropertyValueFactory<>("credit"));
-        ADcourseTable.setItems(courseData);
+        ObservableList<Course> courseData = FXCollections.observableArrayList(Loader.courseList.getCourses());
         ADcourseCountLabel.setText("Total Courses: " + courseData.size());
     }
     private void openCourseWindow() {
@@ -313,18 +309,26 @@ public class AdminDashboardController implements Initializable {
         }
     }
     public void refreshCourseTable() {
-        filteredCourseList = new FilteredList<>(FXCollections.observableArrayList(courseList.getCourses()), p -> true);
-        ADcourseTable.setItems(filteredCourseList);
-        ADcourseCountLabel.setText("Total Courses: " + courseList.getCourses().size());
-
+        ObservableList<Course> sourceList = (ObservableList<Course>) filteredCourseList.getSource();
+        sourceList.clear();
+        sourceList.addAll(Loader.courseList.getCourses());
+        ADcourseCountLabel.setText("Total Courses: " + Loader.courseList.getCourses().size());
     }
 
     public void refreshAllTables() {
         Loader.reloadAll();
         System.out.println(Loader.toDampString());
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        refreshCourseTable();
         refreshStudentTable();
         refreshTeacherTable();
-        refreshCourseTable();
+
     }
     //TODO:SIGN OUT
     public void signOut(){

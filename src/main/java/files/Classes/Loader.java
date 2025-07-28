@@ -8,9 +8,9 @@ import java.io.IOException;
 public class Loader {
 
     private static SocketWrapper wrappedServer;
-    public static CourseList courseList = new CourseList();
-    public static StudentList studentList = new StudentList();
-    public static TeacherList teacherList = new TeacherList();
+    public static CourseList courseList;
+    public static StudentList studentList;
+    public static TeacherList teacherList;
 
     public static void loadAll() {
         try {
@@ -76,5 +76,9 @@ public class Loader {
                 ",\n studentList=" + studentList +
                 ",\n teacherList=" + teacherList +
                 '}';
+    }
+
+    public static void main(String[] args) {
+
     }
 }

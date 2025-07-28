@@ -61,11 +61,26 @@ public class ServerWriteThread implements Runnable{
                             loadTeachers();
                             loadCourses();
 
+                            // Store course count for verification
+                            int originalCourseCount = courseList.getCourses().size();
+                            System.out.println("Original course count: " + originalCourseCount);
+
                             // Coordinate
                             coordinateStudentCourse();
                             coordinateTeacherCourse();
 
-                            // Send exactly 3 objects in a predictable order
+                            // Verify course count after coordination
+                            int finalCourseCount = courseList.getCourses().size();
+                            System.out.println("Final course count: " + finalCourseCount);
+
+                            if (finalCourseCount != originalCourseCount) {
+                                System.err.println("WARNING: Course count changed during coordination!");
+                                System.err.println("Expected: " + originalCourseCount + ", Got: " + finalCourseCount);
+                                // Reload courses if they were modified
+                                loadCourses();
+                                System.out.println("Courses reloaded. New count: " + courseList.getCourses().size());
+                            }
+
                             wrappedClientSocket.write(studentList);
                             wrappedClientSocket.write(teacherList);
                             wrappedClientSocket.write(courseList);

@@ -1,33 +1,14 @@
 package files.Classes;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FilterReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 // this class is completely useless, will be deleted later, but i did it here for mky sake in some other file
 //DO NOT DELETE THE FILE THAMID - muf
-public class CourseList {
+public class CourseList implements Serializable{
     List<Course> Courses=new ArrayList<>();
-
-    public void loadCourses(){
-        Courses.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader("database/Courses.txt"))) {
-            String line;
-            while((line= reader.readLine())!=null){
-                String[] words=line.split(",");
-                if(words.length==3){
-                    Course course=new Course(words[0].trim(),words[1].trim(),Double.parseDouble(words[2].trim()));
-                    addCourse(course);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading courses in CourseList");
-            e.printStackTrace();
-        }
-    }
     public Course searchCourse(String courseId) {
         for (Course course : Courses) {
             if (course.getCourseID().equals(courseId)) {
@@ -49,5 +30,40 @@ public class CourseList {
             if (c.getCourseID().equals(cID)) return true;
         }
         return false;
+    }
+    public void addStudentToCourse(Course course, Student student) {
+        for(Course c:Courses){
+            if(c.equals(course)) {
+                c.addStudent(student);
+                break;
+            }
+        }
+    }public void addTeacherToCourse(Course course, Teacher teacher) {
+        for(Course c:Courses){
+            if(c.equals(course)) {
+                c.addTeacher(teacher);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("CourseList:\n");
+        for (Course c : Courses) {
+            sb.append("  ").append(c).append("\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof CourseList that)) return false;
+        return Objects.equals(Courses, that.Courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Courses);
     }
 }

@@ -26,6 +26,7 @@ public class ViewStudentCoursesController {
 
     public void setStudent(Student student) {
         courseTable.getItems().clear();
+        System.out.println(student);
         studentNameLabel.setText("Courses Taken by: " + student.getName());
 
         colCourseID.setCellValueFactory(new PropertyValueFactory<>("courseID"));

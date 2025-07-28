@@ -3,6 +3,7 @@ package files.Classes;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 // this class is completely useless, will be deleted later, but i did it here for mky sake in some other file
 //DO NOT DELETE THE FILE THAMID - muf
@@ -55,4 +56,14 @@ public class CourseList implements Serializable{
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof CourseList that)) return false;
+        return Objects.equals(Courses, that.Courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Courses);
+    }
 }

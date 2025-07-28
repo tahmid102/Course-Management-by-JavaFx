@@ -41,15 +41,10 @@ public class Teacher extends Person implements Serializable{
     public void assignCourse(Course c){
         if(!courseAssigned.contains(c)){
             courseAssigned.add(c);
-            c.addTeacher(this);
         }
     }
     public List<Course> getCoursesAssigned() {
         return courseAssigned;
-    }
-    public void addStudentToCourse(Student a,Course b){
-        a.addCourses(b);
-        b.addStudent(a);
     }
 
     @Override
@@ -76,26 +71,5 @@ public class Teacher extends Person implements Serializable{
 
         return sb.toString();
     }
-
-    public void loadCoursesForTeacher(CourseList courseList) {
-        if(coursesLoaded) return;
-        try(BufferedReader br= new BufferedReader(new FileReader("database/AssignedCoursesTeacher.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] tokens = line.split(",");
-                int fileTeacherID = Integer.parseInt(tokens[0].trim());
-                String courseID = tokens[1].trim();
-
-                if (fileTeacherID == this.getID()) {
-                    Course course = courseList.searchCourse(courseID);
-                    if (course != null) {
-                        courseAssigned.add(course);
-                    }
-                }
-            }
-            coursesLoaded=true;
-        } catch (NumberFormatException | IOException e) {
-            e.printStackTrace();
-        }
-    }
+    
 }

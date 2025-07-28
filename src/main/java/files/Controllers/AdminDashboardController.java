@@ -105,7 +105,6 @@ public class AdminDashboardController implements Initializable {
                 System.out.println("Student not found in StudentList: " + studentID);
                 return;
             }
-            student.loadCoursesForStudent(courseList);
             ViewStudentCoursesController controller = loader.getController();
             controller.setStudent(student);
 

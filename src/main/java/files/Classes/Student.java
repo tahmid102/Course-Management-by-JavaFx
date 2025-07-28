@@ -41,7 +41,6 @@ public class Student extends Person implements Serializable{
     public void addCourses(Course c){
         if(!courses.contains(c)) {
             courses.add(c);
-            c.addStudent(this);
         }
     }
     public void removeCourse(Course c){
@@ -67,25 +66,4 @@ public class Student extends Person implements Serializable{
         return courses;
     }
 
-    public void loadCoursesForStudent(CourseList courseList) {
-        if(coursesLoaded) return;
-        try(BufferedReader br=new BufferedReader(new FileReader("database/enrollments.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] tokens = line.split(",");
-                int fileStudentID = Integer.parseInt(tokens[0].trim());
-                String courseID = tokens[1].trim();
-
-                if (fileStudentID == this.getID()) {
-                    Course course = courseList.searchCourse(courseID);
-                    if (course != null) {
-                        courses.add(course);
-                    }
-                }
-            }
-            coursesLoaded=true;
-        } catch (NumberFormatException | IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

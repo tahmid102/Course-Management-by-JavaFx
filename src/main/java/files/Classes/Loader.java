@@ -32,10 +32,15 @@ public class Loader implements Runnable {
         }
     }
 
-    public static void reloadAll() {
-        courseList.getCourses().clear();
-        studentList.getStudents().clear();
-        teacherList.getTeachers().clear();
+    public static void reloadAll(){
+        try {
+            sendCoordinatedDataRequest();
+            getCoordinatedInformation();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void loadAll() {
@@ -49,7 +54,6 @@ public class Loader implements Runnable {
                 throw new IOException("Connection test failed");
             }
 
-            // OPTION 1: Send one special request for coordinated data
             sendCoordinatedDataRequest();
             getCoordinatedInformation();
 
@@ -62,13 +66,13 @@ public class Loader implements Runnable {
         }
     }
 
-    private void sendCoordinatedDataRequest() throws IOException {
+    private static void sendCoordinatedDataRequest() throws IOException {
         // Send a single request for fully coordinated data
         wrappedServer.write(Request.RequestType.GET_ALL_COORDINATED_DATA);
         System.out.println("Sent request for all coordinated data");
     }
 
-    private void getCoordinatedInformation() throws IOException, ClassNotFoundException {
+    private static void getCoordinatedInformation() throws IOException, ClassNotFoundException {
         // Server will send exactly 3 objects in this order
         System.out.println("Reading student list...");
         Object studentObj = wrappedServer.read();

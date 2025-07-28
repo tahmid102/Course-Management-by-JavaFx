@@ -27,7 +27,5 @@ public class Server {
         new WriteThread(socketWrapper, "Server");
     }
 
-    public static void main(String args[]) {
-        new Server();
-    }
+
 }

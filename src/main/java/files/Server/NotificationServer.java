@@ -52,22 +52,29 @@ public class NotificationServer {
                         }
                     }
                 }
-                else if (obj instanceof String s && s.startsWith("GET_DEADLINES;")) {
-                    String courseId = s.split(";", 2)[1];
+                else if (obj instanceof GetDeadlinesRequest request) {
+                    System.out.println("📩 Received GetDeadlinesRequest for: [" + request.getCourseId() + "]");
+                    String courseId = request.getCourseId().trim();
                     List<Deadline> deadlines = new ArrayList<>();
                     File file = new File("database/deadlines.txt");
+
                     if (file.exists()) {
                         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                             String line;
                             while ((line = br.readLine()) != null) {
                                 String[] parts = line.split(";", 4);
-                                if (parts.length == 4 && parts[0].equals(courseId)) {
-                                    deadlines.add(new Deadline(parts[0], parts[1], parts[2], LocalDate.parse(parts[3])));
+                                if (parts.length == 4 && parts.length == 4 && parts[0].trim().equalsIgnoreCase(courseId.trim())) {
+                                    deadlines.add(new Deadline(parts[0].trim(), parts[1], parts[2], LocalDate.parse(parts[3])));
                                 }
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            System.out.println("not sent no client");
                         }
                     }
-                    socketWrapper.write(deadlines);  // ✅ send list
+
+                    socketWrapper.write(deadlines);
+                    System.out.println(deadlines);
                 }
 
 

@@ -4,10 +4,7 @@ import files.Classes.Course;
 import files.Classes.Student;
 import files.Classes.Teacher;
 import files.Main;
-import files.Server.Deadline;
-import files.Server.Notification;
-import files.Server.ReadThread;
-import files.Server.SocketWrapper;
+import files.Server.*;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -19,13 +16,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -42,6 +37,7 @@ public class CoursePageController {
     public TableColumn studentIdColumn;
     public TableColumn studentNameColumn;
     public VBox deadlineContainer;
+    public Label announcementToggle;
     Course course;
     Student student;
     public Button uploadFileButton;
@@ -51,11 +47,14 @@ public class CoursePageController {
     List<Student> enrolledStudents=new ArrayList<>();
     List<Teacher> assignedTechers=new ArrayList<>();
 
-    public void setCourse(Course course) {
+    public void setCourse(Course course) throws FileNotFoundException {
         this.course = course;
         this.enrolledStudents=course.getCourseStudents();
         this.assignedTechers=course.getCourseTeachers();
         loadDeadlines();
+        loadUpcomingDeadlines();
+
+
     }
 
     public void setStudent(Student student) {
@@ -66,7 +65,7 @@ public class CoursePageController {
         startListening();  // Start listening for server broadcasts
     }
 
-    public void display(){
+    public void display() throws FileNotFoundException {
         courseName.setText(course.getCourseName());
         creditLOabel.setText("Total Credits: "+ course.getCredit());
         System.out.println(course.getCourseStudents());
@@ -77,12 +76,13 @@ public class CoursePageController {
         loadUploadedFiles();
 
 
+
     }
 
 
 
 
-    public void Initialize(){
+    public void Initialize() throws FileNotFoundException {
         display();
     }
     public VBox announcementBox; // From FXML
@@ -221,24 +221,64 @@ public class CoursePageController {
     public void loadDeadlines() {
         new Thread(() -> {
             try {
-                socketWrapper.write("GET_DEADLINES;" + course.getCourseID());  // e.g., "GET_DEADLINES;CSE101"
-                Object o = socketWrapper.read();  // ⏳ blocking read
+                // Send request object to server
+                socketWrapper.write(new GetDeadlinesRequest(course.getCourseID()));
+                System.out.println("Sent GetDeadlinesRequest for: " + course.getCourseID().trim());
 
-                if (o instanceof List<?> list) {
-                    List<Deadline> deadlines = (List<Deadline>) list;
-                    Platform.runLater(() -> showDeadlines(deadlines));
+                Object response = socketWrapper.read();
+                System.out.println("Received response: " + response);
+
+                if (response instanceof List<?> list) {
+                    if (!list.isEmpty() && list.get(0) instanceof Deadline) {
+                        List<Deadline> deadlines = (List<Deadline>) list;
+                        Platform.runLater(() -> showDeadlines(deadlines));
+                    } else if (list.isEmpty()) {
+                        // Empty list - no deadlines found
+                        Platform.runLater(() -> showAlert("No deadlines found for this course."));
+                    } else {
+                        Platform.runLater(() -> showAlert("Invalid deadline data received."));
+                    }
+                } else {
+                    Platform.runLater(() -> showAlert("Unexpected response type: " + response.getClass()));
                 }
 
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-                Platform.runLater(() -> showAlert("❌ Failed to load deadlines."));
+                Platform.runLater(() -> showAlert("Failed to load deadlines: " + e.getMessage()));
             }
-        }).start();  // ✅ background thread
+        }).start();
+    }
+    public void loadUpcomingDeadlines() throws FileNotFoundException {
+        try(BufferedReader reader=new BufferedReader(new FileReader("database/deadlines.txt"))){
+            String line;
+            List<Deadline> deadlines=new ArrayList<>();
+            while((line=reader.readLine())!=null){
+                String parts[]=line.split(";");
+                if(parts.length==4){
+                    String courseId=parts[0].trim();
+                    String taskname=parts[1].trim();
+                    String type=parts[2].trim();
+                    LocalDate dueDate= LocalDate.parse(parts[3].trim());
+                    deadlines.add(new Deadline(courseId,taskname,type,dueDate));
+                }
+            }
+            showDeadlines(deadlines);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     private void showDeadlines(List<Deadline> deadlines) {
         deadlineContainer.getChildren().clear();
+
+        if (deadlines.isEmpty()) {
+            Label noDeadlineLabel = new Label("No upcoming deadlines found.");
+            noDeadlineLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic; -fx-font-size: 13px;");
+            deadlineContainer.getChildren().add(noDeadlineLabel);
+            return;
+        }
 
         for (Deadline d : deadlines) {
             long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), d.getDueDate());
@@ -266,6 +306,7 @@ public class CoursePageController {
             deadlineContainer.getChildren().add(label);
         }
     }
+
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Info");
@@ -274,4 +315,9 @@ public class CoursePageController {
         alert.showAndWait();
     }
 
+    public void toggleAnnouncements(MouseEvent mouseEvent) { boolean nowVisible = !announcementBox.isVisible();
+        announcementBox.setVisible(nowVisible);
+        announcementBox.setManaged(nowVisible);
+        announcementToggle.setText(nowVisible ? "📢 Hide Announcements" : "📢 Show Announcements");
+    }
 }

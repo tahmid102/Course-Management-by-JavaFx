@@ -55,8 +55,8 @@ public class StudentCoursesController extends DashboardController{
         else{
             for(Course course:courses){
                 //Label label =new Label(course.getCourseName());
-                Hyperlink hyperlinlk=new Hyperlink(course.getCourseID()+course.getCourseName());
-                hyperlinlk.setStyle("-fx-font-size: 11; -fx-padding: 5;");
+                Hyperlink hyperlinlk=new Hyperlink(course.getCourseID()+" "  +course.getCourseName());
+                hyperlinlk.setStyle("-fx-font-size: 15; -fx-padding: 5;");
                 courseVbox.getChildren().add(hyperlinlk);
                 hyperlinlk.setOnAction(e->{
                     try {

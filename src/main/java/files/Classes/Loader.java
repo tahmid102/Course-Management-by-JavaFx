@@ -5,75 +5,47 @@ import files.Server.SocketWrapper;
 
 import java.io.IOException;
 
-public class Loader implements Runnable {
+public class Loader {
 
     private static SocketWrapper wrappedServer;
     public static CourseList courseList = new CourseList();
     public static StudentList studentList = new StudentList();
     public static TeacherList teacherList = new TeacherList();
 
-    @Override
-    public void run() {
-        try {
-            System.out.println("Loader thread started");
-            loadAll();
-            System.out.println("Loader completed successfully");
-        } catch (Exception e) {
-            System.err.println("Exception in Loader thread: " + e.getClass().getSimpleName() + " - " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            if (wrappedServer != null) {
-                try {
-                    wrappedServer.closeConnection();
-                } catch (Exception e) {
-                    System.err.println("Error closing socket: " + e.getMessage());
-                }
-            }
-        }
-    }
-
-    public static void reloadAll(){
-        try {
-            sendCoordinatedDataRequest();
-            getCoordinatedInformation();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void loadAll() {
-        wrappedServer = null;
+    public static void loadAll() {
         try {
             System.out.println("Connecting to server at 127.0.0.1:55555...");
             wrappedServer = new SocketWrapper("127.0.0.1", 55555);
             System.out.println("Connection established successfully");
 
-            if (!testConnection()) {
-                throw new IOException("Connection test failed");
-            }
-
             sendCoordinatedDataRequest();
             getCoordinatedInformation();
 
-        } catch (IOException e) {
-            System.err.println("IO Error in Loader: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println("Unexpected error in Loader: " + e.getMessage());
+            wrappedServer.closeConnection();
+
+            System.out.println("Loader completed successfully");
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error during loading: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    public static void reloadAll() {
+        try {
+            sendCoordinatedDataRequest();
+            getCoordinatedInformation();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Reload failed: " + e.getMessage());
+        }
+    }
+
     private static void sendCoordinatedDataRequest() throws IOException {
-        // Send a single request for fully coordinated data
         wrappedServer.write(Request.RequestType.GET_ALL_COORDINATED_DATA);
         System.out.println("Sent request for all coordinated data");
     }
 
     private static void getCoordinatedInformation() throws IOException, ClassNotFoundException {
-        // Server will send exactly 3 objects in this order
         System.out.println("Reading student list...");
         Object studentObj = wrappedServer.read();
         if (studentObj instanceof StudentList) {
@@ -93,16 +65,6 @@ public class Loader implements Runnable {
         if (courseObj instanceof CourseList) {
             courseList = (CourseList) courseObj;
             System.out.println("Received course list with " + courseList.getCourses().size() + " courses");
-        }
-    }
-
-    private static boolean testConnection() {
-        try {
-            System.out.println("Testing connection...");
-            return true;
-        } catch (Exception e) {
-            System.err.println("Connection test failed: " + e.getMessage());
-            return false;
         }
     }
 

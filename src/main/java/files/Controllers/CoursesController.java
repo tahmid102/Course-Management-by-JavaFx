@@ -122,7 +122,7 @@ public class CoursesController {
         HBox.setHgrow(label, Priority.ALWAYS);
         label.setMaxWidth(Region.USE_PREF_SIZE);
 
-        Button addButton=new Button("Add");
+        Button addButton=new Button("Apply");
         addButton.setPrefWidth(60);
         addButton.setMinWidth(Region.USE_PREF_SIZE);
         addButton.setMaxWidth(Region.USE_PREF_SIZE);

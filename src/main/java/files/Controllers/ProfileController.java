@@ -56,7 +56,7 @@ public class ProfileController {
                 Image img = new Image(getClass().getResource(path).toExternalForm());
                 profileImage.setImage(img);
             } else {
-                Image fallback = new Image(getClass().getResource("/Images/muffed.jpg").toExternalForm());
+                Image fallback = new Image(getClass().getResource("/default pp.jpg").toExternalForm());
                 profileImage.setImage(fallback);
             }
         } catch (Exception e) {

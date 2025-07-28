@@ -52,6 +52,22 @@ public class NotificationServer {
                         }
                     }
                 }
+                else if (obj instanceof FilePacket) {
+                    FilePacket packet = (FilePacket) obj;
+
+                    // Create a directory for the course if it doesn't exist
+                    String dirPath = "uploaded_files/" + packet.getCourseId();
+                    File dir = new File(dirPath);
+                    dir.mkdirs();  // ✅ create if not exists
+
+                    // Full path to save the uploaded file
+                    String filePath = dirPath + "/" + packet.getFileName();
+                    FileOutputStream fos = new FileOutputStream(filePath);
+                    fos.write(packet.getFileData());
+                    fos.close();
+
+                    System.out.println("File saved: " + filePath);
+                }
                 else if (obj instanceof GetDeadlinesRequest request) {
                     System.out.println("📩 Received GetDeadlinesRequest for: [" + request.getCourseId() + "]");
                     String courseId = request.getCourseId().trim();

@@ -15,57 +15,39 @@ import java.util.Optional;
 
 public class LoginController {
     //TODO:LOGIN
-    @FXML
-    public AnchorPane loginAnchorPane;
-    @FXML
-    public TextField userIDField;
-    @FXML
-    public PasswordField passwordField;
-    @FXML
-    public Button submitButton;
-    @FXML
-    public ComboBox<String> roleBox;
-    @FXML
-    public Button cancelButton;
-    @FXML
-    public Hyperlink registerHyperlink;
-    @FXML
-    public Label errorLabel;
+    @FXML public AnchorPane loginAnchorPane;
+    @FXML public TextField userIDField;
+    @FXML public PasswordField passwordField;
+    @FXML public Button submitButton;
+    @FXML public ComboBox<String> roleBox;
+    @FXML public Button cancelButton;
+    @FXML public Hyperlink registerHyperlink;
+    @FXML public Label errorLabel;
     //TODO:REGISTER
-    @FXML
-    public PasswordField setPasswordField;
-    @FXML
-    public Button signUpButton;
-    @FXML
-    public ComboBox<String> roleBoxSetup;
-    @FXML
-    public PasswordField confirmPasswordField;
-    @FXML
-    public Hyperlink LoginHyperlink;
-    @FXML
-    public AnchorPane signUpAnchorPane;
-    @FXML
-    public TextField setUserIDField;
-    @FXML
-    public Label registerErrorLabel;
-    @FXML
-    public TextField setNameField;
+    @FXML public PasswordField setPasswordField;
+    @FXML public Button signUpButton;
+    @FXML public ComboBox<String> roleBoxSetup;
+    @FXML public PasswordField confirmPasswordField;
+    @FXML public Hyperlink LoginHyperlink;
+    @FXML public AnchorPane signUpAnchorPane;
+    @FXML public TextField setUserIDField;
+    @FXML public Label registerErrorLabel;
+    @FXML public TextField setNameField;
 
     //TODO:MAIN PANE
-    @FXML
-    private StackPane loginStackPane;
+    @FXML private StackPane loginStackPane;
 
-    //TODO:STUDENT and TEACHER HASHES
+    //TODO:STUDENT and TEACHER LISTS
     private final StudentList students = Loader.studentList;
     private final TeacherList teachers = Loader.teacherList;
+
+    private final String STUDENT_CRED_PATH="database/StudentCredentials.txt";
+    private final String TEACHER_CRED_PATH="database/TeacherCredentials.txt";
 
     @FXML
     public void initialize() {
         loginAnchorPane.setVisible(true);
         signUpAnchorPane.setVisible(false);
-//        System.out.println(Loader.toDampString());
-        System.out.println(students);
-        System.out.println(teachers);
         roleBox.getItems().addAll("Student", "Teacher", "Admin");
         roleBoxSetup.getItems().addAll("Student", "Teacher");
         roleBox.setOnAction(e -> roleBox.requestFocus());
@@ -130,7 +112,7 @@ public class LoginController {
             errorLabel.setText("Something went wrong loading the dashboard");
         } catch (Exception e) {
             e.printStackTrace();
-            errorLabel.setText("What te fu");
+            errorLabel.setText("Unknown error occurred in onSubmit");
         }
     }
 
@@ -172,22 +154,22 @@ public class LoginController {
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (students.isStudentAvailable(id) || idExistsInCredentialFile("database/StudentCredentials.txt", id)) {
+            if (students.isStudentAvailable(id) || idExistsInCredentialFile(STUDENT_CRED_PATH, id)) {
                 registerErrorLabel.setText("Student ID already exists");
                 return;
             }
-            appendCredentialToFile("database/StudentCredentials.txt", id, name, password, false);
+            appendCredentialToFile(STUDENT_CRED_PATH, id, name, password, false);
             registerErrorLabel.setText("Student request sent! Awaiting admin approval.");
         } else if (role.equals("Teacher")) {
             if (password.length() < 4) {
                 registerErrorLabel.setText("Password must be 4 characters or more");
                 return;
             }
-            if (teachers.isTeacherAvailable(id) || idExistsInCredentialFile("database/TeacherCredentials.txt", id)) {
+            if (teachers.isTeacherAvailable(id) || idExistsInCredentialFile(TEACHER_CRED_PATH, id)) {
                 registerErrorLabel.setText("Teacher ID already exists");
                 return;
             }
-            appendCredentialToFile("database/TeacherCredentials.txt", id, name, password, false);
+            appendCredentialToFile(TEACHER_CRED_PATH, id, name, password, false);
             registerErrorLabel.setText("Teacher request sent! Awaiting admin approval.");
         } else {
             registerErrorLabel.setText("Admin cannot register here");

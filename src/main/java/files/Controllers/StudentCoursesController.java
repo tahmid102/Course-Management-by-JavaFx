@@ -2,6 +2,7 @@ package files.Controllers;
 
 
 import files.Classes.Course;
+import files.Classes.Loader;
 import files.Classes.Student;
 import files.Main;
 import files.Server.SocketWrapper;
@@ -28,6 +29,7 @@ public class StudentCoursesController extends DashboardController{
     private Stage stage;
     private Scene scene;
     private Parent root;
+    public Button refresh;
     Student student=currentStudent;
 
     List<Course> courses;
@@ -35,7 +37,9 @@ public class StudentCoursesController extends DashboardController{
 
     public void passStudent(Student student) {
         this.student = student;
-        this.courses=student.getCourses();
+        int studentId=student.getID();
+        //this.courses=student.getCourses();
+        courses=Loader.studentList.searchStudent(studentId).getCourses();
 
         displayCoursesd();
     }
@@ -128,5 +132,21 @@ public class StudentCoursesController extends DashboardController{
         stage.setTitle("Course Management System");
         stage.setScene(scene);
         stage.show();
+    }
+    public void onRefresh(ActionEvent actionEvent){
+        System.out.println("🔁 Refresh button clicked");
+
+        Loader.reloadAll(); // Reload from server
+
+        // Update student reference with new list data
+        student = Loader.studentList.searchStudent(student.getID());
+        if (student == null) {
+            System.out.println("⚠️ Student not found after reload");
+            return;
+        }
+
+        courses = student.getCourses();
+        displayCoursesd(); // Re-render UI
+        System.out.println("✅ Refreshed courses for: " + student.getID());
     }
 }

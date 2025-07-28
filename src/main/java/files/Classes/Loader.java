@@ -33,8 +33,10 @@ public class Loader {
 
     public static void reloadAll() {
         try {
+            wrappedServer = new SocketWrapper("127.0.0.1", 55555);
             sendCoordinatedDataRequest();
             getCoordinatedInformation();
+            wrappedServer.closeConnection();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Reload failed: " + e.getMessage());
         }

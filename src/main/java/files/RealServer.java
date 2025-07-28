@@ -15,6 +15,7 @@ public class RealServer {
         try {
             serverSocket = new ServerSocket(55555);
             System.out.println("Server started successfully on port 55555");
+            startNotificationServer();
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected from: " + clientSocket.getInetAddress());
@@ -41,6 +42,16 @@ public class RealServer {
             System.err.println("Error setting up client connection: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    private void startNotificationServer() {
+        new Thread(() -> {
+            try {
+                new files.Server.NotificationServer(); // adjust package if needed
+            } catch (Exception e) {
+                System.err.println("holona NotificationServer: " + e.getMessage());
+            }
+        }).start();
+        System.out.println(" Notification Server kaj kore");
     }
 
     public static void main(String[] args) {

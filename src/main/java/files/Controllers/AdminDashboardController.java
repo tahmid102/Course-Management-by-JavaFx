@@ -20,14 +20,12 @@ import java.util.ResourceBundle;
 
 public class AdminDashboardController implements Initializable {
 
-
-    @FXML public Label ADpendingStudentCountLabel;
-    @FXML public Label ADpendingTeacherCountLabel;
-    @FXML public Button ADassignTeacherButton;
+    @FXML private Label ADpendingStudentCountLabel;
+    @FXML private Label ADpendingTeacherCountLabel;
     //TODO: SEARCH COMPONENTS
-    @FXML public TextField ADcourseSearchField;
-    @FXML public TextField ADstudentSearchField;
-    @FXML public TextField ADteacherSearchField;
+    @FXML private TextField ADcourseSearchField;
+    @FXML private TextField ADstudentSearchField;
+    @FXML private TextField ADteacherSearchField;
     //TODO:Student Table Components
     @FXML private TableView<Student> ADstudentTable;
     @FXML private TableColumn<Student, String> ADstudentNameColumn;
@@ -40,9 +38,9 @@ public class AdminDashboardController implements Initializable {
 
     //TODO:Course Display Components
     @FXML private TableView<Course> ADcourseTable;
-    @FXML public TableColumn<Course,String> ADcourseIDColumn;
-    @FXML public TableColumn<Course,String> ADcourseNameColumn;
-    @FXML public TableColumn<Course,Double> ADcourseCreditColumn;
+    @FXML private TableColumn<Course,String> ADcourseIDColumn;
+    @FXML private TableColumn<Course,String> ADcourseNameColumn;
+    @FXML private TableColumn<Course,Double> ADcourseCreditColumn;
 
     //TODO:Action Buttons
     @FXML private Button ADaddStudentButton;
@@ -50,6 +48,8 @@ public class AdminDashboardController implements Initializable {
     @FXML private Button ADaddCourseButton;
     @FXML private Button ADsignOutButton;
     @FXML private Button ADrefreshButton;
+    @FXML private Button ADassignTeacherButton;
+    @FXML private Button ADremoveStudentButton;
 
     //TODO:Status Labels
     @FXML private Label ADstudentCountLabel;
@@ -59,10 +59,10 @@ public class AdminDashboardController implements Initializable {
 
 
     //TODO:Data
-    // Remove final keyword and get fresh references each time
     private FilteredList<Student> filteredStudentList;
     private FilteredList<Teacher> filteredTeacherList;
     private FilteredList<Course> filteredCourseList;
+
 
     //TODO:Loader files
     @Override
@@ -113,6 +113,15 @@ public class AdminDashboardController implements Initializable {
 
         //TODO: STUDENT BUTTON EVENT
         ADaddStudentButton.setOnAction(event -> openStudentApprovalWindow());
+        ADremoveStudentButton.setOnAction(event -> {
+            Student selectedStudent = ADstudentTable.getSelectionModel().getSelectedItem();
+            if (selectedStudent == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a student first!", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
+            removeStudent(selectedStudent);
+        });
         ADstudentTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Student selectedStudent = ADstudentTable.getSelectionModel().getSelectedItem();
@@ -205,6 +214,63 @@ public class AdminDashboardController implements Initializable {
         sourceList.addAll(Loader.studentList.getStudents());
         ADstudentCountLabel.setText("Total Students: " + Loader.studentList.getStudents().size());
     }
+
+    private void removeStudent(Student selectedStudent) {
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Remove Student");
+        confirmationAlert.setHeaderText("Are you sure you want to remove this student?");
+        confirmationAlert.setContentText("Student: " + selectedStudent.getName() + " (ID: " + selectedStudent.getID() + ")\n\nThis action cannot be undone.");
+
+        confirmationAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    boolean removedFromList = Loader.studentList.removeStudent(selectedStudent);
+
+                    if (removedFromList) {
+                        boolean removedFromFile = removeStudentFromFile(selectedStudent.getID());
+
+                        if (removedFromFile) {
+                            removeStudentFromEnrollments(selectedStudent.getID());
+
+                            refreshStudentTable();
+
+                            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                            successAlert.setTitle("Student Removed");
+                            successAlert.setHeaderText("Success!");
+                            successAlert.setContentText("Student " + selectedStudent.getName() + " has been successfully removed.");
+                            successAlert.showAndWait();
+
+                            System.out.println("Student removed successfully: " + selectedStudent.getName());
+                        } else {
+                            Loader.studentList.addStudent(selectedStudent);
+
+                            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                            errorAlert.setTitle("Error");
+                            errorAlert.setHeaderText("Failed to remove student from file");
+                            errorAlert.setContentText("The student could not be removed from the database file. Please try again.");
+                            errorAlert.showAndWait();
+                        }
+                    } else {
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Error");
+                        errorAlert.setHeaderText("Student not found");
+                        errorAlert.setContentText("The selected student could not be found in the system.");
+                        errorAlert.showAndWait();
+                    }
+                } catch (Exception e) {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Error");
+                    errorAlert.setHeaderText("An error occurred");
+                    errorAlert.setContentText("Failed to remove student: " + e.getMessage());
+                    errorAlert.showAndWait();
+                    System.err.println("Error removing student: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
     //TODO: TEACHER FUNCTIONALITIES
     private void openTeacherCoursesWindow(int teacherID) {
         try {
@@ -309,16 +375,24 @@ public class AdminDashboardController implements Initializable {
         }
     }
     public void refreshCourseTable() {
+        System.out.println("DEBUG: refreshCourseTable called - Course count: " + Loader.courseList.getCourses().size());
         ObservableList<Course> sourceList = (ObservableList<Course>) filteredCourseList.getSource();
         sourceList.clear();
         sourceList.addAll(Loader.courseList.getCourses());
         ADcourseCountLabel.setText("Total Courses: " + Loader.courseList.getCourses().size());
+        System.out.println("DEBUG: Course table refreshed - Source list size: " + sourceList.size());
+        System.out.println("DEBUG: Filtered list size: " + filteredCourseList.size());
+        System.out.println("=======Debugging course========");
+        System.out.println(Loader.courseList);
     }
 
     public void refreshAllTables() {
+        System.out.println("DEBUG: Before reloadAll - Course count: " + Loader.courseList.getCourses().size());
         Loader.reloadAll();
+        System.out.println("DEBUG: After reloadAll - Course count: " + Loader.courseList.getCourses().size());
         System.out.println(Loader.toDampString());
 
+        // Add a small delay to ensure data is fully loaded
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
@@ -329,6 +403,7 @@ public class AdminDashboardController implements Initializable {
         refreshStudentTable();
         refreshTeacherTable();
 
+        System.out.println("DEBUG: After refresh tables - Course count: " + Loader.courseList.getCourses().size());
     }
     //TODO:SIGN OUT
     public void signOut(){
@@ -343,4 +418,104 @@ public class AdminDashboardController implements Initializable {
         }
     }
 
+
+
+
+
+
+    private boolean removeStudentFromFile(int studentID) {
+        try {
+            java.io.File inputFile = new java.io.File("database/StudentCredentials.txt");
+            java.io.File tempFile = new java.io.File("database/StudentCredentials_temp.txt");
+
+            java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(inputFile));
+            java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(tempFile));
+
+            String line;
+            boolean studentFound = false;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    int currentID = Integer.parseInt(parts[0].trim());
+                    if (currentID == studentID) {
+                        studentFound = true;
+                        System.out.println("Removing student from file: " + line);
+                        continue;
+                    }
+                }
+                writer.write(line);
+                writer.newLine();
+            }
+
+            reader.close();
+            writer.close();
+
+            if (studentFound) {
+                if (inputFile.delete() && tempFile.renameTo(inputFile)) {
+                    System.out.println("Student successfully removed from file");
+                    return true;
+                } else {
+                    System.err.println("Failed to replace original file");
+                    tempFile.delete();
+                    return false;
+                }
+            } else {
+                tempFile.delete();
+                System.out.println("Student not found in file");
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error removing student from file: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void removeStudentFromEnrollments(int studentID) {
+        try {
+            java.io.File inputFile = new java.io.File("database/enrollments.txt");
+            java.io.File tempFile = new java.io.File("database/enrollments_temp.txt");
+
+            if (!inputFile.exists()) {
+                System.out.println("Enrollments file does not exist, skipping enrollment cleanup");
+                return;
+            }
+
+            java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(inputFile));
+            java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(tempFile));
+
+            String line;
+            int removedEnrollments = 0;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    int enrolledStudentID = Integer.parseInt(parts[0].trim());
+                    if (enrolledStudentID == studentID) {
+                        removedEnrollments++;
+                        System.out.println("Removing enrollment: " + line);
+                        continue;
+                    }
+                }
+                writer.write(line);
+                writer.newLine();
+            }
+
+            reader.close();
+            writer.close();
+
+            if (inputFile.delete() && tempFile.renameTo(inputFile)) {
+                System.out.println("Removed " + removedEnrollments + " enrollments for student ID: " + studentID);
+            } else {
+                System.err.println("Failed to update enrollments file");
+                tempFile.delete();
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error removing student enrollments: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

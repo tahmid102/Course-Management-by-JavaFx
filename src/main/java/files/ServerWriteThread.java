@@ -56,27 +56,22 @@ public class ServerWriteThread implements Runnable{
                         case GET_ALL_COORDINATED_DATA -> {
                             System.out.println("Loading all data and coordinating...");
 
-                            // Load all data
                             loadStudents();
                             loadTeachers();
                             loadCourses();
 
-                            // Store course count for verification
                             int originalCourseCount = courseList.getCourses().size();
                             System.out.println("Original course count: " + originalCourseCount);
 
-                            // Coordinate
                             coordinateStudentCourse();
                             coordinateTeacherCourse();
 
-                            // Verify course count after coordination
                             int finalCourseCount = courseList.getCourses().size();
                             System.out.println("Final course count: " + finalCourseCount);
 
                             if (finalCourseCount != originalCourseCount) {
                                 System.err.println("WARNING: Course count changed during coordination!");
                                 System.err.println("Expected: " + originalCourseCount + ", Got: " + finalCourseCount);
-                                // Reload courses if they were modified
                                 loadCourses();
                                 System.out.println("Courses reloaded. New count: " + courseList.getCourses().size());
                             }

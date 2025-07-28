@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Teacher extends Person{
+public class Teacher extends Person implements Serializable{
     private final List<Course> courseAssigned;
     private boolean coursesLoaded=false;
     public Teacher(String name, int ID, String password) {
@@ -41,6 +41,7 @@ public class Teacher extends Person{
     public void assignCourse(Course c){
         if(!courseAssigned.contains(c)){
             courseAssigned.add(c);
+            c.addTeacher(this);
         }
     }
     public List<Course> getCoursesAssigned() {
@@ -63,15 +64,19 @@ public class Teacher extends Person{
     }
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(super.toString());
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Teacher{Name='%s', ID=%d}", getName(), getID()));
+
         sb.append(", AssignedCourses=[");
         for (Course c : courseAssigned) {
-            sb.append(c.getCourseID()).append(",");
+            sb.append(String.format("(%s, %s), ", c.getCourseID(), c.getCourseName()));
         }
-        if (!courseAssigned.isEmpty()) sb.setLength(sb.length() - 1);
+        if (!courseAssigned.isEmpty()) sb.setLength(sb.length() - 2);
         sb.append("]");
+
         return sb.toString();
     }
+
     public void loadCoursesForTeacher(CourseList courseList) {
         if(coursesLoaded) return;
         try(BufferedReader br= new BufferedReader(new FileReader("database/AssignedCoursesTeacher.txt"))) {

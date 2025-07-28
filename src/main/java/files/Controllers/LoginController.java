@@ -63,7 +63,6 @@ public class LoginController {
     public void initialize() {
         loginAnchorPane.setVisible(true);
         signUpAnchorPane.setVisible(false);
-        Loader.loadAll();
         System.out.println(Loader.toDampString());
         roleBox.getItems().addAll("Student", "Teacher", "Admin");
         roleBoxSetup.getItems().addAll("Student", "Teacher");

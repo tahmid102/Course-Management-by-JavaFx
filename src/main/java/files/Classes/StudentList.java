@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentList {
+public class StudentList implements Serializable {
     private final List<Student> students;
 
     public StudentList() {
@@ -40,8 +40,11 @@ public class StudentList {
 
     @Override
     public String toString() {
-        return "StudentList{" +
-                "students=" + students +
-                '}';
+        StringBuilder sb = new StringBuilder("StudentList:\n");
+        for (Student s : students) {
+            sb.append("  ").append(s).append("\n");
+        }
+        return sb.toString();
     }
+
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Student extends Person{
+public class Student extends Person implements Serializable{
     //personal Student class fields
     private final List<Course>courses;
     private boolean coursesLoaded = false;
@@ -48,16 +48,20 @@ public class Student extends Person{
         courses.remove(c);
     }
     @Override
-    public String toString(){
-        StringBuilder sb=new StringBuilder(super.toString());
-        sb.append(", AssignedCourses=[");
-        for(Course c: courses){
-            sb.append(c.getCourseID()).append(",");
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Student{Name='%s', ID=%d}", getName(), getID()));
+
+        sb.append(", Courses=[");
+        for (Course c : courses) {
+            sb.append(String.format("(%s, %s), ", c.getCourseID(), c.getCourseName()));
         }
-        if(!courses.isEmpty()) sb.setLength(sb.length()-1);
+        if (!courses.isEmpty()) sb.setLength(sb.length() - 2);
         sb.append("]");
+
         return sb.toString();
     }
+
 
     public List<Course> getCourses() {
         return courses;

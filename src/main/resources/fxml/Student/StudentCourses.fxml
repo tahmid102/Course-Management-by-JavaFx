@@ -14,13 +14,13 @@
 
 <AnchorPane prefHeight="604.0" prefWidth="691.0" style="-fx-background-image: buet_logo.png;" stylesheets="@../../css/TeacxherDashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.StudentCoursesController">
    <children>
-      <ImageView fitHeight="162.0" fitWidth="156.0" layoutX="322.0" layoutY="105.0">
+      <ImageView fitHeight="162.0" fitWidth="164.0" layoutX="322.0" layoutY="105.0">
          <image>
             <Image url="@../../buet_logo.png" />
          </image>
       </ImageView>
 
-      <VBox fx:id="courseVbox" layoutX="252.0" layoutY="288.0" prefHeight="265.0" prefWidth="296.0" stylesheets="@../../css/TeacxherDashboard.css" />
+      <VBox fx:id="courseVbox" layoutX="246.0" layoutY="288.0" prefHeight="266.0" prefWidth="539.0" stylesheets="@../../css/TeacxherDashboard.css" />
       <VBox alignment="TOP_CENTER" layoutX="-5.0" layoutY="80.0" prefHeight="524.0" prefWidth="146.0" spacing="15.0" style="-fx-background-color: #34495e;" stylesheets="@../../css/TeacxherDashboard.css">
          <children>
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#toDash" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: #95a5a6;" text=" Back" textFill="#f4f2f2">
@@ -59,6 +59,6 @@
             </Label>
          </children>
       </HBox>
-      <Button fx:id="refresh" layoutX="601.0" layoutY="105.0" mnemonicParsing="false" onAction="#onRefresh" text="Refresh" />
+      <Button fx:id="refresh" layoutX="597.0" layoutY="135.0" mnemonicParsing="false" onAction="#onRefresh" text="Refresh" />
    </children>
 </AnchorPane>

@@ -2,18 +2,20 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ComboBox?>
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.TeacherCoursePage">
 
 <!-- Top Header -->
@@ -59,14 +61,20 @@
          <Button fx:id="post" mnemonicParsing="false" onAction="#onPost" text="Post" textFill="#315621" />
          <Button fx:id="filePost" mnemonicParsing="false" onAction="#onFilepost" text="Upload File" />
         <Label fx:id="attachedFileName" text="No file selected" />
-        <Label text="📅 Upload Deadline" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="📅 Upload Deadline" />
 
         <HBox spacing="10">
-            <TextField fx:id="taskField" promptText="Task Name (e.g., Assignment 2)" prefWidth="200"/>
-            <ComboBox fx:id="typeBox" promptText="Select Type" prefWidth="150"/>
-            <DatePicker fx:id="dueDatePicker" promptText="Due Date" prefWidth="150"/>
-            <Button text="Upload" onAction="#uploadDeadline" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+            <TextField fx:id="taskField" prefWidth="200" promptText="Task Name (e.g., Assignment 2)" />
+            <ComboBox fx:id="typeBox" prefWidth="150" promptText="Select Type" />
+            <DatePicker fx:id="dueDatePicker" prefWidth="150" promptText="Due Date" />
+            <Button onAction="#uploadDeadline" style="-fx-background-color: #2ecc71; -fx-text-fill: white;" text="Upload" />
         </HBox>
+        <TableView fx:id="participantsTable" prefHeight="104.0" prefWidth="404.0">
+            <columns>
+                <TableColumn fx:id="studentIdColumn" prefWidth="150.0" text="Student ID" />
+                <TableColumn fx:id="studentNameColumn" prefWidth="250.0" text="Name" />
+            </columns>
+        </TableView>
     </VBox>
 </center>
 

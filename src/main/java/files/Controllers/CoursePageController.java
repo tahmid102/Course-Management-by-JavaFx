@@ -239,12 +239,12 @@ public class CoursePageController {
                         Platform.runLater(() -> showAlert("Invalid deadline data received."));
                     }
                 } else {
-                    Platform.runLater(() -> showAlert("Unexpected response type: " + response.getClass()));
+                    //Platform.runLater(() -> showAlert("Unexpected response type: " + response.getClass()));
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Platform.runLater(() -> showAlert("Failed to load deadlines: " + e.getMessage()));
+                //Platform.runLater(() -> showAlert("Failed to load deadlines: " + e.getMessage()));
             }
         }).start();
     }

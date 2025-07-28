@@ -1,6 +1,7 @@
 package files.Controllers;
 
 import files.Classes.Course;
+import files.Classes.Student;
 import files.Classes.Teacher;
 import files.Main;
 import javafx.event.ActionEvent;
@@ -8,6 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -23,14 +27,17 @@ public class TeacherDasahboardController {
     public VBox mainContentBox;
     public Label welcomeLabel;
     public Label Name;
+
     Teacher teacher;
     List<Course> courses=new ArrayList<>();
+    List<Student> students=new ArrayList<>();
 
     public void setTeacher(Teacher teacher){
         this.teacher=teacher;
         this.courses=teacher.getCoursesAssigned();
         Name.setText(teacher.getName());
         welcomeLabel.setText("Welcome "+teacher.getName());
+
     }
 
     public void onHomeClicked(ActionEvent actionEvent) {

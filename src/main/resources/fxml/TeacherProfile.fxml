@@ -38,26 +38,30 @@
         </VBox>
 
         <!-- 🔷 Profile Content -->
-        <HBox layoutX="160.0" layoutY="140.0" spacing="30.0">
+        <HBox layoutX="204.0" layoutY="275.0" spacing="30.0">
             <children>
 
                 <!-- 📷 Profile Image -->
                 <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0" />
 
                 <!-- 👤 Info -->
-                <VBox spacing="20.0">
-                    <Label fx:id="nameLabel" style="-fx-font-size: 16px;" text="Name: ">
-                        <font>
-                            <Font name="System Bold" size="12.0" />
-                        </font></Label>
-                    <Label fx:id="idLabel" style="-fx-font-size: 14px;" text="User ID: ">
-                        <font>
-                            <Font name="System Bold" size="12.0" />
-                        </font></Label>
-                    <Label fx:id="courseCountLabel" style="-fx-font-size: 14px;" text="Total Courses: ">
-                        <font>
-                            <Font name="System Bold" size="12.0" />
-                        </font></Label>
+                <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="272.0" spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.3, 0, 3);">
+
+                    <HBox spacing="10.0">
+                        <Label style="-fx-text-fill: #555; -fx-font-size: 16px; -fx-font-weight: bold;" text="👤 Name:" />
+                        <Label fx:id="nameLabel" style="-fx-font-size: 17px; -fx-text-fill: #2c3e50;" />
+                    </HBox>
+
+                    <HBox spacing="10.0">
+                        <Label style="-fx-text-fill: #555; -fx-font-size: 16px; -fx-font-weight: bold;" text="🆔 User ID:" />
+                        <Label fx:id="idLabel" style="-fx-font-size: 17px; -fx-text-fill: #2c3e50;" />
+                    </HBox>
+
+                    <HBox spacing="10.0">
+                        <Label style="-fx-text-fill: #555; -fx-font-size: 16px; -fx-font-weight: bold;" text="📚 Total Courses:" />
+                        <Label fx:id="courseCountLabel" style="-fx-font-size: 17px; -fx-text-fill: #2c3e50;" />
+                    </HBox>
+
                 </VBox>
 
             </children>

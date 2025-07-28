@@ -6,6 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -38,30 +41,53 @@
         </VBox>
 
         <!-- 🔷 Profile Content -->
-        <HBox layoutX="160.0" layoutY="140.0" spacing="30.0">
+        <HBox layoutX="160.0" layoutY="282.0" prefHeight="100.0" prefWidth="271.0" spacing="30.0">
             <children>
 
                 <!-- 📷 Profile Image -->
                 <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="150.0" />
 
-                <!-- 👤 Info -->
-                <VBox spacing="20.0">
-                    <Label fx:id="nameLabel" style="-fx-font-size: 16px;" text="Name: ">
-                  <font>
-                     <Font name="System Bold" size="12.0" />
-                  </font></Label>
-                    <Label fx:id="idLabel" style="-fx-font-size: 14px;" text="User ID: ">
-                  <font>
-                     <Font name="System Bold" size="12.0" />
-                  </font></Label>
-                    <Label fx:id="courseCountLabel" style="-fx-font-size: 14px;" text="Total Courses: ">
-                  <font>
-                     <Font name="System Bold" size="12.0" />
-                  </font></Label>
-                </VBox>
-
             </children>
         </HBox>
+      <Label fx:id="clockLabel" layoutX="358.0" layoutY="130.0" prefHeight="72.0" prefWidth="195.0" text="Label">
+         <font>
+            <Font name="System Bold Italic" size="28.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.5684210658073425" green="0.25684210658073425" blue="0.25684210658073425" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
+
+
+        <VBox alignment="CENTER_LEFT" layoutX="456.0" layoutY="294.0" spacing="15">
+            <HBox spacing="10">
+                <Label style="-fx-font-size: 16px; -fx-text-fill: #666; -fx-font-weight: bold;" text="👤 Name:" />
+                <Label fx:id="nameLabel" style="-fx-font-size: 18px; -fx-text-fill: #2c3e50;" />
+            </HBox>
+   
+                        <HBox spacing="10">
+                <Label style="-fx-font-size: 16px; -fx-text-fill: #666; -fx-font-weight: bold;" text="🆔 ID:" />
+                <Label fx:id="idLabel" style="-fx-font-size: 18px; -fx-text-fill: #2c3e50;" />
+            </HBox>
+
+            <HBox spacing="10">
+                <Label style="-fx-font-size: 16px; -fx-text-fill: #666; -fx-font-weight: bold;" text="📚 Total Courses:" />
+                <Label fx:id="courseCountLabel" style="-fx-font-size: 18px; -fx-text-fill: #2c3e50;" />
+            </HBox>
+        </VBox>
 
     </children>
 </AnchorPane>

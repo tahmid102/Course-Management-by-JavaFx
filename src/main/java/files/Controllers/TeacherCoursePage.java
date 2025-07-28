@@ -1,16 +1,21 @@
 package files.Controllers;
 
 import files.Classes.Course;
+import files.Classes.Student;
 import files.Classes.Teacher;
 import files.Main;
 import files.Server.FilePacket;
 import files.Server.Notification;
 import files.Server.SocketWrapper;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,6 +23,9 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import files.Server.Deadline;
 
 public class TeacherCoursePage {
@@ -34,9 +42,14 @@ public class TeacherCoursePage {
     public ComboBox typeBox;
     public DatePicker dueDatePicker;
     Teacher teacher;
+    @FXML
+    public TableView participantsTable;
+    public TableColumn studentIdColumn;
+    public TableColumn studentNameColumn;
     private File selectedFile;
 
     Course course;
+    List<Student> students=new ArrayList<>();
     private SocketWrapper socketWrapper;
     public void setSocketWrapper(SocketWrapper socketWrapper) {
         this.socketWrapper = socketWrapper;
@@ -49,7 +62,15 @@ public class TeacherCoursePage {
 
     public void setCourse(Course course) {
         this.course = course;
+        students=course.getCourseStudents();
         welcomeLabel.setText(course.getCourseID()+" "+course.getCourseName());
+        for(Student  s:students) {
+            ObservableList<Student> std = FXCollections.observableArrayList(s);
+            studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+            studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            participantsTable.setItems(std);
+        }
+
     }
 
     public void display() {

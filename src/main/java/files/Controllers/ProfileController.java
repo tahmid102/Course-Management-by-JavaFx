@@ -2,6 +2,9 @@ package files.Controllers;
 
 import files.Classes.Student;
 import files.Main;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,8 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 public class ProfileController {
     public ImageView profileImage;
@@ -22,6 +29,8 @@ public class ProfileController {
 
     public Button logout;
     public Button home;
+    public Label clockLabel;
+
     public void passStuddent(Student a){
         this.currentStudent=a;
         loadProfile();
@@ -29,9 +38,17 @@ public class ProfileController {
 
     public void loadProfile(){
 
-        nameLabel.setText(       "Name          "+ currentStudent.getName());
-        idLabel.setText(         "ID            "+ currentStudent.getID()+" ");
-        courseCountLabel.setText("Total Courses "+currentStudent.getCourses().size());
+        nameLabel.setText(currentStudent.getName());
+        idLabel.setText( currentStudent.getID()+" ");
+        courseCountLabel.setText(currentStudent.getCourses().size()+"");
+        Timeline clock = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            LocalTime currentTime = LocalTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            clockLabel.setText(currentTime.format(formatter));
+        }));
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
+
         try {
             String path = currentStudent.getImagePath();
 

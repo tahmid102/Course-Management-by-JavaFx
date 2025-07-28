@@ -375,21 +375,15 @@ public class AdminDashboardController implements Initializable {
         }
     }
     public void refreshCourseTable() {
-        System.out.println("DEBUG: refreshCourseTable called - Course count: " + Loader.courseList.getCourses().size());
         ObservableList<Course> sourceList = (ObservableList<Course>) filteredCourseList.getSource();
         sourceList.clear();
         sourceList.addAll(Loader.courseList.getCourses());
         ADcourseCountLabel.setText("Total Courses: " + Loader.courseList.getCourses().size());
-        System.out.println("DEBUG: Course table refreshed - Source list size: " + sourceList.size());
-        System.out.println("DEBUG: Filtered list size: " + filteredCourseList.size());
-        System.out.println("=======Debugging course========");
         System.out.println(Loader.courseList);
     }
 
     public void refreshAllTables() {
-        System.out.println("DEBUG: Before reloadAll - Course count: " + Loader.courseList.getCourses().size());
         Loader.reloadAll();
-        System.out.println("DEBUG: After reloadAll - Course count: " + Loader.courseList.getCourses().size());
         System.out.println(Loader.toDampString());
 
         // Add a small delay to ensure data is fully loaded
@@ -403,7 +397,6 @@ public class AdminDashboardController implements Initializable {
         refreshStudentTable();
         refreshTeacherTable();
 
-        System.out.println("DEBUG: After refresh tables - Course count: " + Loader.courseList.getCourses().size());
     }
     //TODO:SIGN OUT
     public void signOut(){

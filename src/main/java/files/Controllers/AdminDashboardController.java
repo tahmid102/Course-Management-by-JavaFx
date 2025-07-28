@@ -23,6 +23,7 @@ public class AdminDashboardController implements Initializable {
 
     @FXML public Label ADpendingStudentCountLabel;
     @FXML public Label ADpendingTeacherCountLabel;
+    @FXML public Button ADassignTeacherButton;
     //TODO: SEARCH COMPONENTS
     @FXML public TextField ADcourseSearchField;
     @FXML public TextField ADstudentSearchField;
@@ -146,9 +147,16 @@ public class AdminDashboardController implements Initializable {
         //TODO:REMAINING BUTTONS
         ADsignOutButton.setOnAction(event -> signOut());
         ADrefreshButton.setOnAction(event -> refreshAllTables());
+        ADassignTeacherButton.setOnAction(event -> {
+            Teacher selectedTeacher = ADteacherTable.getSelectionModel().getSelectedItem();
+            if (selectedTeacher == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a teacher first!", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
+            openAssignCourseWindow(selectedTeacher);
+        });
     }
-
-
 
     //TODO:STUDENT FUNCTIONALITIES
     private void openStudentCoursesWindow(int studentID) {
@@ -246,6 +254,24 @@ public class AdminDashboardController implements Initializable {
         ADteacherTable.setItems(filteredTeacherList);
         ADteacherCountLabel.setText("Total Teachers: " + teacherList.getTeachers().size());
 
+    }
+    private void openAssignCourseWindow(Teacher selectedTeacher) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/AssignCourseToTeacher.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            AssignCourseToTeacherController controller = loader.getController();
+            controller.setTeacher(selectedTeacher);
+
+            Stage stage = new Stage();
+            stage.setTitle("Assign Courses to " + selectedTeacher.getName());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     //TODO:COURSE FUNCTIONALITIES
     private void setupCourseTable() {

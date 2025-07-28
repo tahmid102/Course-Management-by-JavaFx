@@ -81,6 +81,7 @@
                                                     </font>
                                                 </Label>
                                                 <TextField fx:id="ADstudentSearchField" prefWidth="150.0" promptText="Search student..." />
+                                    <Button fx:id="ADremoveStudentButton" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" text="Remove Student" />
                                             </children>
                                         </HBox>
 

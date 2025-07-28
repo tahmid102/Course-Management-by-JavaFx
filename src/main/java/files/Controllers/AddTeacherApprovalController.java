@@ -25,8 +25,7 @@ public class AddTeacherApprovalController {
 
     private final ObservableList<Teacher> pendingTeachers = FXCollections.observableArrayList();
 
-    @FXML
-    public void initialize() {
+    @FXML public void initialize() {
         pendingTeacherTable.getColumns().forEach(col -> col.setReorderable(false));
         pendingTeacherTable.getColumns().forEach(col -> col.setResizable(false));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));

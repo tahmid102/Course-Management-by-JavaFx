@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.collections.transformation.FilteredList;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +23,10 @@ public class AdminDashboardController implements Initializable {
 
     @FXML public Label ADpendingStudentCountLabel;
     @FXML public Label ADpendingTeacherCountLabel;
+    //TODO: SEARCH COMPONENTS
+    @FXML public TextField ADcourseSearchField;
+    @FXML public TextField ADstudentSearchField;
+    @FXML public TextField ADteacherSearchField;
     //TODO:Student Table Components
     @FXML private TableView<Student> ADstudentTable;
     @FXML private TableColumn<Student, String> ADstudentNameColumn;
@@ -56,6 +61,9 @@ public class AdminDashboardController implements Initializable {
     private final StudentList studentList = Loader.studentList;
     private final TeacherList teacherList = Loader.teacherList;
     private final CourseList courseList = Loader.courseList;
+    private FilteredList<Student> filteredStudentList;
+    private FilteredList<Teacher> filteredTeacherList;
+    private FilteredList<Course> filteredCourseList;
 
     //TODO:Loader files
     @Override
@@ -63,12 +71,47 @@ public class AdminDashboardController implements Initializable {
         setupStudentTable();
         setupTeacherTable();
         setupCourseTable();
-        ADstudentTable.getColumns().forEach(col -> col.setReorderable(false));
-        ADstudentTable.getColumns().forEach(col -> col.setResizable(false));
-        ADteacherTable.getColumns().forEach(col -> col.setReorderable(false));
-        ADteacherTable.getColumns().forEach(col -> col.setResizable(false));
-        ADcourseTable.getColumns().forEach(col->col.setReorderable(false));
-        ADcourseTable.getColumns().forEach(col->col.setResizable(false));
+
+        ADstudentTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
+        ADteacherTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
+        ADcourseTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
+
+        filteredStudentList = new FilteredList<>(FXCollections.observableArrayList(studentList.getStudents()), p -> true);
+        filteredTeacherList = new FilteredList<>(FXCollections.observableArrayList(teacherList.getTeachers()), p -> true);
+        filteredCourseList = new FilteredList<>(FXCollections.observableArrayList(courseList.getCourses()), p -> true);
+
+        ADstudentTable.setItems(filteredStudentList);
+        ADteacherTable.setItems(filteredTeacherList);
+        ADcourseTable.setItems(filteredCourseList);
+
+        ADstudentSearchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            String filter = (newVal == null) ? "" : newVal.toLowerCase();
+            filteredStudentList.setPredicate(student -> {
+                if (filter.isEmpty()) return true;
+                return student.getName().toLowerCase().contains(filter) ||
+                        String.valueOf(student.getID()).contains(filter);
+            });
+        });
+
+        ADteacherSearchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            String filter = (newVal == null) ? "" : newVal.toLowerCase();
+            filteredTeacherList.setPredicate(teacher -> {
+                if (filter.isEmpty()) return true;
+                return teacher.getName().toLowerCase().contains(filter) ||
+                        String.valueOf(teacher.getID()).contains(filter);
+            });
+        });
+
+        ADcourseSearchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            String filter = (newVal == null) ? "" : newVal.toLowerCase();
+            filteredCourseList.setPredicate(course -> {
+                if (filter.isEmpty()) return true;
+                return course.getCourseID().toLowerCase().contains(filter) ||
+                        course.getCourseName().toLowerCase().contains(filter);
+            });
+        });
+
+
         //TODO: STUDENT BUTTON EVENT
         ADaddStudentButton.setOnAction(event -> openStudentApprovalWindow());
         ADstudentTable.setOnMouseClicked(event -> {
@@ -91,10 +134,22 @@ public class AdminDashboardController implements Initializable {
         });
         //TODO:COURSE BUTTONS
         ADaddCourseButton.setOnAction(event -> openCourseWindow());
+        ADcourseTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Course selectedCourse = ADcourseTable.getSelectionModel().getSelectedItem();
+                if (selectedCourse != null) {
+                    openPendingCourseApprovalWindow(selectedCourse);
+                }
+            }
+        });
+
         //TODO:REMAINING BUTTONS
         ADsignOutButton.setOnAction(event -> signOut());
         ADrefreshButton.setOnAction(event -> refreshAllTables());
     }
+
+
+
     //TODO:STUDENT FUNCTIONALITIES
     private void openStudentCoursesWindow(int studentID) {
         try {
@@ -140,8 +195,9 @@ public class AdminDashboardController implements Initializable {
         ADstudentCountLabel.setText("Total Students: " + studentData.size());
     }
     public void refreshStudentTable() {
-        ObservableList<Student> students = FXCollections.observableArrayList(studentList.getStudents());
-        ADstudentTable.setItems(students);
+        filteredStudentList = new FilteredList<>(FXCollections.observableArrayList(studentList.getStudents()), p -> true);
+        ADstudentTable.setItems(filteredStudentList);
+        ADstudentCountLabel.setText("Total Students: " + studentList.getStudents().size());
     }
     //TODO: TEACHER FUNCTIONALITIES
     private void openTeacherCoursesWindow(int teacherID) {
@@ -186,9 +242,10 @@ public class AdminDashboardController implements Initializable {
         ADteacherCountLabel.setText("Total Teachers: " + teacherData.size());
     }
     public void refreshTeacherTable() {
-        ObservableList<Teacher> teachers = FXCollections.observableArrayList(teacherList.getTeachers());
-        ADteacherTable.setItems(teachers);
-        ADteacherCountLabel.setText("Total Teachers: " + teachers.size());
+        filteredTeacherList = new FilteredList<>(FXCollections.observableArrayList(teacherList.getTeachers()), p -> true);
+        ADteacherTable.setItems(filteredTeacherList);
+        ADteacherCountLabel.setText("Total Teachers: " + teacherList.getTeachers().size());
+
     }
     //TODO:COURSE FUNCTIONALITIES
     private void setupCourseTable() {
@@ -212,14 +269,33 @@ public class AdminDashboardController implements Initializable {
             System.out.println("Error opening course approval window: " + e.getMessage());
         }
     }
+    private void openPendingCourseApprovalWindow(Course selectedCourse) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin/PendingCourseApprovals.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            PendingCourseApprovalController controller = loader.getController();
+            controller.setCourse(selectedCourse);
+
+            Stage stage = new Stage();
+            stage.setTitle("Pending Approvals for " + selectedCourse.getCourseName());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void refreshCourseTable() {
-        ObservableList<Course> courses = FXCollections.observableArrayList(courseList.getCourses());
-        ADcourseTable.setItems(courses);
-        ADcourseCountLabel.setText("Total Courses: " + courses.size());
+        filteredCourseList = new FilteredList<>(FXCollections.observableArrayList(courseList.getCourses()), p -> true);
+        ADcourseTable.setItems(filteredCourseList);
+        ADcourseCountLabel.setText("Total Courses: " + courseList.getCourses().size());
+
     }
 
     public void refreshAllTables() {
         Loader.reloadAll();
+        System.out.println(Loader.toDampString());
         refreshStudentTable();
         refreshTeacherTable();
         refreshCourseTable();

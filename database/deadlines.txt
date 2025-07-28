@@ -4,3 +4,5 @@ CSE 105;Surprize Quiz;Quiz;2025-07-28
 CSE 105;Keu valoabasena;Assignment;2025-07-29
 CSE 103;Assignment Heap;Assignment;2025-07-30
 CSE 103;Assignment Heap;Assignment;2025-07-30
+CSE 105;deklho magiuc;Lab Report;2025-07-01
+CSE 103;CT 2;CT;2025-08-07

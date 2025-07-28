@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -34,6 +35,7 @@ public class DashboardController {
     public Button homeButton;
     public Button myCoursesButton;
     public Button addCourseButton;
+    private ImageView gifImageView;
 
 
 
@@ -47,6 +49,8 @@ public class DashboardController {
         } else {
             System.out.println("welcomeText is null!");
         }
+      //  Image gif = new Image(getClass().getResourceAsStream("/student.gif"));
+       // gifImageView.setImage(gif);
     }
 
     public void onHomeButton(ActionEvent actionEvent) {

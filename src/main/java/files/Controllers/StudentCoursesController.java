@@ -136,9 +136,7 @@ public class StudentCoursesController extends DashboardController{
     public void onRefresh(ActionEvent actionEvent){
         System.out.println("🔁 Refresh button clicked");
 
-        Loader.reloadAll(); // Reload from server
-
-        // Update student reference with new list data
+        Loader.reloadAll();
         student = Loader.studentList.searchStudent(student.getID());
         if (student == null) {
             System.out.println("⚠️ Student not found after reload");
@@ -146,7 +144,7 @@ public class StudentCoursesController extends DashboardController{
         }
 
         courses = student.getCourses();
-        displayCoursesd(); // Re-render UI
+        displayCoursesd();
         System.out.println("✅ Refreshed courses for: " + student.getID());
     }
 }

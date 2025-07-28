@@ -46,19 +46,21 @@ public class CoursePageController {
     private ReadThread readThread;
     List<Student> enrolledStudents=new ArrayList<>();
     List<Teacher> assignedTechers=new ArrayList<>();
+    List<Course> allCourse=new ArrayList<>();
 
     public void setCourse(Course course) throws FileNotFoundException {
         this.course = course;
         this.enrolledStudents=course.getCourseStudents();
         this.assignedTechers=course.getCourseTeachers();
         loadDeadlines();
-        loadUpcomingDeadlines();
+        //loadUpcomingDeadlines();
 
 
     }
 
     public void setStudent(Student student) {
         this.student = student;
+        allCourse=student.getCourses();
     }
     public void setSocketWrapper(SocketWrapper socketWrapper) {
         this.socketWrapper = socketWrapper;
@@ -218,10 +220,9 @@ public class CoursePageController {
             e.printStackTrace();
         }
     }
-    public void loadDeadlines() {
+    public void loadDeadlines()  {
         new Thread(() -> {
             try {
-                // Send request object to server
                 socketWrapper.write(new GetDeadlinesRequest(course.getCourseID()));
                 System.out.println("Sent GetDeadlinesRequest for: " + course.getCourseID().trim());
 
@@ -231,7 +232,7 @@ public class CoursePageController {
                 if (response instanceof List<?> list) {
                     if (!list.isEmpty() && list.get(0) instanceof Deadline) {
                         List<Deadline> deadlines = (List<Deadline>) list;
-                        Platform.runLater(() -> showDeadlines(deadlines));
+                        Platform.runLater(() -> showDeadlines(deadlines,course));
                     } else if (list.isEmpty()) {
                         // Empty list - no deadlines found
                         Platform.runLater(() -> showAlert("No deadlines found for this course."));
@@ -259,10 +260,17 @@ public class CoursePageController {
                     String taskname=parts[1].trim();
                     String type=parts[2].trim();
                     LocalDate dueDate= LocalDate.parse(parts[3].trim());
-                    deadlines.add(new Deadline(courseId,taskname,type,dueDate));
+
+                    if(course.getCourseID().equals(courseId)){
+                        deadlines.add(new Deadline(courseId,taskname,type,dueDate));
+
+                    }
                 }
+
             }
-            showDeadlines(deadlines);
+            showDeadlines(deadlines,course);
+
+            //showDeadlines(deadlines);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -270,7 +278,7 @@ public class CoursePageController {
     }
 
 
-    private void showDeadlines(List<Deadline> deadlines) {
+    private void showDeadlines(List<Deadline> deadlines, Course course) {
         deadlineContainer.getChildren().clear();
 
         if (deadlines.isEmpty()) {
@@ -281,6 +289,7 @@ public class CoursePageController {
         }
 
         for (Deadline d : deadlines) {
+            if(this.course!=course)continue;
             long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), d.getDueDate());
 
             String status;

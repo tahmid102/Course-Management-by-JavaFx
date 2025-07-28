@@ -204,7 +204,6 @@ public class LoginController {
         }
             return false;
     }
-
     //TODO:DASHBOARD
     private void goToDashboard(int enteredId) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));

@@ -20,9 +20,9 @@ public class ViewTeacherCoursesController {
     @FXML private TableColumn<Course,Double> colCredit;
     @FXML private Label teacherNameLabel;
 
-    private final CourseList courseList=new CourseList();
     @FXML public void initialize() {
         courseTable.getColumns().forEach(col -> col.setReorderable(false));
+        courseTable.getColumns().forEach(col -> col.setResizable(false));
         teacherNameLabel.setText("");
         courseTable.setItems(FXCollections.observableArrayList());
 
@@ -49,7 +49,6 @@ public class ViewTeacherCoursesController {
             studentTable.getItems().clear();
             return;
         }
-
         studentTable.getItems().clear();
         colStudentID.setCellValueFactory(new PropertyValueFactory<>("ID"));
         colStudentName.setCellValueFactory(new PropertyValueFactory<>("name"));

@@ -20,6 +20,7 @@ public class ViewStudentCoursesController {
 
     @FXML public void initialize() {
         courseTable.getColumns().forEach(col -> col.setReorderable(false));
+        courseTable.getColumns().forEach(col -> col.setResizable(false));
         studentNameLabel.setText("");
         courseTable.setItems(FXCollections.observableArrayList());
     }

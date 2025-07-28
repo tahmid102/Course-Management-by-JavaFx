@@ -86,6 +86,7 @@ public class AddStudentApprovalController {
                     updated.add(line);
                 }
             }
+
             Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
             Loader.studentList.addStudent(student);
         } catch (IOException e) {
@@ -123,9 +124,6 @@ public class AddStudentApprovalController {
         } catch (IOException e) {
             System.out.println("Error deleting student: "+e.getMessage());
         }
-    }
-
-    public void setDashboardController(AdminDashboardController controller) {
     }
 
 }

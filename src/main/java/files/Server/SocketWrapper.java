@@ -24,11 +24,11 @@ public class SocketWrapper {
         ois = new ObjectInputStream(socket.getInputStream());
     }
 
-    public synchronized Object read() throws IOException, ClassNotFoundException {
+    public Object read() throws IOException, ClassNotFoundException {
         return ois.readObject();
     }
 
-    public synchronized void write(Object o) throws IOException {
+    public void write(Object o) throws IOException {
         oos.writeObject(o);
         oos.flush();
     }

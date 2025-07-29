@@ -13,7 +13,7 @@
 
 <BorderPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.AdminDashboardController">
     <top>
-        <VBox prefHeight="100.0" style="-fx-background-color: #2c3e50; -fx-padding: 25;">
+        <VBox prefHeight="100.0" style="-fx-background-color: #2c3e50; -fx-padding: 25;" >
             <children>
                 <Label text="Admin Dashboard" textFill="WHITE">
                     <font>

@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -25,6 +27,7 @@ public class ProfileController {
     public Label nameLabel;
     public Label courseCountLabel;
     public Label idLabel;
+    public AnchorPane editProfile;
     Student currentStudent;
 
     public Button logout;
@@ -95,5 +98,22 @@ public class ProfileController {
         stage.setTitle("Course Management System");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void onEditProfile(MouseEvent mouseEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+        Scene scene= null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        DashboardController controller=fxmlLoader.getController();
+        controller.setCurrentStudent(currentStudent);
+        Stage stage = (Stage) logout.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Dashboard");
+        stage.show();
+
     }
 }

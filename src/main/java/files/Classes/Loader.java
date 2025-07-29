@@ -77,8 +77,4 @@ public class Loader {
                 ",\n teacherList=" + teacherList +
                 '}';
     }
-
-    public static void main(String[] args) {
-
-    }
 }

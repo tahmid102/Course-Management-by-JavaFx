@@ -20,8 +20,6 @@ import java.util.ResourceBundle;
 
 public class AdminDashboardController implements Initializable {
 
-    @FXML private Label ADpendingStudentCountLabel;
-    @FXML private Label ADpendingTeacherCountLabel;
     //TODO: SEARCH COMPONENTS
     @FXML private TextField ADcourseSearchField;
     @FXML private TextField ADstudentSearchField;
@@ -83,6 +81,7 @@ public class AdminDashboardController implements Initializable {
         ADteacherTable.setItems(filteredTeacherList);
         ADcourseTable.setItems(filteredCourseList);
 
+        /// Search Field
         ADstudentSearchField.textProperty().addListener((obs, oldVal, newVal) -> {
             String filter = (newVal == null) ? "" : newVal.toLowerCase();
             filteredStudentList.setPredicate(student -> {
@@ -269,7 +268,6 @@ public class AdminDashboardController implements Initializable {
             }
         });
     }
-
 
     //TODO: TEACHER FUNCTIONALITIES
     private void openTeacherCoursesWindow(int teacherID) {

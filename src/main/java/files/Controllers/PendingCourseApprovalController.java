@@ -18,10 +18,6 @@ public class PendingCourseApprovalController {
     @FXML private TableView<Student> pendingStudentTable;
     @FXML private TableColumn<Student, String> nameColumn;
     @FXML private TableColumn<Student, Integer> idColumn;
-    @FXML private Button approveSelectedButton;
-    @FXML private Button approveAllButton;
-    @FXML private Button deleteSelectedButton;
-    @FXML private Button deleteAllButton;
 
     private final ObservableList<Student> pendingStudents = FXCollections.observableArrayList();
     private Course currentCourse;

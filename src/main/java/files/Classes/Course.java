@@ -75,13 +75,6 @@ public class Course implements Serializable {
         return sb.toString();
     }
 
-
-    public void dropStudent(Student s){
-        if(courseStudents.contains(s)){
-            courseStudents.remove(s);
-            s.removeCourse(this);
-        }
-    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

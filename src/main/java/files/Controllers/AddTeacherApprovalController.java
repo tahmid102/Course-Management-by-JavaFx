@@ -1,8 +1,7 @@
-// AddTeacherApprovalController.java - EXACT same structure as AddStudentApprovalController
+///AddTeacherApprovalController.java - EXACT same structure as AddStudentApprovalController
 package files.Controllers;
 
 import files.Classes.Loader;
-import files.Classes.Student;
 import files.Classes.Teacher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,10 +17,7 @@ public class AddTeacherApprovalController {
     @FXML private TableView<Teacher> pendingTeacherTable;
     @FXML private TableColumn<Teacher, String> nameColumn;
     @FXML private TableColumn<Teacher, Integer> idColumn;
-    @FXML private Button approveSelectedButton;
-    @FXML private Button approveAllButton;
-    @FXML private Button deleteSelectedButton;
-    @FXML private Button deleteAllButton;
+
 
     private final ObservableList<Teacher> pendingTeachers = FXCollections.observableArrayList();
 
@@ -126,9 +122,4 @@ public class AddTeacherApprovalController {
         }
     }
 
-        private AdminDashboardController dashboardController;
-
-    public void setDashboardController(AdminDashboardController controller) {
-        this.dashboardController = controller;
-    }
 }

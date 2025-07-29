@@ -22,14 +22,6 @@ public class Course implements Serializable {
         return courseID;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public void setCourseID(String courseID) {
-        this.courseID = courseID;
-    }
-
     public String getCourseName() {
         return courseName;
     }
@@ -88,7 +80,6 @@ public class Course implements Serializable {
         if(courseStudents.contains(s)){
             courseStudents.remove(s);
             s.removeCourse(this);
-
         }
     }
     @Override

@@ -1,0 +1,2 @@
+This JavaFX-based application was developed as part of the Object-Oriented Programming Sessional course. The project was collaboratively implemented by myself and my partner, Mufeed Talukder, under the supervision of Niaz Rahman Sir.
+A core feature of this system is its LAN-based networking, seamlessly enabling real-time database interaction and communication across clients. The project demonstrates robust OOP principles, user interface design with JavaFX, and socket-based networking to support dynamic, multi-user functionality.

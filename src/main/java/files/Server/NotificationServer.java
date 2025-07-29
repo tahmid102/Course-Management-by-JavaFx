@@ -72,10 +72,10 @@ public class NotificationServer {
                     System.out.println("📩 Received GetDeadlinesRequest for: [" + request.getCourseId() + "]");
                     String courseId = request.getCourseId().trim();
                     List<Deadline> deadlines = new ArrayList<>();
-                    File file = new File("database/deadlines.txt");
+                    //File file = new File("database/deadlines.txt");
 
-                    if (file.exists()) {
-                        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+
+                        try (BufferedReader br = new BufferedReader(new FileReader("database/deadlines.txt"))) {
                             String line;
                             while ((line = br.readLine()) != null) {
                                 String[] parts = line.split(";", 4);
@@ -87,7 +87,7 @@ public class NotificationServer {
                             e.printStackTrace();
                             System.out.println("not sent no client");
                         }
-                    }
+
 
                     socketWrapper.write(deadlines);
                     System.out.println(deadlines);

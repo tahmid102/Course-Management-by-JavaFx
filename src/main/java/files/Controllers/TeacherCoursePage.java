@@ -64,12 +64,15 @@ public class TeacherCoursePage {
         this.course = course;
         students=course.getCourseStudents();
         welcomeLabel.setText(course.getCourseID()+" "+course.getCourseName());
-        for(Student  s:students) {
-            ObservableList<Student> std = FXCollections.observableArrayList(s);
-            studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-            studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-            participantsTable.setItems(std);
-        }
+
+        welcomeLabel.setText(course.getCourseID() + " " + course.getCourseName());
+
+        studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        ObservableList<Student> stdList = FXCollections.observableArrayList(students);
+
+        participantsTable.setItems(stdList);
 
     }
 

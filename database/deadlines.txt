@@ -1,8 +1,7 @@
-CSE 105;Assignment 1;Assignment;2025-08-08
-CSE 101;ct 1;CT;2025-08-02
-CSE 105;Surprize Quiz;Quiz;2025-07-28
-CSE 105;Keu valoabasena;Assignment;2025-07-29
-CSE 103;Assignment Heap;Assignment;2025-07-30
-CSE 103;Assignment Heap;Assignment;2025-07-30
-CSE 105;deklho magiuc;Lab Report;2025-07-01
-CSE 103;CT 2;CT;2025-08-07
+CSE 101;ASSIGNMENT NA DILE MARBO;Assignment;2025-07-30
+CSE 103;CT-2 on Counting;CT;2025-08-01
+CSE 105;Assignment on DP;Assignment;2025-08-01
+CSE 105;Assignment on DSA-heaps;Assignment;2025-08-08
+CSE 105;ABCD;Lab Report;2025-07-31
+CSE 105;ABCD;Lab Report;2025-07-31
+CSE 101;CT-2;CT;2025-08-01

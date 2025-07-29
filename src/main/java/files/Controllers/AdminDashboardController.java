@@ -69,9 +69,9 @@ public class AdminDashboardController implements Initializable {
         setupTeacherTable();
         setupCourseTable();
 
-        ADstudentTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
-        ADteacherTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
-        ADcourseTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); });
+        ADstudentTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false); col.setSortable(true);});
+        ADteacherTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false);col.setSortable(true); });
+        ADcourseTable.getColumns().forEach(col -> { col.setReorderable(false); col.setResizable(false);col.setSortable(true); });
 
         filteredStudentList = new FilteredList<>(FXCollections.observableArrayList(Loader.studentList.getStudents()), p -> true);
         filteredTeacherList = new FilteredList<>(FXCollections.observableArrayList(Loader.teacherList.getTeachers()), p -> true);

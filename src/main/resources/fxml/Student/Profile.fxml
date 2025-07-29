@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.ProfileController">
+<AnchorPane fx:id="editProfile" onDragDetected="#onEditProfile" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="files.Controllers.ProfileController">
 
     <children>
 
@@ -92,6 +92,11 @@
                 <Label fx:id="courseCountLabel" style="-fx-font-size: 18px; -fx-text-fill: #2c3e50;" />
             </HBox>
         </VBox>
+      <Button layoutX="249.0" layoutY="462.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="96.0" text="Edit Profile">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
 
     </children>
 </AnchorPane>

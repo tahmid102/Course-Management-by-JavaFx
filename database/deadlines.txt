@@ -5,3 +5,7 @@ CSE 105;Assignment on DSA-heaps;Assignment;2025-08-08
 CSE 105;ABCD;Lab Report;2025-07-31
 CSE 105;ABCD;Lab Report;2025-07-31
 CSE 101;CT-2;CT;2025-08-01
+CSE 69;Assignment-1;Assignment;2025-07-31
+CSE 69;Assignment-1;Assignment;2025-07-31
+CSE 69;Assignment;Assignment;2025-07-30
+CSE 69;CT;CT;2025-08-09

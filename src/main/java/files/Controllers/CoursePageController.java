@@ -53,8 +53,8 @@ public class CoursePageController {
         this.course = course;
         this.enrolledStudents=course.getCourseStudents();
         this.assignedTechers=course.getCourseTeachers();
-        loadDeadlines();
-        //loadUpcomingDeadlines();
+        //loadDeadlines();
+        loadUpcomingDeadlines();
 
 
     }

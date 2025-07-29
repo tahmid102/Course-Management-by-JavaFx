@@ -18,10 +18,6 @@ public class Student extends Person implements Serializable{
         courses=new ArrayList<>();
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
     public String getImagePath() {
         return imagePath;
     }
@@ -43,9 +39,6 @@ public class Student extends Person implements Serializable{
         if(!courses.contains(c)) {
             courses.add(c);
         }
-    }
-    public void removeCourse(Course c){
-        courses.remove(c);
     }
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package files.Controllers;
 
 import files.Classes.*;
+import files.Classes.Writer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -183,10 +184,9 @@ public class LoginController {
     }
 
     private void appendCredentialToFile(String s, int id, String name, String password, boolean b) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(s, true))) {
-            writer.write(id + "," + name + "," + password +","+b);
-            writer.newLine();
-        } catch (IOException e) {
+        try {
+            Writer.writeToFile(id + "," + name + "," + password +","+b,s);
+        } catch (Exception e) {
             System.out.println("Error writing creds" + e.getMessage());
         }
     }

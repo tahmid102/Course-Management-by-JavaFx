@@ -3,6 +3,7 @@ package files.Controllers;
 import files.Classes.Course;
 import files.Classes.Loader;
 import files.Classes.Student;
+import files.Classes.Writer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,10 +18,6 @@ public class PendingCourseApprovalController {
     @FXML private TableView<Student> pendingStudentTable;
     @FXML private TableColumn<Student, String> nameColumn;
     @FXML private TableColumn<Student, Integer> idColumn;
-    @FXML private Button approveSelectedButton;
-    @FXML private Button approveAllButton;
-    @FXML private Button deleteSelectedButton;
-    @FXML private Button deleteAllButton;
 
     private final ObservableList<Student> pendingStudents = FXCollections.observableArrayList();
     private Course currentCourse;
@@ -117,10 +114,9 @@ public class PendingCourseApprovalController {
         }
     }
     private void adjustInEnrollments(String line){
-        try(BufferedWriter bw=new BufferedWriter(new FileWriter("database/enrollments.txt",true))){
-            bw.write(line);
-            bw.newLine();
-        } catch (IOException e) {
+        try{
+            Writer.writeToFile(line,"database/enrollments.txt");
+        } catch (Exception e) {
             System.out.println("Problem in adjusting enrollments "+e.getMessage());
         }
     }

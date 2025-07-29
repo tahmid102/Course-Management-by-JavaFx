@@ -14,3 +14,4 @@ CSE 69,Introduction to FAANG,0.69
 ME 174,Mechanical Engineering Drawing,1.5
 CSE 100,From SpiderMan to IronMan,10.0
 e,e,5.00
+EEE 263,Digital Circuit,3.00

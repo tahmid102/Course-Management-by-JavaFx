@@ -1,14 +1,10 @@
 package files.Controllers;
 
 import files.Classes.Course;
+import files.Classes.Writer;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.*;
 
 public class AddCourseController {
 
@@ -20,7 +16,6 @@ public class AddCourseController {
     @FXML private Button addCourseButton;
     @FXML private Button cancelButton;
 
-    private final Path courseFilePath = Paths.get("database/Courses.txt");
 
     @FXML
     public void initialize() {
@@ -51,17 +46,11 @@ public class AddCourseController {
     }
 
     private void writeCourseToFile(Course course) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(courseFilePath.toFile(), true))) {
             String line = String.format("%s,%s,%.2f",
                     course.getCourseID(),
                     course.getCourseName(),
                     course.getCredit());
-            writer.write(line);
-            writer.newLine();
-        }
-        catch (IOException e) {
-            statusLabel.setText("Failed to write course: " + e.getMessage());
-        }
+        Writer.writeToFile(line,"database/Courses.txt");
         statusLabel.setText("Course added successfully.");
         clearFields();
     }

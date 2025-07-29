@@ -16,10 +16,7 @@ public class AddStudentApprovalController {
     @FXML private TableView<Student> pendingStudentTable;
     @FXML private TableColumn<Student, String> nameColumn;
     @FXML private TableColumn<Student, Integer> idColumn;
-    @FXML private Button approveSelectedButton;
-    @FXML private Button approveAllButton;
-    @FXML private Button deleteSelectedButton;
-    @FXML private Button deleteAllButton;
+
 
     private final ObservableList<Student> pendingStudents = FXCollections.observableArrayList();
 
@@ -86,6 +83,7 @@ public class AddStudentApprovalController {
                     updated.add(line);
                 }
             }
+
             Files.write(path, updated,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE);
             Loader.studentList.addStudent(student);
         } catch (IOException e) {
@@ -124,8 +122,4 @@ public class AddStudentApprovalController {
             System.out.println("Error deleting student: "+e.getMessage());
         }
     }
-
-    public void setDashboardController(AdminDashboardController controller) {
-    }
-
 }

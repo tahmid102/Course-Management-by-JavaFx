@@ -1,9 +1,6 @@
 package files.Controllers;
 
-import files.Classes.Course;
-import files.Classes.CourseList;
-import files.Classes.Loader;
-import files.Classes.Teacher;
+import files.Classes.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,9 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +69,6 @@ public class AssignCourseToTeacherController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Course assigned successfully!", ButtonType.OK);
             alert.showAndWait();
 
-            // Optionally close the window
             ((Stage) approveButton.getScene().getWindow()).close();
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Teacher already assigned to this course.", ButtonType.OK);
@@ -85,10 +78,9 @@ public class AssignCourseToTeacherController implements Initializable {
 
     private void appendTeacherCourseAssignment(String teacherID, String courseID) {
         String line = teacherID + "," + courseID;
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("database/AssignedCoursesTeacher.txt", true))) {
-            bw.write(line);
-            bw.newLine();
-        } catch (IOException e) {
+        try{
+            Writer.writeToFile(line,"database/AssignedCoursesTeacher.txt");
+        }catch (Exception e) {
             System.out.println("Problem appending teacher-course assignment: " + e.getMessage());
         }
     }

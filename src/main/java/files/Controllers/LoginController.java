@@ -39,8 +39,8 @@ public class LoginController {
     @FXML private StackPane loginStackPane;
 
     //TODO:STUDENT and TEACHER LISTS
-    private final StudentList students = Loader.studentList;
-    private final TeacherList teachers = Loader.teacherList;
+    private StudentList students=Loader.studentList;
+    private TeacherList teachers=Loader.teacherList;
 
     private final String STUDENT_CRED_PATH="database/StudentCredentials.txt";
     private final String TEACHER_CRED_PATH="database/TeacherCredentials.txt";
@@ -60,6 +60,10 @@ public class LoginController {
     //TODO:LOGIN PAGE SUBMISSION
     @FXML
     public void onSubmit(ActionEvent actionEvent) {
+        Loader.reloadAll();
+        students = Loader.studentList;
+        teachers = Loader.teacherList;
+
         errorLabel.setText("");
         String role = roleBox.getValue();
         String idText = userIDField.getText().trim();
@@ -252,6 +256,9 @@ public class LoginController {
         signUpAnchorPane.setVisible(false);
         loginAnchorPane.setVisible(true);
         userIDField.requestFocus();
+        Loader.reloadAll();
+        students = Loader.studentList;
+        teachers = Loader.teacherList;
     }
     @FXML public void onCancel() {
         Alert cancelAlert = new Alert(Alert.AlertType.CONFIRMATION);

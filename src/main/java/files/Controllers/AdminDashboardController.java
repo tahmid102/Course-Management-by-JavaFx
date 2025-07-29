@@ -386,7 +386,6 @@ public class AdminDashboardController implements Initializable {
         Loader.reloadAll();
         System.out.println(Loader.toDampString());
 
-        // Add a small delay to ensure data is fully loaded
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {

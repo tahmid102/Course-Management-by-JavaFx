@@ -3,6 +3,7 @@ package files.Controllers;
 import files.Classes.Course;
 import files.Classes.Loader;
 import files.Classes.Student;
+import files.Classes.Writer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -117,10 +118,9 @@ public class PendingCourseApprovalController {
         }
     }
     private void adjustInEnrollments(String line){
-        try(BufferedWriter bw=new BufferedWriter(new FileWriter("database/enrollments.txt",true))){
-            bw.write(line);
-            bw.newLine();
-        } catch (IOException e) {
+        try{
+            Writer.writeToFile(line,"database/enrollments.txt");
+        } catch (Exception e) {
             System.out.println("Problem in adjusting enrollments "+e.getMessage());
         }
     }
